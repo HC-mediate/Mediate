@@ -1,0 +1,13 @@
+server:
+  port: 8081
+spring:
+  config:
+    activate:
+      on-profile: prod1
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      format_sql: true
+      ddl-auto: none
