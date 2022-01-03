@@ -22,12 +22,6 @@ deploy:
     access_key_id: $AWS_ACCESS_KEY #Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY
     bucket: mediate-springboot-build #s3 버킷
-    key: mediate-springboot2-webservice.zip #빌드 파일을 압축해서 전달
-
-    bundle_type: zip #압축 확장자
-    application: mediate-springboot2-webservice #웹 콘솔에서 등록한 codedeploy 애플리케이션
-    deployment_group: mediate-springboot2-webservice-group
-
     region: ap-northeast-2
     skip_cleanup: true
     acl: private #zip 파일 접근을 private으로
@@ -35,6 +29,16 @@ deploy:
     wait-until-deployed: true
     on:
       all_branches: true
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECREY_KEY
+    bucket: mediate-springboot-build
+    key: mediate-springboot2-webservice.zip
+    bundle_type: zip
+    application: mediate-springboot2-webservice
+    deployment_group: mediate-springboot2-webservice-group
+    region: ap-northeast-2
+    wait-until-deployed: true
 
 notifications:
   email:
