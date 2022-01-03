@@ -15,7 +15,6 @@ public class ProfileController {
   @GetMapping("/profile")
   public String profile() {
     List<String> profiles = Arrays.asList(env.getActiveProfiles());
-    profiles.stream().forEach(System.out::println);
     List<String> realProfiles = Arrays.asList("prod", "prod1", "prod2");
     String defaultProfile = profiles.isEmpty() ? "default" : profiles.get(0);
     return profiles.stream().filter(realProfiles::contains).findAny().orElse(defaultProfile);
