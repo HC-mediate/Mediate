@@ -13,7 +13,7 @@ cache:
 script: "./gradlew clean build"
 
 before_deploy:
-  - zip -r mediate-springboot-build *
+  - zip -r mediate-springboot2-build *
   - mkdir -p deploy
   - mv mediate-springboot2-webservice.zip deploy/mediate-springboot2-webservice.zip
 
