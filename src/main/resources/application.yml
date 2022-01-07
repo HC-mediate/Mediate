@@ -1,5 +1,5 @@
 spring:
   profiles:
     group:
-      local: local-db
-      prod: prod-db
+      local: local-db, local-secret
+      prod: prod-db, prod-secret
