@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.Account.domain;
+package com.ko.mediate.HC.account.domain;
 
 import java.util.HashSet;
 import java.util.Set;

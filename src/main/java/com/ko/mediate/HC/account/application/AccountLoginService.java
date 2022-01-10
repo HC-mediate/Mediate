@@ -1,6 +1,6 @@
-package com.ko.mediate.HC.Account.application;
+package com.ko.mediate.HC.account.application;
 
-import com.ko.mediate.HC.Account.domain.Account;
+import com.ko.mediate.HC.account.domain.Account;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

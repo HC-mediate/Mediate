@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.Account.application.dto.request;
+package com.ko.mediate.HC.account.application.dto.request;
 
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;

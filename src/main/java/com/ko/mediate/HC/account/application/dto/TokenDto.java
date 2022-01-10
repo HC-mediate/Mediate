@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.Account.application.dto;
+package com.ko.mediate.HC.account.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,9 +1,9 @@
-package com.ko.mediate.HC.Account.controller;
+package com.ko.mediate.HC.account.controller;
 
-import com.ko.mediate.HC.Account.application.AccountJoinService;
-import com.ko.mediate.HC.Account.application.dto.TokenDto;
-import com.ko.mediate.HC.Account.application.dto.request.LoginDto;
-import com.ko.mediate.HC.Account.application.dto.request.SignupDto;
+import com.ko.mediate.HC.account.application.AccountJoinService;
+import com.ko.mediate.HC.account.application.dto.TokenDto;
+import com.ko.mediate.HC.account.application.dto.request.LoginDto;
+import com.ko.mediate.HC.account.application.dto.request.SignupDto;
 import com.ko.mediate.HC.jwt.JwtFilter;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import javax.validation.Valid;

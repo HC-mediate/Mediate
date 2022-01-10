@@ -1,7 +1,7 @@
-package com.ko.mediate.HC.Account.application;
+package com.ko.mediate.HC.account.application;
 
-import com.ko.mediate.HC.Account.application.dto.request.SignupDto;
-import com.ko.mediate.HC.Account.domain.Account;
+import com.ko.mediate.HC.account.application.dto.request.SignupDto;
+import com.ko.mediate.HC.account.domain.Account;
 import java.util.Arrays;
 import java.util.HashSet;
 import lombok.RequiredArgsConstructor;

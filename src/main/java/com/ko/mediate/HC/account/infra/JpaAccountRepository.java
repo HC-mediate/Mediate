@@ -1,7 +1,7 @@
-package com.ko.mediate.HC.Account.infra;
+package com.ko.mediate.HC.account.infra;
 
-import com.ko.mediate.HC.Account.application.AccountRepository;
-import com.ko.mediate.HC.Account.domain.Account;
+import com.ko.mediate.HC.account.application.AccountRepository;
+import com.ko.mediate.HC.account.domain.Account;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
