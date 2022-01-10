@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     web
         .ignoring()
         .antMatchers("/h2-console/**",
-            "/favicon.ico");
+            "/favicon.ico", "/profile");
   }
 
   @Override

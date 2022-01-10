@@ -1,0 +1,6 @@
+spring:
+  config:
+    activate:
+      on-profile: prod1
+server:
+  port: 8081
