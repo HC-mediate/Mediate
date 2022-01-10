@@ -18,15 +18,18 @@ public class Account {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long idx;
+
   @Column(unique = true)
   private String id;
+
   private String password;
   private String phoneNum;
   private Boolean isActivated;
 
   @ElementCollection private Set<String> Authority = new HashSet<>();
 
-  protected Account() {};
+  protected Account() {}
+  ;
 
   public Account(String id, String password, String phoneNum, Set<String> authority) {
     this.id = id;
@@ -34,5 +37,9 @@ public class Account {
     this.phoneNum = phoneNum;
     this.isActivated = true;
     Authority = authority;
+  }
+
+  public boolean isActivated() {
+    return this.isActivated;
   }
 }
