@@ -4,3 +4,6 @@ spring:
       local: local-db, local-secret
       prod1: prod-db, prod-secret
       prod2: prod-db, prod-secret
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher

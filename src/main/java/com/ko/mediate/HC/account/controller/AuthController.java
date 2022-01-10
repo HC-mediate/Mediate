@@ -6,6 +6,8 @@ import com.ko.mediate.HC.account.application.dto.request.LoginDto;
 import com.ko.mediate.HC.account.application.dto.request.SignupDto;
 import com.ko.mediate.HC.jwt.JwtFilter;
 import com.ko.mediate.HC.jwt.TokenProvider;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -23,21 +25,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
+@Api(tags = {"회원가입 및 로그인 API"})
 public class AuthController {
   private final AccountJoinService joinService;
   private final TokenProvider tokenProvider;
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
   @PostMapping(value = "/signup")
+  @ApiOperation(value = "회원가입", response = String.class)
   public ResponseEntity<String> Signup(@Valid @RequestBody SignupDto dto) {
     joinService.Join(dto);
     return ResponseEntity.ok("회원가입이 완료되었습니다.");
   }
 
   @PostMapping("/auth")
+  @ApiOperation(
+      value = "로그인",
+      notes = "성공시 jwt 토큰을 헤더와 응답 값에 넣어 반환합니다.",
+      produces = "application/json",
+      response = TokenDto.class)
   public ResponseEntity<TokenDto> Authorize(@Valid @RequestBody LoginDto loginDto) {
-    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getId(), loginDto.getPassword());
-    Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+    UsernamePasswordAuthenticationToken authenticationToken =
+        new UsernamePasswordAuthenticationToken(loginDto.getId(), loginDto.getPassword());
+    Authentication authentication =
+        authenticationManagerBuilder.getObject().authenticate(authenticationToken);
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     String jwt = tokenProvider.createToken(authentication);
