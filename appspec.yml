@@ -2,5 +2,19 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/app/step2/zip/
+    destination: /home/ec2-user/app/step3/zip/
     overwrite: yes
+hooks:
+  AfterInstall:
+    - location: stop.sh
+      timeout: 60
+      runas: ec2-user
+  ApplicationStart:
+    - location: start.sh
+
+      timeout: 60
+      runas: ec2-user
+  ValidateService:
+    - location: health.sh
+      timeout: 60
+      runas: ec2-user
