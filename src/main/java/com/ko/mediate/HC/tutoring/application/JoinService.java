@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class JoinService {
   private final JpaAccountRepository accountRepository;
   private final JpaTutorRepository tutorRepository;
   private final JpaTuteeRepository tuteeRepository;
