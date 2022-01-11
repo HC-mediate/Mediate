@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JpaTuteeRepository extends JpaRepository<Tutee, Long> {
-  Tutee Save(Tutee tutee);
 
   @Query("SELECT t FROM Tutee t WHERE t.accountId = :accountId")
   Optional<Tutee> findByAccountId(@Param("accountId") String accountId);

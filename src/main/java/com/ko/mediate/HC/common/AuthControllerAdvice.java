@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.common;
 
-import com.ko.mediate.HC.account.controller.AuthController;
+import com.ko.mediate.HC.tutoring.controller.AuthController;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

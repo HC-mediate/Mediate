@@ -28,7 +28,7 @@ public class Tutee {
 
   protected Tutee() {};
 
-  public Tutee(TuteeInfo tuteeInfo, String address) {
+  public Tutee(String address, TuteeInfo tuteeInfo) {
     this.tuteeInfo = tuteeInfo;
     this.address = address;
   }

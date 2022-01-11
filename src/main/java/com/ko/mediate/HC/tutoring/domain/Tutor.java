@@ -23,15 +23,19 @@ public class Tutor {
   @Column(name = "address")
   private String address;
 
+  public Tutor(String accountId, String address, Curricolum curriculum, TutorInfo tutorInfo) {
+    this.accountId = new AccountId(accountId);
+    this.address = address;
+    this.curriculum = curriculum;
+    this.tutorInfo = tutorInfo;
+  }
+
   @Column(name = "curriculum")
   @Enumerated
   private Curricolum curriculum; // 교과 과정
 
   @Embedded
-  private TutorInfo tutorInfo;
-
-  @Embedded
-  private TutorInfo studentInfo; // 학생 정보
+  private TutorInfo tutorInfo; // 튜터의 학생 정보
 
   protected Tutor() {};
 }

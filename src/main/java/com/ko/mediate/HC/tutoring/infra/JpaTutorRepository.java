@@ -11,5 +11,4 @@ import org.springframework.stereotype.Repository;
 public interface JpaTutorRepository extends JpaRepository<Tutor, Long> {
   @Query("SELECT t FROM Tutor t WHERE t.accountId = :accountId")
   Optional<Tutor> findByAccountId(@Param("accountId") String accountId);
-  Tutor Save(Tutor tutor);
 }
