@@ -32,4 +32,8 @@ public class Tutee {
     this.tuteeInfo = tuteeInfo;
     this.address = address;
   }
+
+  public String getStringAccountId(){
+    return this.accountId.getAccountId();
+  }
 }

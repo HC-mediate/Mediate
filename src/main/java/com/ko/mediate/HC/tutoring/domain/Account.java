@@ -27,11 +27,23 @@ public class Account {
   @Column(name = "is_activated")
   private Boolean isActivated;
 
+  @Column(name = "authority")
+  private String authority;
+
   protected Account() {};
 
-  public Account(String accountId, String password) {
+  public Account(String accountId, String password, String authority) {
     this.accountId = new AccountId(accountId);
     this.password = password;
+    this.authority = authority;
     this.isActivated = true;
+  }
+
+  public boolean isActivated() {
+    return this.isActivated;
+  }
+
+  public String getStringAccountId(){
+    return this.accountId.getAccountId();
   }
 }

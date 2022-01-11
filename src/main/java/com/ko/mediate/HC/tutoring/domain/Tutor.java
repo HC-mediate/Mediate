@@ -38,4 +38,8 @@ public class Tutor {
   private TutorInfo tutorInfo; // 튜터의 학생 정보
 
   protected Tutor() {};
+
+  public String getStringAccountId(){
+    return this.accountId.getAccountId();
+  }
 }

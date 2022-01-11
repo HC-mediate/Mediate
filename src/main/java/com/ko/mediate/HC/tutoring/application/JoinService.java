@@ -31,7 +31,7 @@ public class JoinService {
   }
 
   public void saveAccount(String id, String rawPassword) {
-    Account account = new Account(id, passwordEncoder.encode(rawPassword));
+    Account account = new Account(id, passwordEncoder.encode(rawPassword), "USER");
     accountRepository.save(account);
   }
 
