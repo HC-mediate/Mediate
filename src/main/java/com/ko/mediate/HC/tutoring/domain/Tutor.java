@@ -24,23 +24,26 @@ public class Tutor {
   @Column(name = "address")
   private String address;
 
-  public Tutor(String accountId, String address, Curriculum curriculum, TutorInfo tutorInfo) {
-    this.accountId = new AccountId(accountId);
-    this.address = address;
-    this.curriculum = curriculum;
-    this.tutorInfo = tutorInfo;
-  }
+  @Column(name = "name")
+  private String name;
 
   @Column(name = "curriculum")
   @Enumerated(value = EnumType.STRING)
   private Curriculum curriculum; // 교과 과정
 
-  @Embedded
-  private TutorInfo tutorInfo; // 튜터의 학생 정보
+  @Embedded private AccademicInfo accademicInfo; // 튜터의 학생 정보
 
   protected Tutor() {};
 
-  public String getStringAccountId(){
+  public Tutor(String accountId, String name, String address, Curriculum curriculum, AccademicInfo accademicInfo) {
+    this.accountId = new AccountId(accountId);
+    this.name = name;
+    this.address = address;
+    this.curriculum = curriculum;
+    this.accademicInfo = accademicInfo;
+  }
+
+  public String getStringAccountId() {
     return this.accountId.getAccountId();
   }
 }

@@ -18,18 +18,22 @@ public class Tutee {
   private Long id;
 
   @Embedded
-  private TuteeInfo tuteeInfo;
+  private AccademicInfo accademicInfo;
 
   @Embedded
   private AccountId accountId;
+
+  @Column(name = "name")
+  private String name;
 
   @Column(name = "address")
   private String address;
 
   protected Tutee() {};
 
-  public Tutee(String address, TuteeInfo tuteeInfo) {
-    this.tuteeInfo = tuteeInfo;
+  public Tutee(String name, String address, AccademicInfo accademicInfo) {
+    this.name = name;
+    this.accademicInfo = accademicInfo;
     this.address = address;
   }
 
