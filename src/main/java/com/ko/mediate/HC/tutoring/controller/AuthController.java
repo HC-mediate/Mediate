@@ -2,7 +2,7 @@ package com.ko.mediate.HC.tutoring.controller;
 
 import com.ko.mediate.HC.jwt.JwtFilter;
 import com.ko.mediate.HC.jwt.TokenProvider;
-import com.ko.mediate.HC.tutoring.application.dto.TokenDto;
+import com.ko.mediate.HC.tutoring.application.dto.response.TokenDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.LoginDto;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;

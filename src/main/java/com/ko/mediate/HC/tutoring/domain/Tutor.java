@@ -3,6 +3,7 @@ package com.ko.mediate.HC.tutoring.domain;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,7 +24,7 @@ public class Tutor {
   @Column(name = "address")
   private String address;
 
-  public Tutor(String accountId, String address, Curricolum curriculum, TutorInfo tutorInfo) {
+  public Tutor(String accountId, String address, Curriculum curriculum, TutorInfo tutorInfo) {
     this.accountId = new AccountId(accountId);
     this.address = address;
     this.curriculum = curriculum;
@@ -31,8 +32,8 @@ public class Tutor {
   }
 
   @Column(name = "curriculum")
-  @Enumerated
-  private Curricolum curriculum; // 교과 과정
+  @Enumerated(value = EnumType.STRING)
+  private Curriculum curriculum; // 교과 과정
 
   @Embedded
   private TutorInfo tutorInfo; // 튜터의 학생 정보

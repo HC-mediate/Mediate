@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,7 +32,7 @@ public class Tutoring {
   private AccountId tuteeId;
 
   @Column(name = "tutoring_stat")
-  @Enumerated
+  @Enumerated(EnumType.STRING)
   private TutoringStat stat;
 
   @CreatedDate

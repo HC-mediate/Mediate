@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.tutoring.application.dto;
+package com.ko.mediate.HC.tutoring.application.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

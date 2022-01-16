@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.tutoring.application.dto.request;
 
-import com.ko.mediate.HC.tutoring.domain.Curricolum;
+import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,5 +25,5 @@ public class TutorSignupDto {
   @ApiModelProperty(name = "튜터/튜티 타입")
   private SignupType type;
   @ApiModelProperty(name = "교육가능한 교과 과정")
-  private Curricolum curriculum;
+  private Curriculum curriculum;
 }
