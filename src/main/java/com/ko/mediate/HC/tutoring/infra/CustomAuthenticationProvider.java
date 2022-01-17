@@ -27,7 +27,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
       throw new BadCredentialsException("비밀번호가 틀립니다.");
     }
     UsernamePasswordAuthenticationToken authenticationToken =
-        new UsernamePasswordAuthenticationToken(accountId, password);
+        new UsernamePasswordAuthenticationToken(accountId, password, detail.getAuthorities());
     return authenticationToken;
   }
 
