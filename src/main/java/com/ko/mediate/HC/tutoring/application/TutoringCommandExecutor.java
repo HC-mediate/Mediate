@@ -17,16 +17,16 @@ public class TutoringCommandExecutor {
   private final TokenProvider tokenProvider;
 
   @Transactional
-  public long requestTutoring(String AuthValue, RequestTutoringDto dto) {
-    tokenProvider.authenticateByAccountId(AuthValue, dto.getFromId());
+  public long requestTutoring(String authValue, RequestTutoringDto dto) {
+    tokenProvider.authenticateByAccountId(authValue, dto.getFromId());
     Tutoring tutoring = new Tutoring(dto.getFromId(), dto.getToId());
     return tutoringRepository.save(tutoring).getId();
   }
 
   @Transactional
   public TutoringResponseType TutoringResponse(
-      String AuthValue, long tutoringId, TutoringResponseDto dto) {
-    tokenProvider.authenticateByAccountId(AuthValue, dto.getAccountId());
+      String authValue, long tutoringId, TutoringResponseDto dto) {
+    tokenProvider.authenticateByAccountId(authValue, dto.getAccountId());
     Tutoring tutoring =
         tutoringRepository
             .findById(tutoringId)

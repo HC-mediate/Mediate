@@ -5,6 +5,8 @@ import com.ko.mediate.HC.tutoring.application.dto.request.TuteeSignupDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutorSignupDto;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class JoinController {
   private final JoinService joinService;
 
-  @PostMapping("/tutor/signup")
+  @PostMapping(value = "/tutor/signup", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> Signup(@Valid @RequestBody TutorSignupDto dto) {
     joinService.tutorJoin(dto);
     return ResponseEntity.ok("회원가입 완료");
   }
 
-  @PostMapping("/tutee/signup")
+  @PostMapping(value = "/tutee/signup", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> Signup(@Valid @RequestBody TuteeSignupDto dto) {
     joinService.tuteeJoin(dto);
     return ResponseEntity.ok("회원가입 완료");

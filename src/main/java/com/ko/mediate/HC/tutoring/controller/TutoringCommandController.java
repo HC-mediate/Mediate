@@ -4,6 +4,7 @@ import com.ko.mediate.HC.tutoring.application.TutoringCommandExecutor;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TutoringCommandController {
   private final TutoringCommandExecutor commandExecutor;
 
-  @PostMapping(value = "/tutoring")
+  @PostMapping(value = "/tutoring", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity requestTutoring(
       @RequestHeader(name = "Authorization") String authValue,
       @RequestBody RequestTutoringDto dto) {
@@ -26,7 +27,7 @@ public class TutoringCommandController {
     return ResponseEntity.ok("요청을 보냈습니다.");
   }
 
-  @PostMapping(value = "/tutoring/{tutoringId}")
+  @PostMapping(value = "/tutoring/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity responseTutoring(
       @RequestHeader(name = "Authorization") String authValue,
       @PathVariable long tutoringId,
