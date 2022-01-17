@@ -55,6 +55,15 @@ public class Tutoring {
     return true;
   }
 
+  public boolean cancelTutoring(){
+    if(this.stat != TutoringStat.LEARNING){
+      throw new IllegalArgumentException("학습 중인 상태가 아닙니다.");
+    }
+    this.stat = TutoringStat.CANCEL;
+    this.completedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    return true;
+  }
+
   public boolean completeTutoring(){
     if(this.stat != TutoringStat.LEARNING){
       throw new IllegalArgumentException("튜터링이 진행 중 상태가 아닙니다.");

@@ -16,6 +16,12 @@ public class TutoringCommandExecutor {
   private final JpaTutoringRepository tutoringRepository;
   private final TokenProvider tokenProvider;
 
+  public Tutoring findTutoringWithAuthAndId(String authValue, long tutoringId) {
+    return tutoringRepository
+        .findByIdWithAccountId(tutoringId, tokenProvider.getAccountIdWithToken(authValue))
+        .orElseThrow(() -> new IllegalArgumentException("튜터링에 접근 권한이 없습니다."));
+  }
+
   @Transactional
   public long requestTutoring(String authValue, RequestTutoringDto dto) {
     tokenProvider.authenticateByAccountId(authValue, dto.getFromId());
@@ -26,13 +32,13 @@ public class TutoringCommandExecutor {
   @Transactional
   public TutoringResponseType TutoringResponse(
       String authValue, long tutoringId, TutoringResponseDto dto) {
-    tokenProvider.authenticateByAccountId(authValue, dto.getAccountId());
+    tokenProvider.authenticateByAccountId(authValue, dto.getToAccountId());
     Tutoring tutoring =
         tutoringRepository
             .findById(tutoringId)
             .orElseThrow(() -> new IllegalArgumentException("생성되지 않은 튜터링입니다."));
 
-    if (dto.getType() == TutoringResponseType.ACCEPT) {
+    if (dto.getResponseType() == TutoringResponseType.ACCEPT) {
       tutoring.acceptTutoring();
       return TutoringResponseType.ACCEPT;
     }
@@ -40,5 +46,15 @@ public class TutoringCommandExecutor {
       tutoringRepository.delete(tutoring);
       return TutoringResponseType.REFUSE;
     }
+  }
+
+  @Transactional
+  public boolean cancelTutoring(String authValue, long tutoringId) {
+    String accountId = tokenProvider.getAccountIdWithToken(authValue);
+    Tutoring tutoring =
+        tutoringRepository
+            .findByIdWithAccountId(tutoringId, accountId)
+            .orElseThrow(() -> new IllegalArgumentException("튜터링에 접근 권한이 없습니다."));
+    return tutoring.cancelTutoring();
   }
 }

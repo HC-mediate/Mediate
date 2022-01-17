@@ -100,8 +100,17 @@ public class TokenProvider implements InitializingBean {
             .getBody()
             .getSubject();
     logger.debug("acoount id In token: " + id);
-    if(!id.equals(accountId)){
+    if (!id.equals(accountId)) {
       throw new IllegalArgumentException("토큰과 계정 ID가 일치하지 않습니다.");
     }
+  }
+
+  public String getAccountIdWithToken(String authValue) {
+    return Jwts.parserBuilder()
+        .setSigningKey(key)
+        .build()
+        .parseClaimsJws(authValue.substring(7))
+        .getBody()
+        .getSubject();
   }
 }
