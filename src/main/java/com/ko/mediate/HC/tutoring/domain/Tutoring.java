@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.tutoring.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -33,12 +33,10 @@ public class Tutoring {
   private TutoringStat stat;
 
   @Column(name = "started_at")
-  @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-  private LocalDateTime startedAt;
+  private String startedAt;
 
   @Column(name = "completed_at")
-  @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-  private LocalDateTime completedAt;
+  private String completedAt;
 
   protected Tutoring() {};
 
@@ -53,7 +51,7 @@ public class Tutoring {
       throw new IllegalArgumentException("수락 대기 중 상태가 아닙니다.");
     }
     this.stat = TutoringStat.LEARNING;
-    this.startedAt = LocalDateTime.now();
+    this.startedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
     return true;
   }
 
@@ -62,7 +60,7 @@ public class Tutoring {
       throw new IllegalArgumentException("튜터링이 진행 중 상태가 아닙니다.");
     }
     this.stat = TutoringStat.COMPLETE_TUTORING;
-    this.completedAt = LocalDateTime.now();
+    this.completedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
     return true;
   }
 }

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class TutoringResponseDto {
-  private long tutoringId;
   private String accountId;
   private TutoringResponseType type;
 }

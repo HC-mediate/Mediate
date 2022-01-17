@@ -24,11 +24,12 @@ public class TutoringCommandExecutor {
   }
 
   @Transactional
-  public TutoringResponseType TutoringResponse(String AuthValue, TutoringResponseDto dto) {
+  public TutoringResponseType TutoringResponse(
+      String AuthValue, long tutoringId, TutoringResponseDto dto) {
     tokenProvider.authenticateByAccountId(AuthValue, dto.getAccountId());
     Tutoring tutoring =
         tutoringRepository
-            .findById(dto.getTutoringId())
+            .findById(tutoringId)
             .orElseThrow(() -> new IllegalArgumentException("생성되지 않은 튜터링입니다."));
 
     if (dto.getType() == TutoringResponseType.ACCEPT) {
