@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.tutoring.domain;
 
 public enum TutoringStat {
-  BEFORE_LEARNING,
+  WAITING_ACCEPT,
   LEARNING,
-  AFTER_LEARNING
+  COMPLETE_TUTORING
 }

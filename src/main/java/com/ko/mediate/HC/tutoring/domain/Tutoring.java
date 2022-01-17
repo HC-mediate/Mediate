@@ -1,23 +1,20 @@
 package com.ko.mediate.HC.tutoring.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
-@EntityListeners(AuditingEntityListener.class)
 public class Tutoring {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +32,37 @@ public class Tutoring {
   @Enumerated(EnumType.STRING)
   private TutoringStat stat;
 
-  @CreatedDate
-  private LocalDateTime createAt;
+  @Column(name = "started_at")
+  @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+  private LocalDateTime startedAt;
+
+  @Column(name = "completed_at")
+  @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+  private LocalDateTime completedAt;
 
   protected Tutoring() {};
+
+  public Tutoring(String tutorId, String tuteeId) {
+    this.tutorId = new AccountId(tutorId);
+    this.tuteeId = new AccountId(tuteeId);
+    this.stat = TutoringStat.WAITING_ACCEPT;
+  }
+
+  public boolean acceptTutoring(){
+    if(this.stat != TutoringStat.WAITING_ACCEPT){
+      throw new IllegalArgumentException("수락 대기 중 상태가 아닙니다.");
+    }
+    this.stat = TutoringStat.LEARNING;
+    this.startedAt = LocalDateTime.now();
+    return true;
+  }
+
+  public boolean completeTutoring(){
+    if(this.stat != TutoringStat.LEARNING){
+      throw new IllegalArgumentException("튜터링이 진행 중 상태가 아닙니다.");
+    }
+    this.stat = TutoringStat.COMPLETE_TUTORING;
+    this.completedAt = LocalDateTime.now();
+    return true;
+  }
 }
