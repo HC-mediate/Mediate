@@ -48,7 +48,7 @@ public class JoinService {
     isOverlapAccountId(dto.getId());
     saveAccount(dto.getId(), dto.getPassword());
     AccademicInfo info = new AccademicInfo(dto.getSchool(), dto.getGrade());
-    Tutee tutee = new Tutee(dto.getName(), dto.getAddress(), info);
+    Tutee tutee = new Tutee(dto.getId(), dto.getName(), dto.getAddress(), info);
     tuteeRepository.save(tutee);
   }
 }

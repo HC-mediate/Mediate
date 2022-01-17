@@ -31,7 +31,8 @@ public class Tutee {
 
   protected Tutee() {};
 
-  public Tutee(String name, String address, AccademicInfo accademicInfo) {
+  public Tutee(String accountId, String name, String address, AccademicInfo accademicInfo) {
+    this.accountId = new AccountId(accountId);
     this.name = name;
     this.accademicInfo = accademicInfo;
     this.address = address;
