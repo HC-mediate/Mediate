@@ -32,11 +32,7 @@ public class TutoringCommandExecutor {
   @Transactional
   public TutoringResponseType TutoringResponse(
       String authValue, long tutoringId, TutoringResponseDto dto) {
-    tokenProvider.authenticateByAccountId(authValue, dto.getToAccountId());
-    Tutoring tutoring =
-        tutoringRepository
-            .findById(tutoringId)
-            .orElseThrow(() -> new IllegalArgumentException("생성되지 않은 튜터링입니다."));
+    Tutoring tutoring = findTutoringWithAuthAndId(authValue, tutoringId);
 
     if (dto.getResponseType() == TutoringResponseType.ACCEPT) {
       tutoring.acceptTutoring();
@@ -50,11 +46,7 @@ public class TutoringCommandExecutor {
 
   @Transactional
   public boolean cancelTutoring(String authValue, long tutoringId) {
-    String accountId = tokenProvider.getAccountIdWithToken(authValue);
-    Tutoring tutoring =
-        tutoringRepository
-            .findByIdWithAccountId(tutoringId, accountId)
-            .orElseThrow(() -> new IllegalArgumentException("튜터링에 접근 권한이 없습니다."));
+    Tutoring tutoring = findTutoringWithAuthAndId(authValue, tutoringId);
     return tutoring.cancelTutoring();
   }
 }
