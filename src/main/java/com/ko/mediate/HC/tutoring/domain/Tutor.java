@@ -16,7 +16,7 @@ import lombok.Getter;
 public class Tutor {
   @Id
   @GeneratedValue
-  private Long idx;
+  private Long id;
 
   @Embedded
   private AccountId accountId;

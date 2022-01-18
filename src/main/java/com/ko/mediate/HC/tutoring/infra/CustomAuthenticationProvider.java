@@ -22,7 +22,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     String accountId = authentication.getName();
     String password = (String) authentication.getCredentials();
 
-    UserDetails detail = (UserDetails) userDetailsService.loadUserByUsername(accountId);
+    UserDetails detail = userDetailsService.loadUserByUsername(accountId);
     if (!passwordEncoder.matches(password, detail.getPassword())) {
       throw new BadCredentialsException("비밀번호가 틀립니다.");
     }

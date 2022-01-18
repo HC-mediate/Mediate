@@ -29,24 +29,25 @@ public class JoinService {
     }
   }
 
-  public void saveAccount(String id, String rawPassword) {
-    Account account = new Account(id, passwordEncoder.encode(rawPassword), "USER");
+  public void saveAccount(String id, String rawPassword, UserType userType) {
+    Account account = new Account(id, passwordEncoder.encode(rawPassword), userType.name());
     accountRepository.save(account);
   }
 
   @Transactional
   public void tutorJoin(TutorSignupDto dto) {
     isOverlapAccountId(dto.getId());
-    saveAccount(dto.getId(), dto.getPassword());
+    saveAccount(dto.getId(), dto.getPassword(), UserType.TUTOR);
     AccademicInfo info = new AccademicInfo(dto.getSchool(), dto.getMajor(), dto.getGrade());
-    Tutor tutor = new Tutor(dto.getId(), dto.getName(), dto.getAddress(), dto.getCurriculum(), info);
+    Tutor tutor =
+        new Tutor(dto.getId(), dto.getName(), dto.getAddress(), dto.getCurriculum(), info);
     tutorRepository.save(tutor);
   }
 
   @Transactional
   public void tuteeJoin(TuteeSignupDto dto) {
     isOverlapAccountId(dto.getId());
-    saveAccount(dto.getId(), dto.getPassword());
+    saveAccount(dto.getId(), dto.getPassword(), UserType.TUTEE);
     AccademicInfo info = new AccademicInfo(dto.getSchool(), dto.getGrade());
     Tutee tutee = new Tutee(dto.getId(), dto.getName(), dto.getAddress(), info);
     tuteeRepository.save(tutee);
