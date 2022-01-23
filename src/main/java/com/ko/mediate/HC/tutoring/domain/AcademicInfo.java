@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Embeddable
-public class AccademicInfo {
+public class AcademicInfo {
   @Column(name = "school")
   private String school;
 
@@ -16,14 +16,14 @@ public class AccademicInfo {
   @Column(name = "grade")
   private String grade;
 
-  public AccademicInfo(String school, String grade) {
+  public AcademicInfo(String school, String grade) {
     this.school = school;
     this.grade = grade;
   }
 
-  protected AccademicInfo() {};
+  protected AcademicInfo() {};
 
-  public AccademicInfo(String school, String major, String grade) {
+  public AcademicInfo(String school, String major, String grade) {
     this.school = school;
     this.major = major;
     this.grade = grade;

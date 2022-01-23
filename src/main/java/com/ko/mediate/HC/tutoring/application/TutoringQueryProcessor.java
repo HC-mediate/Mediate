@@ -2,7 +2,7 @@ package com.ko.mediate.HC.tutoring.application;
 
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTuteeDto;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTutorDto;
-import com.ko.mediate.HC.tutoring.domain.AccademicInfo;
+import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.tutoring.domain.Tutee;
 import com.ko.mediate.HC.tutoring.domain.Tutor;
 import com.ko.mediate.HC.tutoring.infra.JpaTuteeRepository;
@@ -25,7 +25,7 @@ public class TutoringQueryProcessor {
         tutorRepository
             .findByAccountId(accountId)
             .orElseThrow(() -> new IllegalArgumentException("찾으려는 튜터 정보가 없습니다."));
-    AccademicInfo info = tutor.getAccademicInfo();
+    AcademicInfo info = tutor.getAcademicInfo();
     return new GetTutorDto(
         tutor.getName(), info.getSchool(), info.getGrade(), info.getMajor(), tutor.getAddress());
   }
@@ -35,7 +35,7 @@ public class TutoringQueryProcessor {
         tuteeRepository
             .findByAccountId(accuntId)
             .orElseThrow(() -> new IllegalArgumentException("찾으려는 튜티 정보가 없습니다."));
-    AccademicInfo info = tutee.getAccademicInfo();
+    AcademicInfo info = tutee.getAcademicInfo();
     return new GetTuteeDto(tutee.getName(), info.getSchool(), info.getGrade(), tutee.getAddress());
   }
 
@@ -43,7 +43,7 @@ public class TutoringQueryProcessor {
     return tutorRepository.findAll().stream()
         .map(
             t -> {
-              AccademicInfo info = t.getAccademicInfo();
+              AcademicInfo info = t.getAcademicInfo();
               GetTutorDto dto =
                   new GetTutorDto(
                       t.getName(),
@@ -60,7 +60,7 @@ public class TutoringQueryProcessor {
     return tuteeRepository.findAll().stream()
         .map(
             t -> {
-              AccademicInfo info = t.getAccademicInfo();
+              AcademicInfo info = t.getAcademicInfo();
               GetTuteeDto dto =
                   new GetTuteeDto(t.getName(), info.getSchool(), info.getGrade(), t.getAddress());
               return dto;

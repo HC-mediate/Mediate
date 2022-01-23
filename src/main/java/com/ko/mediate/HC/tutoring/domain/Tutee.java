@@ -18,7 +18,7 @@ public class Tutee {
   private Long id;
 
   @Embedded
-  private AccademicInfo accademicInfo;
+  private AcademicInfo academicInfo;
 
   @Embedded
   private AccountId accountId;
@@ -31,10 +31,10 @@ public class Tutee {
 
   protected Tutee() {};
 
-  public Tutee(String accountId, String name, String address, AccademicInfo accademicInfo) {
+  public Tutee(String accountId, String name, String address, AcademicInfo academicInfo) {
     this.accountId = new AccountId(accountId);
     this.name = name;
-    this.accademicInfo = accademicInfo;
+    this.academicInfo = academicInfo;
     this.address = address;
   }
 

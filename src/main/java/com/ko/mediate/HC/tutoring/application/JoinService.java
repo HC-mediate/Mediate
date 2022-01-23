@@ -2,7 +2,7 @@ package com.ko.mediate.HC.tutoring.application;
 
 import com.ko.mediate.HC.tutoring.application.dto.request.TuteeSignupDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutorSignupDto;
-import com.ko.mediate.HC.tutoring.domain.AccademicInfo;
+import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.tutoring.domain.Account;
 import com.ko.mediate.HC.tutoring.domain.AccountId;
 import com.ko.mediate.HC.tutoring.domain.Tutee;
@@ -38,7 +38,7 @@ public class JoinService {
   public void Join(TutorSignupDto dto) {
     isOverlapAccountId(dto.getId());
     saveAccount(dto.getId(), dto.getPassword(), RoleType.ROLE_TUTOR);
-    AccademicInfo info = new AccademicInfo(dto.getSchool(), dto.getMajor(), dto.getGrade());
+    AcademicInfo info = new AcademicInfo(dto.getSchool(), dto.getMajor(), dto.getGrade());
     Tutor tutor =
         new Tutor(dto.getId(), dto.getName(), dto.getAddress(), dto.getCurriculum(), info);
     tutorRepository.save(tutor);
@@ -48,7 +48,7 @@ public class JoinService {
   public void Join(TuteeSignupDto dto) {
     isOverlapAccountId(dto.getId());
     saveAccount(dto.getId(), dto.getPassword(), RoleType.ROLE_TUTEE);
-    AccademicInfo info = new AccademicInfo(dto.getSchool(), dto.getGrade());
+    AcademicInfo info = new AcademicInfo(dto.getSchool(), dto.getGrade());
     Tutee tutee = new Tutee(dto.getId(), dto.getName(), dto.getAddress(), info);
     tuteeRepository.save(tutee);
   }

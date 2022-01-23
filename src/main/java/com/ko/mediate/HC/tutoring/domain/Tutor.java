@@ -31,16 +31,16 @@ public class Tutor {
   @Enumerated(value = EnumType.STRING)
   private Curriculum curriculum; // 교과 과정
 
-  @Embedded private AccademicInfo accademicInfo; // 튜터의 학생 정보
+  @Embedded private AcademicInfo academicInfo; // 튜터의 학생 정보
 
   protected Tutor() {};
 
-  public Tutor(String accountId, String name, String address, Curriculum curriculum, AccademicInfo accademicInfo) {
+  public Tutor(String accountId, String name, String address, Curriculum curriculum, AcademicInfo academicInfo) {
     this.accountId = new AccountId(accountId);
     this.name = name;
     this.address = address;
     this.curriculum = curriculum;
-    this.accademicInfo = accademicInfo;
+    this.academicInfo = academicInfo;
   }
 
   public String getStringAccountId() {
