@@ -29,15 +29,15 @@ public class JoinService {
     }
   }
 
-  public void saveAccount(String id, String rawPassword, UserType userType) {
-    Account account = new Account(id, passwordEncoder.encode(rawPassword), userType.name());
+  public void saveAccount(String id, String rawPassword, RoleType roleType) {
+    Account account = new Account(id, passwordEncoder.encode(rawPassword), roleType.name());
     accountRepository.save(account);
   }
 
   @Transactional
-  public void tutorJoin(TutorSignupDto dto) {
+  public void Join(TutorSignupDto dto) {
     isOverlapAccountId(dto.getId());
-    saveAccount(dto.getId(), dto.getPassword(), UserType.TUTOR);
+    saveAccount(dto.getId(), dto.getPassword(), RoleType.ROLE_TUTOR);
     AccademicInfo info = new AccademicInfo(dto.getSchool(), dto.getMajor(), dto.getGrade());
     Tutor tutor =
         new Tutor(dto.getId(), dto.getName(), dto.getAddress(), dto.getCurriculum(), info);
@@ -45,9 +45,9 @@ public class JoinService {
   }
 
   @Transactional
-  public void tuteeJoin(TuteeSignupDto dto) {
+  public void Join(TuteeSignupDto dto) {
     isOverlapAccountId(dto.getId());
-    saveAccount(dto.getId(), dto.getPassword(), UserType.TUTEE);
+    saveAccount(dto.getId(), dto.getPassword(), RoleType.ROLE_TUTEE);
     AccademicInfo info = new AccademicInfo(dto.getSchool(), dto.getGrade());
     Tutee tutee = new Tutee(dto.getId(), dto.getName(), dto.getAddress(), info);
     tuteeRepository.save(tutee);

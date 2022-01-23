@@ -21,13 +21,13 @@ public class JoinController {
 
   @PostMapping(value = "/tutor/signup", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> Signup(@Valid @RequestBody TutorSignupDto dto) {
-    joinService.tutorJoin(dto);
+    joinService.Join(dto);
     return ResponseEntity.ok("회원가입 완료");
   }
 
   @PostMapping(value = "/tutee/signup", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> Signup(@Valid @RequestBody TuteeSignupDto dto) {
-    joinService.tuteeJoin(dto);
+    joinService.Join(dto);
     return ResponseEntity.ok("회원가입 완료");
   }
 }
