@@ -15,8 +15,11 @@ public class GetTutoringDetailDto {
   private String tutoringName;
 
   @ApiModelProperty(value = "시작 일자")
-  private LocalDateTime startedAt;
+  private String startedAt;
 
+  @ApiModelProperty(value = "숙제 목록")
   private List<GetHomeworkDto> homeworks;
+
+  @ApiModelProperty(value = "진행도 목록")
   private List<GetProgressDto> progresses;
 }

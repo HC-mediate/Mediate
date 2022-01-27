@@ -1,12 +1,19 @@
 package com.ko.mediate.HC.tutoring.application;
 
+import com.ko.mediate.HC.tutoring.application.dto.response.GetHomeworkDto;
+import com.ko.mediate.HC.tutoring.application.dto.response.GetProgressDto;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTuteeDto;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTutorDto;
+import com.ko.mediate.HC.tutoring.application.dto.response.GetTutoringDetailDto;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.tutoring.domain.Tutee;
 import com.ko.mediate.HC.tutoring.domain.Tutor;
+import com.ko.mediate.HC.tutoring.domain.Tutoring;
 import com.ko.mediate.HC.tutoring.infra.JpaTuteeRepository;
 import com.ko.mediate.HC.tutoring.infra.JpaTutorRepository;
+import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TutoringQueryProcessor {
   private final JpaTutorRepository tutorRepository;
   private final JpaTuteeRepository tuteeRepository;
+  private final JpaTutoringRepository tutoringRepository;
 
   public GetTutorDto getTutorDetail(String accountId) {
     Tutor tutor =
@@ -66,5 +74,27 @@ public class TutoringQueryProcessor {
               return dto;
             })
         .collect(Collectors.toList());
+  }
+
+  public GetTutoringDetailDto getTutoringDetailById(long tutoringId) {
+    Tutoring tutoring =
+        tutoringRepository
+            .findTutoringDetailInfoById(tutoringId)
+            .orElseThrow(() -> new IllegalArgumentException("No Such Id"));
+    return new GetTutoringDetailDto(
+        tutoring.getTutoringName(),
+        tutoring.getStartedAt(),
+        tutoring.getHomeworks().stream()
+            .map(
+                h -> {
+                  return new GetHomeworkDto(h.getId(), h.getContent(), h.getIsFinished());
+                })
+            .collect(Collectors.toList()),
+        tutoring.getProgresses().stream()
+            .map(
+                p -> {
+                  return new GetProgressDto(p.getId(), p.getContent(), p.getIsFinished());
+                })
+            .collect(Collectors.toList()));
   }
 }

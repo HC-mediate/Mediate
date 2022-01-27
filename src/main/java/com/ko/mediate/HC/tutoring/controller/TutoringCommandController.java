@@ -46,9 +46,4 @@ public class TutoringCommandController {
     commandExecutor.cancelTutoring(authValue, tutoringId);
     return ResponseEntity.ok("튜터링이 취소되었습니다.");
   }
-
-  @GetMapping(value = "/tutoring/{tutoringId}")
-  public ResponseEntity getTutoringDetail(@PathVariable long tutoringId) {
-    return ResponseEntity.ok(commandExecutor.getTutoringDetail(tutoringId));
-  }
 }

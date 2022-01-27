@@ -4,15 +4,9 @@ import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseType;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetHomeworkDto;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetProgressDto;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetTutoringDetailDto;
 import com.ko.mediate.HC.tutoring.domain.Tutoring;
 import com.ko.mediate.HC.tutoring.domain.TutoringStat;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,12 +41,10 @@ public class TutoringCommandExecutor {
     if (dto.getResponseType() == TutoringResponseType.ACCEPT) {
       tutoring.acceptTutoring();
       return TutoringResponseType.ACCEPT;
-    }
-    else if(tutoring.isWaitingAcceptStat()){
+    } else if (tutoring.isWaitingAcceptStat()) {
       tutoringRepository.delete(tutoring);
       return TutoringResponseType.REFUSE;
-    }
-    else{
+    } else {
       throw new IllegalArgumentException("수락 대기 중 상태가 아닙니다.");
     }
   }
@@ -76,28 +68,5 @@ public class TutoringCommandExecutor {
             .findById(tutoringId)
             .orElseThrow(() -> new IllegalArgumentException("No Such Id"));
     return tutoring.cancelTutoring();
-  }
-
-  @Transactional(readOnly = true)
-  public GetTutoringDetailDto getTutoringDetail(long tutoringId) {
-    Tutoring tutoring =
-        tutoringRepository
-            .findTutoringDetailInfoById(tutoringId)
-            .orElseThrow(() -> new IllegalArgumentException("No Such Id"));
-    return new GetTutoringDetailDto(
-        tutoring.getTutoringName(),
-        LocalDateTime.parse(tutoring.getStartedAt(), DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-        tutoring.getHomeworks().stream()
-            .map(
-                h -> {
-                  return new GetHomeworkDto(h.getId(), h.getContent(), h.getIsFinished());
-                })
-            .collect(Collectors.toList()),
-        tutoring.getProgresses().stream()
-            .map(
-                p -> {
-                  return new GetProgressDto(p.getId(), p.getContent(), p.getIsFinished());
-                })
-            .collect(Collectors.toList()));
   }
 }

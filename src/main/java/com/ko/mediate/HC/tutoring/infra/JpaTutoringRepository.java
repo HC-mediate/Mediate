@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JpaTutoringRepository extends JpaRepository<Tutoring, Long> {
   @Query(
-      "SELECT t FROM Tutoring t JOIN FETCH t.homeworks JOIN FETCH t.progresses WHERE t.id = :tutoringId")
+      "SELECT t FROM Tutoring t LEFT JOIN t.homeworks LEFT JOIN t.progresses WHERE t.id = :tutoringId")
   Optional<Tutoring> findTutoringDetailInfoById(@Param("tutoringId") Long tutoringId);
 }
