@@ -28,7 +28,7 @@ public class TutoringCommandController {
   @ApiOperation(value = "튜터링을 생성하는 api")
   public ResponseEntity requestTutoring(
       @RequestHeader(name = "Authorization") String authValue,
-      @RequestBody RequestTutoringDto dto) {
+      @Valid @RequestBody RequestTutoringDto dto) {
     commandExecutor.requestTutoring(dto);
     return ResponseEntity.status(HttpStatus.CREATED).body("요청을 보냈습니다.");
   }
@@ -38,7 +38,7 @@ public class TutoringCommandController {
   public ResponseEntity<String> responseTutoring(
       @RequestHeader(name = "Authorization") String authValue,
       @PathVariable long tutoringId,
-      @RequestBody TutoringResponseDto dto) {
+      @Valid @RequestBody TutoringResponseDto dto) {
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(commandExecutor.responseTutoring(authValue, tutoringId, dto).getMessage());
   }
