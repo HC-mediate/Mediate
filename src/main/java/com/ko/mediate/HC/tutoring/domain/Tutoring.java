@@ -17,11 +17,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
+@Table(name = "tb_tutoring")
 public class Tutoring {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
