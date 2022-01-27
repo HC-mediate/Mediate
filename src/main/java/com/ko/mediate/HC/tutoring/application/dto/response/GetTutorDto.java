@@ -13,12 +13,16 @@ import lombok.NoArgsConstructor;
 public class GetTutorDto {
   @ApiModelProperty(value = "튜터 이름")
   private String name;
+
   @ApiModelProperty(value = "학교 이름")
   private String school;
+
   @ApiModelProperty(value = "학과 이름")
   private String major;
+
   @ApiModelProperty(value = "학년")
   private String grade;
+
   @ApiModelProperty(value = "주소")
   private String address;
 }

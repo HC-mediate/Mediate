@@ -3,6 +3,7 @@ package com.ko.mediate.HC.tutoring.controller;
 import com.ko.mediate.HC.tutoring.application.TutoringCommandExecutor;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,11 @@ public class TutoringCommandController {
   private final TutoringCommandExecutor commandExecutor;
 
   @PostMapping(value = "/tutoring", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ApiOperation(value = "튜터링을 생성하는 api")
   public ResponseEntity requestTutoring(
       @RequestHeader(name = "Authorization") String authValue,
       @RequestBody RequestTutoringDto dto) {
-    commandExecutor.requestTutoring(authValue, dto);
+    commandExecutor.requestTutoring(dto);
     return ResponseEntity.ok("요청을 보냈습니다.");
   }
 
@@ -35,7 +37,7 @@ public class TutoringCommandController {
       @PathVariable long tutoringId,
       @RequestBody TutoringResponseDto dto) {
     return ResponseEntity.ok(
-        commandExecutor.TutoringResponse(authValue, tutoringId, dto).getMessage());
+        commandExecutor.responseTutoring(authValue, tutoringId, dto).getMessage());
   }
 
   @DeleteMapping(value = "/tutoring/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)

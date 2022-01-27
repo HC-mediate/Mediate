@@ -13,10 +13,13 @@ import lombok.NoArgsConstructor;
 public class GetTuteeDto {
   @ApiModelProperty(value = "튜티 이름")
   private String name;
+
   @ApiModelProperty(value = "학교 이름")
   private String school;
+
   @ApiModelProperty(value = "학년")
   private String grade;
+
   @ApiModelProperty(value = "주소")
   private String address;
 }

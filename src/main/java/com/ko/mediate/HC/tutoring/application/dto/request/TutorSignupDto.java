@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutoring.application.dto.request;
 
+import com.ko.mediate.HC.tutoring.application.RoleType;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotEmpty;
@@ -40,7 +41,7 @@ public class TutorSignupDto {
   private String address;
 
   @ApiModelProperty(name = "튜터/튜티 타입", required = true)
-  private SignupType type;
+  private RoleType type;
 
   @ApiModelProperty(name = "교육가능한 교과 과정", required = true)
   private Curriculum curriculum;

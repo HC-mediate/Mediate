@@ -72,6 +72,10 @@ public class Tutoring {
     this.stat = stat;
   }
 
+  public boolean isWaitingAcceptStat(){
+    return this.stat == TutoringStat.WAITING_ACCEPT;
+  }
+
   public boolean acceptTutoring() {
     if (this.stat != TutoringStat.WAITING_ACCEPT) {
       throw new IllegalArgumentException("수락 대기 중 상태가 아닙니다.");

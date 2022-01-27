@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutoring.application.dto.request;
 
+import com.ko.mediate.HC.tutoring.application.RoleType;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -35,5 +36,5 @@ public class TuteeSignupDto {
   private String address;
 
   @ApiModelProperty(name = "튜터/튜티 타입", required = true)
-  private SignupType type;
+  private RoleType type;
 }

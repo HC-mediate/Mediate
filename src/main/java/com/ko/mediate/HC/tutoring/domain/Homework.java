@@ -16,7 +16,6 @@ public class Homework {
   private Long id;
 
   @ManyToOne
-  @Column(name = "tutoring_id")
   private Tutoring tutoring;
 
   @Column(name = "content")
