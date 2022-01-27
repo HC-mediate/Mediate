@@ -56,7 +56,8 @@ public class Tutoring {
   @JoinColumn(name = "tutoring_id")
   private Set<Progress> progresses = new HashSet<>();
 
-  protected Tutoring() {};
+  protected Tutoring() {}
+  ;
 
   public Tutoring(String tutorId, String tuteeId) {
     this.tutorId = new AccountId(tutorId);
@@ -72,7 +73,7 @@ public class Tutoring {
     this.stat = stat;
   }
 
-  public boolean isWaitingAcceptStat(){
+  public boolean isWaitingAcceptStat() {
     return this.stat == TutoringStat.WAITING_ACCEPT;
   }
 
@@ -103,9 +104,19 @@ public class Tutoring {
     return true;
   }
 
+  // 엔티티 수정 메서드
+  public void changeTutoringName(String tutoringName) {
+    this.tutoringName = tutoringName;
+  }
+
   // 연관 관계 편의 메서드
   public void addHomework(Homework homework) {
     homework.changeTutoring(this);
     this.homeworks.add(homework);
+  }
+
+  public void addProgress(Progress progress) {
+    progress.changeTutoring(this);
+    this.progresses.add(progress);
   }
 }

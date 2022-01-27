@@ -69,4 +69,13 @@ public class TutoringCommandExecutor {
             .orElseThrow(() -> new IllegalArgumentException("No Such Id"));
     return tutoring.cancelTutoring();
   }
+
+  @Transactional
+  public void updateTutoring(String authValue, long tutoringId, RequestTutoringDto dto) {
+    Tutoring tutoring =
+        tutoringRepository
+            .findById(tutoringId)
+            .orElseThrow(() -> new IllegalArgumentException("No Such Id"));
+    tutoring.changeTutoringName(dto.getTutoringName());
+  }
 }
