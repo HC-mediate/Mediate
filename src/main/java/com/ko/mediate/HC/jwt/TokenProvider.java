@@ -105,12 +105,20 @@ public class TokenProvider implements InitializingBean {
     }
   }
 
-  public String getAccountIdWithToken(String authValue) {
+  private String getAccountIdWithToken(String authValue) {
     return Jwts.parserBuilder()
         .setSigningKey(key)
         .build()
         .parseClaimsJws(authValue.substring(7))
         .getBody()
         .getSubject();
+  }
+
+  public boolean isUserToken(String authValue, String accountId) {
+    if (getAccountIdWithToken(authValue).equals(accountId)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +36,7 @@ public class TutoringCommandController {
     return ResponseEntity.status(HttpStatus.CREATED).body("요청을 보냈습니다.");
   }
 
+  @PreAuthorize("@tokenProvider.isUserToken(#authValue, #dto.fromAccountId)")
   @ApiOperation(value = "튜터링 제안에 대한 응답을 보내는 api")
   @PostMapping(value = "/tutoring/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> responseTutoring(

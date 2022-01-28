@@ -12,8 +12,6 @@ import com.ko.mediate.HC.tutoring.domain.Tutoring;
 import com.ko.mediate.HC.tutoring.infra.JpaTuteeRepository;
 import com.ko.mediate.HC.tutoring.infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
