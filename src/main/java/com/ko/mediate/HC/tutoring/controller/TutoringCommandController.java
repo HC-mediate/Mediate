@@ -3,6 +3,7 @@ package com.ko.mediate.HC.tutoring.controller;
 import com.ko.mediate.HC.tutoring.application.TutoringCommandExecutor;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
+@Api(tags = {"생성, 업데이트, 삭제용 api"})
 public class TutoringCommandController {
   private final TutoringCommandExecutor commandExecutor;
 

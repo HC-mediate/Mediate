@@ -4,6 +4,7 @@ import com.ko.mediate.HC.jwt.JwtFilter;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutoring.application.dto.response.TokenDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.LoginDto;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
+@Api(tags = {"로그인용 api"})
 public class AuthController {
   private final TokenProvider tokenProvider;
   private final AuthenticationManagerBuilder authenticationManagerBuilder;

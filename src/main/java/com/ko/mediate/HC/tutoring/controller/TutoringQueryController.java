@@ -4,6 +4,7 @@ import com.ko.mediate.HC.tutoring.application.TutoringQueryProcessor;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTuteeDto;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTutorDto;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTutoringDetailDto;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api")
 @RequiredArgsConstructor
+@Api(tags = {"튜터링 조회용 api"})
 public class TutoringQueryController {
   // 목록 조회, 상세 조회
   private final TutoringQueryProcessor tutoringQueryProcessor;
