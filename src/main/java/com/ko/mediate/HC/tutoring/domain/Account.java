@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -30,13 +31,18 @@ public class Account {
   @Column(name = "authority")
   private String authority;
 
+  @Column(name = "phone_num")
+  private String phoneNum;
+
   protected Account() {};
 
-  public Account(String accountId, String password, String authority) {
+  @Builder
+  public Account(String accountId, String password, String phoneNum, String authority) {
     this.accountId = new AccountId(accountId);
     this.password = password;
     this.authority = authority;
     this.isActivated = true;
+    this.phoneNum = phoneNum;
   }
 
   public boolean isActivated() {

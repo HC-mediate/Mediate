@@ -37,7 +37,7 @@ public class TutoringCommandExecutor {
         tutoringRepository
             .findById(tutoringId)
             .orElseThrow(() -> new IllegalArgumentException("No Such Id"));
-
+    //todo: 튜터링 제안 이벤트 발생
     if (dto.getResponseType() == TutoringResponseType.ACCEPT) {
       tutoring.acceptTutoring();
       return TutoringResponseType.ACCEPT;

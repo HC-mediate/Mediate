@@ -33,13 +33,13 @@ public class AuthTest {
   private static String password;
   private static int order = 1; // 매 시도마다 아이디를 다르게 하기 위함.
 
-  @BeforeEach
-  public void setup() {
-    password = passwordEncoder.encode("test");
-    Account account =
-        new Account("test" + ++order, password, "USER");
-    accountRepository.save(account);
-  }
+//  @BeforeEach
+//  public void setup() {
+//    password = passwordEncoder.encode("test");
+//    Account account =
+//        new Account("test" + ++order, password, "USER");
+//    accountRepository.save(account);
+//  }
 
 //  @Test
 //  @DisplayName("올바른 로그인 시도")
