@@ -2,7 +2,6 @@ package com.ko.mediate.HC.tutoring.controller;
 
 import com.ko.mediate.HC.tutoring.application.AuthService;
 import com.ko.mediate.HC.tutoring.application.TutoringQueryProcessor;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetAccountDto;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTuteeAccountDto;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTuteeDto;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTutorAccountDto;

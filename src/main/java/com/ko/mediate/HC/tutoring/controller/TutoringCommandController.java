@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TutoringCommandController {
   private final TutoringCommandExecutor commandExecutor;
 
-  @PostMapping(value = "/tutoring", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/tutorings", produces = MediaType.APPLICATION_JSON_VALUE)
   @ApiOperation(value = "튜터링을 생성하는 api")
   public ResponseEntity requestTutoring(
       @RequestHeader(name = "Authorization") String authValue,
@@ -38,7 +38,7 @@ public class TutoringCommandController {
 
   @PreAuthorize("@tokenProvider.isUserToken(#authValue, #dto.fromAccountId)")
   @ApiOperation(value = "튜터링 제안에 대한 응답을 보내는 api")
-  @PostMapping(value = "/tutoring/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> responseTutoring(
       @RequestHeader(name = "Authorization") String authValue,
       @PathVariable long tutoringId,
@@ -48,7 +48,7 @@ public class TutoringCommandController {
   }
 
   @ApiOperation(value = "튜터링을 취소하는 api")
-  @DeleteMapping(value = "/tutoring/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @DeleteMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> cancelTutoring(
       @RequestHeader(name = "Authorization") String authValue, @PathVariable long tutoringId) {
     commandExecutor.cancelTutoring(authValue, tutoringId);
@@ -56,7 +56,7 @@ public class TutoringCommandController {
   }
 
   @ApiOperation(value = "튜터링 정보를 업데이트하는 api")
-  @PutMapping(value = "/tutoring/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PutMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> updateTutoring(
       @RequestHeader(name = "Authorization") String authValue,
       @PathVariable long tutoringId,

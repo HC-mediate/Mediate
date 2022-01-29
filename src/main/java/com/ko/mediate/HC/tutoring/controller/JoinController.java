@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class JoinController {
   private final JoinService joinService;
 
-  @PostMapping(value = "/tutor/signup", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/tutors/signup", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> Signup(@Valid @RequestBody TutorSignupDto dto) {
     joinService.Join(dto);
     return ResponseEntity.ok("회원가입 완료");
   }
 
-  @PostMapping(value = "/tutee/signup", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/tutees/signup", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> Signup(@Valid @RequestBody TuteeSignupDto dto) {
     joinService.Join(dto);
     return ResponseEntity.ok("회원가입 완료");
