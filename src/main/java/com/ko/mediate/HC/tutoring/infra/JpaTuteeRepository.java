@@ -1,6 +1,8 @@
 package com.ko.mediate.HC.tutoring.infra;
 
+import com.ko.mediate.HC.tutoring.domain.AccountId;
 import com.ko.mediate.HC.tutoring.domain.Tutee;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +14,8 @@ public interface JpaTuteeRepository extends JpaRepository<Tutee, Long> {
 
   @Query("SELECT t FROM Tutee t WHERE t.accountId.accountId = :accountId")
   Optional<Tutee> findByAccountId(@Param("accountId") String accountId);
+
+  @Query(
+      "SELECT t, a FROM Tutee t, Account a WHERE t.accountId.accountId = :accountId and a.accountId.accountId = :accountId")
+  List<Object[]> findTuteeAccountInfoById(String accountId);
 }

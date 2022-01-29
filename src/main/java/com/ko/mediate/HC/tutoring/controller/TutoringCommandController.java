@@ -44,7 +44,7 @@ public class TutoringCommandController {
       @PathVariable long tutoringId,
       @Valid @RequestBody TutoringResponseDto dto) {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(commandExecutor.responseTutoring(authValue, tutoringId, dto).getMessage());
+        .body(commandExecutor.responseTutoring(tutoringId, dto).getMessage());
   }
 
   @ApiOperation(value = "튜터링을 취소하는 api")

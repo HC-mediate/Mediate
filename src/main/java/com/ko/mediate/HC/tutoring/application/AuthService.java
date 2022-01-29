@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutoring.application;
 
+import com.ko.mediate.HC.tutoring.application.dto.response.GetAccountDto;
 import com.ko.mediate.HC.tutoring.domain.Account;
 import com.ko.mediate.HC.tutoring.domain.AccountId;
 import com.ko.mediate.HC.tutoring.infra.JpaAccountRepository;
@@ -35,5 +36,15 @@ public class AuthService implements UserDetailsService {
     List<GrantedAuthority> grantedAuthorities =
         Arrays.asList(new SimpleGrantedAuthority(account.getAuthority()));
     return new User(account.getStringAccountId(), account.getPassword(), grantedAuthorities);
+  }
+
+  public GetAccountDto getAccountDetail(String accountId) {
+    return accountRepository
+        .findByAccountId(new AccountId(accountId))
+        .map(
+            a -> {
+              return new GetAccountDto(a.getStringAccountId(), a.getPhoneNum());
+            })
+        .orElseThrow(() -> new IllegalArgumentException("요청한 계정 ID가 없습니다."));
   }
 }

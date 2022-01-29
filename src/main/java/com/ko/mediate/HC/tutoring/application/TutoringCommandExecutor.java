@@ -30,14 +30,13 @@ public class TutoringCommandExecutor {
   }
 
   @Transactional
-  public TutoringResponseType responseTutoring(
-      String authValue, long tutoringId, TutoringResponseDto dto) {
+  public TutoringResponseType responseTutoring(long tutoringId, TutoringResponseDto dto) {
 
     Tutoring tutoring =
         tutoringRepository
             .findById(tutoringId)
             .orElseThrow(() -> new IllegalArgumentException("No Such Id"));
-    //todo: 튜터링 제안 이벤트 발생
+    // todo: 튜터링 제안 이벤트 발생
     if (dto.getResponseType() == TutoringResponseType.ACCEPT) {
       tutoring.acceptTutoring();
       return TutoringResponseType.ACCEPT;
