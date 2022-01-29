@@ -16,5 +16,5 @@ public interface JpaTutorRepository extends JpaRepository<Tutor, Long> {
 
   @Query(
       "SELECT t, a FROM Tutor t, Account a WHERE t.accountId.accountId = :accountId and a.accountId.accountId = :accountId")
-  List<Object[]> findTutorAccountInfoById(String accountId);
+  List<Object[]> findTutorAccountInfoById(@Param("accountId") String accountId);
 }

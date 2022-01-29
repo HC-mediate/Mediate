@@ -17,5 +17,5 @@ public interface JpaTuteeRepository extends JpaRepository<Tutee, Long> {
 
   @Query(
       "SELECT t, a FROM Tutee t, Account a WHERE t.accountId.accountId = :accountId and a.accountId.accountId = :accountId")
-  List<Object[]> findTuteeAccountInfoById(String accountId);
+  List<Object[]> findTuteeAccountInfoById(@Param("accountId") String accountId);
 }
