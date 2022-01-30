@@ -1,8 +1,8 @@
 package com.ko.mediate.HC.tutee.application;
 
 import com.ko.mediate.HC.tutee.domain.Tutee;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetTuteeAccountDto;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetTuteeDto;
+import com.ko.mediate.HC.tutee.application.response.GetTuteeAccountDto;
+import com.ko.mediate.HC.tutee.application.response.GetTuteeDto;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.tutoring.domain.Account;
 import com.ko.mediate.HC.tutee.Infra.JpaTuteeRepository;

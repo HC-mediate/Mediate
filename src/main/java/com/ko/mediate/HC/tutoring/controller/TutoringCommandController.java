@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
-@Api(tags = {"생성, 업데이트, 삭제용 api"})
+@Api(tags = {"튜터링 생성, 업데이트, 삭제용 api"})
 public class TutoringCommandController {
   private final TutoringCommandExecutor commandExecutor;
 

@@ -2,8 +2,8 @@ package com.ko.mediate.HC.tutor.application;
 
 import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutor.domain.Tutor;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetTutorAccountDto;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetTutorDto;
+import com.ko.mediate.HC.tutor.application.response.GetTutorAccountDto;
+import com.ko.mediate.HC.tutor.application.response.GetTutorDto;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.tutoring.domain.Account;
 import java.util.List;

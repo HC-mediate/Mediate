@@ -2,10 +2,13 @@ package com.ko.mediate.HC.tutee.controller;
 
 import com.ko.mediate.HC.tutee.application.TuteeCommandExecutor;
 import com.ko.mediate.HC.tutee.application.TuteeQueryProcessor;
-import com.ko.mediate.HC.tutoring.application.dto.request.TuteeSignupDto;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetTuteeAccountDto;
+import com.ko.mediate.HC.tutee.application.request.TuteeSignupDto;
+import com.ko.mediate.HC.tutee.application.response.GetTuteeAccountDto;
+import com.ko.mediate.HC.tutee.application.response.GetTuteeDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -22,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
-@Api(tags = {"회원가입용 api"})
+@Api(tags = {"튜티 생성, 조회 api"})
 public class TuteeController {
   private final TuteeQueryProcessor tuteeQueryProcessor;
   private final TuteeCommandExecutor tuteeCommandExecutor;
@@ -39,5 +42,18 @@ public class TuteeController {
   public ResponseEntity<GetTuteeAccountDto> getTuteeAccount(
       @RequestHeader("Authorization") String authValue, @PathVariable String accountId) {
     return ResponseEntity.ok(tuteeQueryProcessor.getTuteeAccount(accountId));
+  }
+
+  @ApiOperation(value = "튜티 정보 목록 조회")
+  @GetMapping(value = "/tutees")
+  public ResponseEntity<List<GetTuteeDto>> getAllTutee() {
+    return ResponseEntity.ok(tuteeQueryProcessor.getAllTutee());
+  }
+
+  @ApiOperation(value = "튜티 정보 상세 조회")
+  @GetMapping(value = "/tutees/{accountId}")
+  public ResponseEntity<GetTuteeDto> getTuteeDetail(
+      @PathVariable @ApiParam(value = "계정 ID") String accountId) {
+    return ResponseEntity.ok(tuteeQueryProcessor.getTuteeDetail(accountId));
   }
 }

@@ -3,7 +3,7 @@ package com.ko.mediate.HC.tutee.application;
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import com.ko.mediate.HC.tutoring.application.AccountService;
 import com.ko.mediate.HC.tutoring.application.RoleType;
-import com.ko.mediate.HC.tutoring.application.dto.request.TuteeSignupDto;
+import com.ko.mediate.HC.tutee.application.request.TuteeSignupDto;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.tutee.Infra.JpaTuteeRepository;
 import lombok.RequiredArgsConstructor;

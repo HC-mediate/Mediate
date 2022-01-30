@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.tutoring.application.dto.response;
+package com.ko.mediate.HC.tutor.application.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

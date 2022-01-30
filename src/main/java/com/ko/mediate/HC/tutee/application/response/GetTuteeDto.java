@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.tutoring.application.dto.response;
+package com.ko.mediate.HC.tutee.application.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,14 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@ApiModel(description = "튜티 마이페이지 정보")
-public class GetTuteeAccountDto {
-  @ApiModelProperty(value = "계정 ID")
-  private String accountId;
-
-  @ApiModelProperty(value = "전화번호")
-  private String phoneNum;
-
+@ApiModel(value = "튜티 정보")
+public class GetTuteeDto {
   @ApiModelProperty(value = "튜티 이름")
   private String name;
 

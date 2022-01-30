@@ -1,6 +1,7 @@
-package com.ko.mediate.HC.tutoring.application.dto.request;
+package com.ko.mediate.HC.tutor.application.request;
 
 import com.ko.mediate.HC.tutoring.application.RoleType;
+import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TuteeSignupDto {
+public class TutorSignupDto {
   @ApiModelProperty(value = "계정 ID", required = true)
   @NotEmpty(message = "ID는 반드시 있어야 합니다.")
   private String id;
@@ -31,14 +32,21 @@ public class TuteeSignupDto {
   @NotEmpty(message = "학교 이름을 입력해주세요")
   private String school;
 
+  @ApiModelProperty(value = "학과 이름", required = true)
+  @NotEmpty(message = "학과를 입력해주세요")
+  private String major;
+
   @ApiModelProperty(value = "학년", required = true)
   @NotEmpty(message = "학년을 입력해주세요")
   private String grade;
 
   @ApiModelProperty(value = "튜터링 가능 지역", required = true)
-  @NotEmpty(message = "튜터링 가능 지역은 반드시 있어야 합니다.")
+  @NotEmpty(message = "주소를 입력해주세요")
   private String address;
 
   @ApiModelProperty(value = "튜터/튜티 타입", required = true)
   private RoleType type;
+
+  @ApiModelProperty(value = "교육가능한 교과 과정", required = true)
+  private Curriculum curriculum;
 }

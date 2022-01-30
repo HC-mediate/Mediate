@@ -2,11 +2,13 @@ package com.ko.mediate.HC.tutor.controller;
 
 import com.ko.mediate.HC.tutor.application.TutorCommandExecutor;
 import com.ko.mediate.HC.tutor.application.TutorQueryProcessor;
-import com.ko.mediate.HC.tutoring.application.AccountService;
-import com.ko.mediate.HC.tutoring.application.dto.request.TutorSignupDto;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetTutorAccountDto;
+import com.ko.mediate.HC.tutor.application.request.TutorSignupDto;
+import com.ko.mediate.HC.tutor.application.response.GetTutorAccountDto;
+import com.ko.mediate.HC.tutor.application.response.GetTutorDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
-@Api(tags = {"회원가입용 api"})
+@Api(tags = {"튜터 생성, 조회 api"})
 public class TutorController {
   private final TutorQueryProcessor tutorQueryProcessor;
   private final TutorCommandExecutor tutorCommandExecutor;
@@ -40,5 +42,18 @@ public class TutorController {
   public ResponseEntity<GetTutorAccountDto> getTutorAccount(
       @RequestHeader("Authorization") String authValue, @PathVariable String accountId) {
     return ResponseEntity.ok(tutorQueryProcessor.getTutorAccount(accountId));
+  }
+
+  @ApiOperation(value = "튜터 정보 목록 조회")
+  @GetMapping(value = "/tutors")
+  public ResponseEntity<List<GetTutorDto>> getAllTutor() {
+    return ResponseEntity.ok(tutorQueryProcessor.getAllTutor());
+  }
+
+  @ApiOperation(value = "튜터 정보 상세 조회")
+  @GetMapping(value = "/tutors/{accountId}")
+  public ResponseEntity<GetTutorDto> getTutorDetail(
+      @PathVariable @ApiParam(value = "계정 ID") String accountId) {
+    return ResponseEntity.ok(tutorQueryProcessor.getTutorDetail(accountId));
   }
 }
