@@ -1,24 +1,14 @@
 package com.ko.mediate.HC.AuthTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ko.mediate.HC.tutoring.domain.Account;
-import com.ko.mediate.HC.tutoring.domain.Tutor;
 import com.ko.mediate.HC.tutoring.infra.JpaAccountRepository;
-import java.util.Arrays;
-import java.util.HashSet;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest

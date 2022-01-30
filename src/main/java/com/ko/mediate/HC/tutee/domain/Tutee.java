@@ -1,5 +1,7 @@
-package com.ko.mediate.HC.tutoring.domain;
+package com.ko.mediate.HC.tutee.domain;
 
+import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
+import com.ko.mediate.HC.tutoring.domain.AccountId;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;

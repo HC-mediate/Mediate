@@ -1,7 +1,6 @@
-package com.ko.mediate.HC.tutoring.infra;
+package com.ko.mediate.HC.tutor.Infra;
 
-import com.ko.mediate.HC.tutoring.domain.AccountId;
-import com.ko.mediate.HC.tutoring.domain.Tutor;
+import com.ko.mediate.HC.tutor.domain.Tutor;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

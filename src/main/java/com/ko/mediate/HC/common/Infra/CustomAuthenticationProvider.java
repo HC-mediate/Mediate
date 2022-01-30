@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.tutoring.infra;
+package com.ko.mediate.HC.common.Infra;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
