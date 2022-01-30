@@ -4,7 +4,7 @@ import com.ko.mediate.HC.tutee.domain.Tutee;
 import com.ko.mediate.HC.tutee.application.response.GetTuteeAccountDto;
 import com.ko.mediate.HC.tutee.application.response.GetTuteeDto;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
-import com.ko.mediate.HC.tutoring.domain.Account;
+import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.tutee.Infra.JpaTuteeRepository;
 import java.util.List;
 import java.util.stream.Collectors;

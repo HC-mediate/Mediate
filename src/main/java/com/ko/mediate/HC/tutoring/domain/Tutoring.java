@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutoring.domain;
 
+import com.ko.mediate.HC.auth.domain.AccountId;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;

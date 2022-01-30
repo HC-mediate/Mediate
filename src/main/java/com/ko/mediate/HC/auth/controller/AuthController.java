@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.tutoring.controller;
+package com.ko.mediate.HC.auth.controller;
 
 import com.ko.mediate.HC.jwt.JwtFilter;
 import com.ko.mediate.HC.jwt.TokenProvider;

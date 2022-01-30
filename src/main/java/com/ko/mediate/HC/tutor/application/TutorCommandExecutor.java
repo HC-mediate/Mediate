@@ -2,7 +2,7 @@ package com.ko.mediate.HC.tutor.application;
 
 import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutor.domain.Tutor;
-import com.ko.mediate.HC.tutoring.application.AccountService;
+import com.ko.mediate.HC.auth.application.AccountService;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import com.ko.mediate.HC.tutor.application.request.TutorSignupDto;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;

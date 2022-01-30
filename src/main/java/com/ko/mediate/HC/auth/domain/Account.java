@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.tutoring.domain;
+package com.ko.mediate.HC.auth.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;

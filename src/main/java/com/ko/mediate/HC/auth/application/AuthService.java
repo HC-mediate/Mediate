@@ -1,7 +1,7 @@
-package com.ko.mediate.HC.tutoring.application;
+package com.ko.mediate.HC.auth.application;
 
-import com.ko.mediate.HC.tutoring.domain.Account;
-import com.ko.mediate.HC.tutoring.domain.AccountId;
+import com.ko.mediate.HC.auth.domain.Account;
+import com.ko.mediate.HC.auth.domain.AccountId;
 import com.ko.mediate.HC.tutoring.infra.JpaAccountRepository;
 import java.util.Arrays;
 import java.util.List;
