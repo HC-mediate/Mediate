@@ -30,7 +30,7 @@ public class AuthService implements UserDetailsService {
 
   private User createUser(String accountId, Account account) {
     if (!account.isActivated()) {
-      throw new RuntimeException("활성화되지 않은 아이디입니다.");
+      throw new BadCredentialsException("활성화되지 않은 아이디입니다.");
     }
     List<GrantedAuthority> grantedAuthorities =
         Arrays.asList(new SimpleGrantedAuthority(account.getAuthority()));

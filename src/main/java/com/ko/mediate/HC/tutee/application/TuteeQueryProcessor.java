@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutee.application;
 
+import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import com.ko.mediate.HC.tutee.application.response.GetTuteeAccountDto;
 import com.ko.mediate.HC.tutee.application.response.GetTuteeDto;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TuteeQueryProcessor {
-  private JpaTuteeRepository tuteeRepository;
+  private final JpaTuteeRepository tuteeRepository;
 
   public List<GetTuteeDto> getAllTutee() {
     return tuteeRepository.findAll().stream()
@@ -54,6 +55,6 @@ public class TuteeQueryProcessor {
                   t.getAddress());
             })
         .findAny()
-        .orElseThrow(() -> new IllegalArgumentException("찾는 ID가 없습니다."));
+        .orElseThrow(() -> new MediateNotFoundException(String.format("해당 ID를 찾을 수 없습니다.")));
   }
 }

@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.auth.application;
 
+import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import com.ko.mediate.HC.auth.domain.Account;
@@ -14,13 +15,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountService {
   private final JpaAccountRepository accountRepository;
-  private final JpaTutorRepository tutorRepository;
-  private final JpaTuteeRepository tuteeRepository;
   private final PasswordEncoder passwordEncoder;
 
   public void isOverlapAccountId(String accountId) {
     if (accountRepository.findByAccountId(new AccountId(accountId)).isPresent()) {
-      throw new IllegalArgumentException("이미 ID가 있습니다.");
+      throw new MediateNotFoundException(String.format("해당 아이디를 찾을 수 없습니다. [%s]", accountId));
     }
   }
 
@@ -34,6 +33,4 @@ public class AccountService {
             .build();
     accountRepository.save(account);
   }
-
-
 }

@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutor.application;
 
+import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.ko.mediate.HC.tutor.application.response.GetTutorAccountDto;
@@ -38,7 +39,7 @@ public class TutorQueryProcessor {
     Tutor tutor =
         tutorRepository
             .findByAccountId(accountId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 찾을 수 없습니다."));
+            .orElseThrow(() -> new MediateNotFoundException("찾는 ID가 없습니다."));
     AcademicInfo info = tutor.getAcademicInfo();
     return new GetTutorDto(
         tutor.getName(), info.getSchool(), info.getMajor(), info.getGrade(), tutor.getAddress());
@@ -60,6 +61,6 @@ public class TutorQueryProcessor {
                   t.getAddress());
             })
         .findAny()
-        .orElseThrow(() -> new IllegalArgumentException("찾는 ID가 없습니다."));
+        .orElseThrow(() -> new MediateNotFoundException("찾는 ID가 없습니다."));
   }
 }

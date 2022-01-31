@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutoring.application;
 
+import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
@@ -35,7 +36,7 @@ public class TutoringCommandExecutor {
     Tutoring tutoring =
         tutoringRepository
             .findById(tutoringId)
-            .orElseThrow(() -> new IllegalArgumentException("No Such Id"));
+            .orElseThrow(() -> new MediateNotFoundException("찾는 ID가 없습니다."));
     // todo: 튜터링 제안 이벤트 발생
     if (dto.getResponseType() == TutoringResponseType.ACCEPT) {
       tutoring.acceptTutoring();
@@ -65,7 +66,7 @@ public class TutoringCommandExecutor {
     Tutoring tutoring =
         tutoringRepository
             .findById(tutoringId)
-            .orElseThrow(() -> new IllegalArgumentException("No Such Id"));
+            .orElseThrow(() -> new MediateNotFoundException("찾는 ID가 없습니다."));
     return tutoring.cancelTutoring();
   }
 
@@ -74,7 +75,7 @@ public class TutoringCommandExecutor {
     Tutoring tutoring =
         tutoringRepository
             .findById(tutoringId)
-            .orElseThrow(() -> new IllegalArgumentException("No Such Id"));
+            .orElseThrow(() -> new MediateNotFoundException("찾는 ID가 없습니다."));
     tutoring.changeTutoringName(dto.getTutoringName());
   }
 }

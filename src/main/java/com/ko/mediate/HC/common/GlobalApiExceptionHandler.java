@@ -2,6 +2,7 @@ package com.ko.mediate.HC.common;
 
 import static java.util.stream.Collectors.toList;
 
+import com.ko.mediate.HC.common.exception.MediateException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,7 +32,7 @@ import static com.ko.mediate.HC.common.ErrorResponseBuilder.*;
 @RestControllerAdvice
 @Slf4j
 public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
-  @ExceptionHandler(value = {AuthenticationException.class})
+  @ExceptionHandler(value = {AuthenticationException.class, BadCredentialsException.class})
   public ResponseEntity<Object> handleAuthenticationException(
       final AuthenticationException ex, final ServletWebRequest request) {
     log(ex, request);
@@ -54,13 +56,13 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponseDto);
   }
 
-  @ExceptionHandler({BusinessException.class})
+  @ExceptionHandler({MediateException.class})
   public ResponseEntity<Object> handleCustomUncaughtDomainLayerException(
-      final BusinessException ex, final ServletWebRequest request) {
+      final MediateException ex, final ServletWebRequest request) {
     log(ex, request);
     final ErrorResponseDto errorResponseDto =
-        build(ex.getCode(), ex.getMessage(), HttpStatus.BAD_REQUEST);
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
+        build(ex.getClass().getSimpleName(), ex.getMessage(), ex.status());
+    return ResponseEntity.status(ex.status()).body(errorResponseDto);
   }
 
   @ExceptionHandler(value = {ConstraintViolationException.class})
