@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -29,6 +30,18 @@ import static com.ko.mediate.HC.common.ErrorResponseBuilder.*;
 @RestControllerAdvice
 @Slf4j
 public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
+  @ExceptionHandler(value = {AuthenticationException.class})
+  public ResponseEntity<Object> handleAuthenticationException(
+      final AuthenticationException ex, final ServletWebRequest request) {
+    log(ex, request);
+    final ErrorResponseDto errorResponseDto =
+        build(
+            AuthenticationException.class.getSimpleName(),
+            ex.getMessage(),
+            HttpStatus.UNAUTHORIZED);
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponseDto);
+  }
+
   @ExceptionHandler(value = {Exception.class})
   public ResponseEntity<Object> handleUncaughtException(
       final Exception ex, final ServletWebRequest request) {
