@@ -70,7 +70,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         aws deploy create-deployment \
-        --application-name mediate-springboot-build \
+        --application-name mediate-springboot2-webservice \
         --deployment-group-name mediate-springboot2-webservice-group \
         --file-exists-behavior OVERWRITE \
         --s3-location bucket=mediate-springboot-build,bundleType=zip,key=mediate-springboot2-webservice.zip \
