@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.tutoring.domain;
 
 import com.ko.mediate.HC.auth.domain.AccountId;
+import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -21,11 +22,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 @Entity
 @Getter
 @Table(name = "tb_tutoring")
-public class Tutoring {
+public class Tutoring extends AbstractAggregateRoot<Tutoring> {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -62,48 +64,31 @@ public class Tutoring {
   protected Tutoring() {}
   ;
 
-  public Tutoring(String tutorId, String tuteeId) {
+  @Builder
+  public Tutoring(String tutoringName, String tutorId, String tuteeId) {
+    this.tutoringName = tutoringName;
     this.tutorId = new AccountId(tutorId);
     this.tuteeId = new AccountId(tuteeId);
     this.stat = TutoringStat.WAITING_ACCEPT;
   }
 
-  @Builder
-  public Tutoring(String tutoringName, String tutorId, String tuteeId, TutoringStat stat) {
-    this.tutoringName = tutoringName;
-    this.tutorId = new AccountId(tutorId);
-    this.tuteeId = new AccountId(tuteeId);
-    this.stat = stat;
-  }
-
-  public boolean isWaitingAcceptStat() {
-    return this.stat == TutoringStat.WAITING_ACCEPT;
-  }
-
   public boolean acceptTutoring() {
     if (this.stat != TutoringStat.WAITING_ACCEPT) {
-      throw new IllegalArgumentException("수락 대기 중 상태가 아닙니다.");
+      throw new MediateIllegalStateException("수락 대기 중 상태가 아닙니다.");
     }
     this.stat = TutoringStat.LEARNING;
     this.startedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    publish();
     return true;
   }
 
   public boolean cancelTutoring() {
-    if (this.stat != TutoringStat.LEARNING) {
-      throw new IllegalArgumentException("학습 중인 상태가 아닙니다.");
+    if (this.stat != TutoringStat.WAITING_ACCEPT && this.stat != TutoringStat.LEARNING) {
+      throw new MediateIllegalStateException("대기 중 상태나 학습 중 상태가 아닙니다.");
     }
     this.stat = TutoringStat.CANCEL;
     this.finishedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-    return true;
-  }
-
-  public boolean completeTutoring() {
-    if (this.stat != TutoringStat.LEARNING) {
-      throw new IllegalArgumentException("튜터링이 진행 중 상태가 아닙니다.");
-    }
-    this.stat = TutoringStat.COMPLETE_TUTORING;
-    this.finishedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    publish();
     return true;
   }
 
@@ -112,14 +97,9 @@ public class Tutoring {
     this.tutoringName = tutoringName;
   }
 
-  // 연관 관계 편의 메서드
-  public void addHomework(Homework homework) {
-    homework.changeTutoring(this);
-    this.homeworks.add(homework);
-  }
-
-  public void addProgress(Progress progress) {
-    progress.changeTutoring(this);
-    this.progresses.add(progress);
+  // 이벤트 발행 메서드
+  private Tutoring publish() {
+    this.registerEvent(new TutoringPublishedEvent(this));
+    return this;
   }
 }

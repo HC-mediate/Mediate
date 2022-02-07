@@ -51,7 +51,7 @@ public class TutoringCommandController {
   @DeleteMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> cancelTutoring(
       @RequestHeader(name = "Authorization") String authValue, @PathVariable long tutoringId) {
-    commandExecutor.cancelTutoring(authValue, tutoringId);
+    commandExecutor.cancelTutoring(tutoringId);
     return ResponseEntity.ok("튜터링이 취소되었습니다.");
   }
 
@@ -61,7 +61,7 @@ public class TutoringCommandController {
       @RequestHeader(name = "Authorization") String authValue,
       @PathVariable long tutoringId,
       @Valid @RequestBody RequestTutoringDto dto) {
-    commandExecutor.updateTutoring(authValue, tutoringId, dto);
+    commandExecutor.updateTutoring(tutoringId, dto);
     return ResponseEntity.ok("튜터링 정보가 업데이트 되었습니다.");
   }
 }

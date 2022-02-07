@@ -19,7 +19,7 @@ public class AccountService {
 
   public void isOverlapAccountId(String accountId) {
     if (accountRepository.findByAccountId(new AccountId(accountId)).isPresent()) {
-      throw new MediateNotFoundException(String.format("해당 아이디를 찾을 수 없습니다. [%s]", accountId));
+      throw new MediateNotFoundException(String.format("이미 존재하는 ID입니다. [%s]", accountId));
     }
   }
 
