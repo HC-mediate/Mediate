@@ -25,8 +25,7 @@ public class TutoringCommandExecutor {
   public TutoringResponseType responseTutoring(long tutoringId, TutoringResponseDto dto) {
     Tutoring tutoring = findByTutoringId(tutoringId);
     if (dto.getResponseType() == TutoringResponseType.REFUSE) {
-      tutoring.cancelTutoring();
-      tutoringRepository.delete(tutoring);
+      tutoring.refuseTutoring();
     } else {
       tutoring.acceptTutoring();
     }

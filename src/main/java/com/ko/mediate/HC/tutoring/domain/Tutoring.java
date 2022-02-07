@@ -82,9 +82,19 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
     return true;
   }
 
+  public boolean refuseTutoring() {
+    if (this.stat != TutoringStat.WAITING_ACCEPT) {
+      throw new MediateIllegalStateException("수락 대기 중 상태가 아닙니다.");
+    }
+    this.stat = TutoringStat.REFUSE;
+    this.finishedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    publish();
+    return true;
+  }
+
   public boolean cancelTutoring() {
-    if (this.stat != TutoringStat.WAITING_ACCEPT && this.stat != TutoringStat.LEARNING) {
-      throw new MediateIllegalStateException("대기 중 상태나 학습 중 상태가 아닙니다.");
+    if (this.stat != TutoringStat.LEARNING) {
+      throw new MediateIllegalStateException("학습 중 상태가 아닙니다.");
     }
     this.stat = TutoringStat.CANCEL;
     this.finishedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
