@@ -29,6 +29,7 @@ public class TutoringCommandExecutor {
     } else {
       tutoring.acceptTutoring();
     }
+    tutoringRepository.save(tutoring);
     return dto.getResponseType();
   }
 
@@ -46,7 +47,9 @@ public class TutoringCommandExecutor {
   @Transactional
   public boolean cancelTutoring(long tutoringId) {
     Tutoring tutoring = findByTutoringId(tutoringId);
-    return tutoring.cancelTutoring();
+    tutoring.cancelTutoring();
+    tutoringRepository.save(tutoring);
+    return true;
   }
 
   @Transactional

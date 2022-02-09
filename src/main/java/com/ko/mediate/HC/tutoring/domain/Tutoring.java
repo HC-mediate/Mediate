@@ -70,6 +70,7 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
     this.tutorId = new AccountId(tutorId);
     this.tuteeId = new AccountId(tuteeId);
     this.stat = TutoringStat.WAITING_ACCEPT;
+    publish();
   }
 
   public boolean acceptTutoring() {
