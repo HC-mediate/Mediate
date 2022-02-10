@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,14 +27,17 @@ public class DataInitializer implements ApplicationRunner {
   private final JpaTuteeRepository tuteeRepository;
   private final JpaTutoringRepository tutoringRepository;
   private final JpaAccountRepository accountRepository;
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public void run(ApplicationArguments args) throws Exception {
     String tutorId = "tutor", tuteeId = "tutee";
     accountRepository.save(
-        new Account(tutorId, tutorId, "010-1234-5678", RoleType.ROLE_TUTOR.name()));
+        new Account(
+            tutorId, passwordEncoder.encode(tutorId), "010-1234-5678", RoleType.ROLE_TUTOR.name()));
     accountRepository.save(
-        new Account(tuteeId, tuteeId, "010-1234-5678", RoleType.ROLE_TUTEE.name()));
+        new Account(
+            tuteeId, passwordEncoder.encode(tuteeId), "010-1234-5678", RoleType.ROLE_TUTEE.name()));
 
     tutorRepository.save(
         new Tutor(
