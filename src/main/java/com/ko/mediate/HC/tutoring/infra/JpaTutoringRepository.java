@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutoring.infra;
 
+import com.ko.mediate.HC.tutoring.application.RoleType;
 import com.ko.mediate.HC.tutoring.domain.Tutoring;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

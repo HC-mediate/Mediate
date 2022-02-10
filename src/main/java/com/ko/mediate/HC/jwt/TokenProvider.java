@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.jwt;
 
+import com.ko.mediate.HC.tutoring.application.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -105,13 +106,25 @@ public class TokenProvider implements InitializingBean {
     }
   }
 
-  private String getAccountIdWithToken(String authValue) {
+  public String getAccountIdWithToken(String authValue) {
     return Jwts.parserBuilder()
         .setSigningKey(key)
         .build()
         .parseClaimsJws(authValue.substring(7))
         .getBody()
         .getSubject();
+  }
+
+  public RoleType getRoleWithToken(String authValue) {
+    String temp1 = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authValue.substring(7)).getBody().getAudience();
+    String temp2 = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authValue.substring(7)).getBody().getSubject();
+    String body = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authValue.substring(7)).getBody().toString();
+    return RoleType.fromString(Jwts.parserBuilder()
+        .setSigningKey(key)
+        .build()
+        .parseClaimsJws(authValue.substring(7))
+        .getBody()
+        .get("auth", String.class));
   }
 
   public boolean isUserToken(String authValue, String accountId) {

@@ -11,17 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class TutoringResponseDto {
-  @ApiModelProperty(value = "요청에 대한 응답을 보낼 계정 ID")
-  @NotEmpty(message = "응답을 보낼 계정 ID는 반드시 있어야 합니다.")
-  private String fromAccountId;
-
-  @ApiModelProperty(value = "요청에 대한 응답을 받을 계정 ID")
-  @NotEmpty(message = "응답을 받을 계정 ID는 반드시 있어야 합니다.")
-  private String toAccountId;
-
-  @ApiModelProperty(value = "튜터/튜티 타입")
-  private RoleType type;
-
   @ApiModelProperty(value = "응답 유형 (수락/거절)")
   private TutoringResponseType responseType;
 }

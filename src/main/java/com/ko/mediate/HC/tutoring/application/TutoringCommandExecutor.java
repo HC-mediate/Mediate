@@ -1,10 +1,12 @@
 package com.ko.mediate.HC.tutoring.application;
 
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
+import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseType;
 import com.ko.mediate.HC.tutoring.domain.Tutoring;
+import com.ko.mediate.HC.tutoring.infra.JpaTutoringCustomRepository;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TutoringCommandExecutor {
   private final JpaTutoringRepository tutoringRepository;
+  private final JpaTutoringCustomRepository tutoringCustomRepository;
+  private final TokenProvider tokenProvider;
 
   public Tutoring findByTutoringId(long tutoringId) {
     return tutoringRepository
@@ -22,11 +26,15 @@ public class TutoringCommandExecutor {
   }
 
   @Transactional
-  public TutoringResponseType responseTutoring(long tutoringId, TutoringResponseDto dto) {
-    Tutoring tutoring = findByTutoringId(tutoringId);
-    if (dto.getResponseType() == TutoringResponseType.REFUSE) {
-      tutoring.refuseTutoring();
-    } else {
+  public TutoringResponseType responseTutoring(long tutoringId, String authValue, TutoringResponseDto dto) {
+    String accountId = tokenProvider.getAccountIdWithToken(authValue);
+    RoleType roleType = tokenProvider.getRoleWithToken(authValue);
+    Tutoring tutoring = tutoringCustomRepository.findTutoringByAccountIdAndRole(tutoringId, accountId, roleType)
+        .orElseThrow(() -> new MediateNotFoundException("튜터링에 속한 계정이 없습니다."));
+    if(TutoringResponseType.REFUSE == dto.getResponseType()){
+      tutoring.cancelTutoring();
+    }
+    else if(TutoringResponseType.ACCEPT == dto.getResponseType()){
       tutoring.acceptTutoring();
     }
     tutoringRepository.save(tutoring);
