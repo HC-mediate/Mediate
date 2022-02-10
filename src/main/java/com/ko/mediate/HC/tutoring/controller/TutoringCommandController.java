@@ -1,5 +1,7 @@
 package com.ko.mediate.HC.tutoring.controller;
 
+import com.ko.mediate.HC.auth.annotation.TokenAccount;
+import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
 import com.ko.mediate.HC.tutoring.application.TutoringCommandExecutor;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
@@ -15,22 +17,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
-@Api(tags = {"튜터링 생성, 업데이트, 삭제용 api"})
+@Api(tags = {"튜터링 생성(제안), 업데이트, 삭제용 api"})
 public class TutoringCommandController {
   private final TutoringCommandExecutor commandExecutor;
 
   @PostMapping(value = "/tutorings", produces = MediaType.APPLICATION_JSON_VALUE)
-  @ApiOperation(value = "튜터링을 생성하는 api")
-  public ResponseEntity requestTutoring(
-      @RequestHeader(name = "Authorization") String authValue,
-      @Valid @RequestBody RequestTutoringDto dto) {
+  @ApiOperation(value = "튜터링을 생성(제안)하는 api")
+  public ResponseEntity requestTutoring(@Valid @RequestBody RequestTutoringDto dto) {
     commandExecutor.requestTutoring(dto);
     return ResponseEntity.status(HttpStatus.CREATED).body("요청을 보냈습니다.");
   }
@@ -38,28 +37,28 @@ public class TutoringCommandController {
   @ApiOperation(value = "튜터링 제안에 대한 응답을 보내는 api")
   @PostMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> responseTutoring(
-      @RequestHeader(name = "Authorization") String authValue,
+      @TokenAccount TokenAccountInfo token,
       @PathVariable long tutoringId,
       @Valid @RequestBody TutoringResponseDto dto) {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(commandExecutor.responseTutoring(tutoringId, authValue, dto).getMessage());
+        .body(commandExecutor.responseTutoring(tutoringId, token, dto).getMessage());
   }
 
   @ApiOperation(value = "튜터링을 취소하는 api")
   @DeleteMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> cancelTutoring(
-      @RequestHeader(name = "Authorization") String authValue, @PathVariable long tutoringId) {
-    commandExecutor.cancelTutoring(tutoringId);
+      @TokenAccount TokenAccountInfo token, @PathVariable long tutoringId) {
+    commandExecutor.cancelTutoring(tutoringId, token);
     return ResponseEntity.ok("튜터링이 취소되었습니다.");
   }
 
   @ApiOperation(value = "튜터링 정보를 업데이트하는 api")
   @PutMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> updateTutoring(
-      @RequestHeader(name = "Authorization") String authValue,
+      @TokenAccount TokenAccountInfo token,
       @PathVariable long tutoringId,
       @Valid @RequestBody RequestTutoringDto dto) {
-    commandExecutor.updateTutoring(tutoringId, dto);
+    commandExecutor.updateTutoring(tutoringId, token, dto);
     return ResponseEntity.ok("튜터링 정보가 업데이트 되었습니다.");
   }
 }

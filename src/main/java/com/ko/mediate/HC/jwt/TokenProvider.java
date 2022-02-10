@@ -1,6 +1,5 @@
 package com.ko.mediate.HC.jwt;
 
-import com.ko.mediate.HC.tutoring.application.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -91,47 +90,7 @@ public class TokenProvider implements InitializingBean {
     return false;
   }
 
-  public void authenticateByAccountId(String AuthValue, String accountId) {
-    String token = AuthValue.substring(7);
-    String id =
-        Jwts.parserBuilder()
-            .setSigningKey(key)
-            .build()
-            .parseClaimsJws(token)
-            .getBody()
-            .getSubject();
-    logger.debug("acoount id In token: " + id);
-    if (!id.equals(accountId)) {
-      throw new IllegalArgumentException("토큰과 계정 ID가 일치하지 않습니다.");
-    }
-  }
-
-  public String getAccountIdWithToken(String authValue) {
-    return Jwts.parserBuilder()
-        .setSigningKey(key)
-        .build()
-        .parseClaimsJws(authValue.substring(7))
-        .getBody()
-        .getSubject();
-  }
-
-  public RoleType getRoleWithToken(String authValue) {
-    String temp1 = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authValue.substring(7)).getBody().getAudience();
-    String temp2 = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authValue.substring(7)).getBody().getSubject();
-    String body = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authValue.substring(7)).getBody().toString();
-    return RoleType.fromString(Jwts.parserBuilder()
-        .setSigningKey(key)
-        .build()
-        .parseClaimsJws(authValue.substring(7))
-        .getBody()
-        .get("auth", String.class));
-  }
-
-  public boolean isUserToken(String authValue, String accountId) {
-    if (getAccountIdWithToken(authValue).equals(accountId)) {
-      return true;
-    } else {
-      return false;
-    }
+  public Claims decode(String token) {
+    return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
   }
 }

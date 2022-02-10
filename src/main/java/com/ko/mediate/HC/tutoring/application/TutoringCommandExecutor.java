@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutoring.application;
 
+import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
@@ -17,24 +18,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class TutoringCommandExecutor {
   private final JpaTutoringRepository tutoringRepository;
   private final JpaTutoringCustomRepository tutoringCustomRepository;
-  private final TokenProvider tokenProvider;
 
-  public Tutoring findByTutoringId(long tutoringId) {
-    return tutoringRepository
-        .findById(tutoringId)
-        .orElseThrow(() -> new MediateNotFoundException("찾는 ID가 없습니다."));
+  public Tutoring findByTutoringIdWithAuth(long tutoringId, String accountId, RoleType roleType) {
+    return tutoringCustomRepository
+        .findTutoringByAccountIdAndRole(tutoringId, accountId, roleType)
+        .orElseThrow(() -> new MediateNotFoundException("튜터링에 속한 계정이 없습니다."));
   }
 
   @Transactional
-  public TutoringResponseType responseTutoring(long tutoringId, String authValue, TutoringResponseDto dto) {
-    String accountId = tokenProvider.getAccountIdWithToken(authValue);
-    RoleType roleType = tokenProvider.getRoleWithToken(authValue);
-    Tutoring tutoring = tutoringCustomRepository.findTutoringByAccountIdAndRole(tutoringId, accountId, roleType)
-        .orElseThrow(() -> new MediateNotFoundException("튜터링에 속한 계정이 없습니다."));
-    if(TutoringResponseType.REFUSE == dto.getResponseType()){
+  public TutoringResponseType responseTutoring(
+      long tutoringId, TokenAccountInfo token, TutoringResponseDto dto) {
+    Tutoring tutoring =
+        findByTutoringIdWithAuth(
+            tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));
+
+    if (TutoringResponseType.REFUSE == dto.getResponseType()) {
       tutoring.cancelTutoring();
-    }
-    else if(TutoringResponseType.ACCEPT == dto.getResponseType()){
+    } else if (TutoringResponseType.ACCEPT == dto.getResponseType()) {
       tutoring.acceptTutoring();
     }
     tutoringRepository.save(tutoring);
@@ -53,16 +53,20 @@ public class TutoringCommandExecutor {
   }
 
   @Transactional
-  public boolean cancelTutoring(long tutoringId) {
-    Tutoring tutoring = findByTutoringId(tutoringId);
+  public boolean cancelTutoring(long tutoringId, TokenAccountInfo token) {
+    Tutoring tutoring =
+        findByTutoringIdWithAuth(
+            tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));
     tutoring.cancelTutoring();
     tutoringRepository.save(tutoring);
     return true;
   }
 
   @Transactional
-  public void updateTutoring(long tutoringId, RequestTutoringDto dto) {
-    Tutoring tutoring = findByTutoringId(tutoringId);
+  public void updateTutoring(long tutoringId, TokenAccountInfo token, RequestTutoringDto dto) {
+    Tutoring tutoring =
+        findByTutoringIdWithAuth(
+            tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));
     tutoring.changeTutoringName(dto.getTutoringName());
   }
 }
