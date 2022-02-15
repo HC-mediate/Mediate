@@ -80,13 +80,13 @@ public class FirebaseCloudMessenger {
 
   private String getAccessToken() throws IOException {
     GoogleCredentials googleCredentials = null;
-    if (activeProfiles.contains("prod")) {
+    if (activeProfiles.contains("local")) {
       googleCredentials =
-          GoogleCredentials.fromStream(new FileInputStream(firebaseConfigPath))
+          GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
               .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
     } else {
       googleCredentials =
-          GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+          GoogleCredentials.fromStream(new FileInputStream(firebaseConfigPath))
               .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
     }
     googleCredentials.refreshIfExpired();
