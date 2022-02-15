@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.ko.mediate.HC.firebase.FcmMessage;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -15,6 +17,7 @@ import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -23,6 +26,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class FirebaseCloudMessenger {
   private final Logger logger = LoggerFactory.getLogger(FirebaseCloudMessenger.class);
+  private final Environment env;
+  private List<String> activeProfiles;
 
   @Value("${firebase.config-path}")
   private String firebaseConfigPath;
@@ -31,6 +36,11 @@ public class FirebaseCloudMessenger {
   private String apiUrl;
 
   private final ObjectMapper objectMapper;
+
+  @PostConstruct
+  public void initActiveProfiles() {
+    this.activeProfiles = List.of(env.getActiveProfiles());
+  }
 
   public void sendMessageTo(String targetToken, String title, String body) throws IOException {
     String message = makeMessage(targetToken, title, body);
@@ -69,9 +79,16 @@ public class FirebaseCloudMessenger {
   }
 
   private String getAccessToken() throws IOException {
-    GoogleCredentials googleCredentials =
-        GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-            .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+    GoogleCredentials googleCredentials = null;
+    if (activeProfiles.contains("prod")) {
+      googleCredentials =
+          GoogleCredentials.fromStream(new FileInputStream(firebaseConfigPath))
+              .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+    } else {
+      googleCredentials =
+          GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+              .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+    }
     googleCredentials.refreshIfExpired();
     return googleCredentials.getAccessToken().getTokenValue();
   }
