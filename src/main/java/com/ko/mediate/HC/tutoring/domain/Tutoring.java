@@ -95,7 +95,7 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
   }
 
   public void cancelTutoring(RoleType roleType) {
-    if (this.stat != TutoringStat.LEARNING || this.stat != TutoringStat.WAITING_ACCEPT) {
+    if (this.stat == TutoringStat.COMPLETE_TUTORING || this.stat == TutoringStat.CANCEL) {
       throw new MediateIllegalStateException("학습 중이거나 대기 중이여야 합니다.");
     }
     this.stat = TutoringStat.CANCEL;
