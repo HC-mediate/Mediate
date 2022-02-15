@@ -63,8 +63,7 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
   @JoinColumn(name = "tutoring_id")
   private Set<Progress> progresses = new HashSet<>();
 
-  @Transient
-  private RoleType currentUserRole;
+  @Transient private RoleType currentUserRole;
 
   protected Tutoring() {}
   ;
@@ -77,8 +76,8 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
     this.stat = TutoringStat.WAITING_ACCEPT;
   }
 
-  public void requestTutoring(RoleType roleType){
-    if(this.stat != TutoringStat.WAITING_ACCEPT){
+  public void requestTutoring(RoleType roleType) {
+    if (this.stat != TutoringStat.WAITING_ACCEPT) {
       throw new MediateIllegalStateException("수락 대기 중 상태가 아닙니다.");
     }
     this.currentUserRole = roleType;
@@ -96,8 +95,8 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
   }
 
   public void cancelTutoring(RoleType roleType) {
-    if (this.stat != TutoringStat.LEARNING) {
-      throw new MediateIllegalStateException("학습 중 상태가 아닙니다.");
+    if (this.stat != TutoringStat.LEARNING || this.stat != TutoringStat.WAITING_ACCEPT) {
+      throw new MediateIllegalStateException("학습 중이거나 대기 중이여야 합니다.");
     }
     this.stat = TutoringStat.CANCEL;
     this.finishedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
