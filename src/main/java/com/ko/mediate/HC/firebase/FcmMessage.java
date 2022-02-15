@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.notification;
+package com.ko.mediate.HC.firebase;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

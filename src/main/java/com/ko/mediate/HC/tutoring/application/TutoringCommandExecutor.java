@@ -2,7 +2,6 @@ package com.ko.mediate.HC.tutoring.application;
 
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
-import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseType;
@@ -33,22 +32,23 @@ public class TutoringCommandExecutor {
             tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));
 
     if (TutoringResponseType.REFUSE == dto.getResponseType()) {
-      tutoring.cancelTutoring();
+      tutoring.cancelTutoring(RoleType.fromString(token.getAuthority()));
     } else if (TutoringResponseType.ACCEPT == dto.getResponseType()) {
-      tutoring.acceptTutoring();
+      tutoring.acceptTutoring(RoleType.fromString(token.getAuthority()));
     }
     tutoringRepository.save(tutoring);
     return dto.getResponseType();
   }
 
   @Transactional
-  public void requestTutoring(RequestTutoringDto dto) {
+  public void requestTutoring(RequestTutoringDto dto, TokenAccountInfo token) {
     Tutoring tutoring =
         Tutoring.builder()
             .tutoringName(dto.getTutoringName())
             .tutorId(dto.getTutorId())
             .tuteeId(dto.getTuteeId())
             .build();
+    tutoring.requestTutoring(RoleType.fromString(token.getAuthority()));
     tutoringRepository.save(tutoring);
   }
 
@@ -57,7 +57,7 @@ public class TutoringCommandExecutor {
     Tutoring tutoring =
         findByTutoringIdWithAuth(
             tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));
-    tutoring.cancelTutoring();
+    tutoring.cancelTutoring(RoleType.fromString(token.getAuthority()));
     tutoringRepository.save(tutoring);
     return true;
   }

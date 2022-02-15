@@ -29,8 +29,9 @@ public class TutoringCommandController {
 
   @PostMapping(value = "/tutorings", produces = MediaType.APPLICATION_JSON_VALUE)
   @ApiOperation(value = "튜터링을 생성(제안)하는 api")
-  public ResponseEntity requestTutoring(@Valid @RequestBody RequestTutoringDto dto) {
-    commandExecutor.requestTutoring(dto);
+  public ResponseEntity requestTutoring(
+      @TokenAccount TokenAccountInfo token, @Valid @RequestBody RequestTutoringDto dto) {
+    commandExecutor.requestTutoring(dto, token);
     return ResponseEntity.status(HttpStatus.CREATED).body("요청을 보냈습니다.");
   }
 

@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.auth.controller;
 
+import com.ko.mediate.HC.firebase.application.FirebaseCloudService;
 import com.ko.mediate.HC.jwt.JwtFilter;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutoring.application.dto.response.TokenDto;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
   private final TokenProvider tokenProvider;
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
+  private final FirebaseCloudService firebaseCloudService;
 
   @PostMapping("/auth")
   @ApiOperation(
@@ -44,6 +46,8 @@ public class AuthController {
     String jwt = tokenProvider.createToken(authentication);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+    firebaseCloudService.renewFcmToken(loginDto);
     return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
   }
 }

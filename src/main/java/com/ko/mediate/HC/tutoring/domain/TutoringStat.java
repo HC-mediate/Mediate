@@ -4,6 +4,5 @@ public enum TutoringStat {
   WAITING_ACCEPT,
   LEARNING,
   COMPLETE_TUTORING,
-  CANCEL,
-  REFUSE
+  CANCEL
 }

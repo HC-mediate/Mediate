@@ -2,6 +2,7 @@ package com.ko.mediate.HC.tutoring.domain;
 
 import com.ko.mediate.HC.auth.domain.AccountId;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
+import com.ko.mediate.HC.tutoring.application.RoleType;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.domain.AbstractAggregateRoot;
@@ -61,6 +63,9 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
   @JoinColumn(name = "tutoring_id")
   private Set<Progress> progresses = new HashSet<>();
 
+  @Transient
+  private RoleType currentUserRole;
+
   protected Tutoring() {}
   ;
 
@@ -70,37 +75,34 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
     this.tutorId = new AccountId(tutorId);
     this.tuteeId = new AccountId(tuteeId);
     this.stat = TutoringStat.WAITING_ACCEPT;
+  }
+
+  public void requestTutoring(RoleType roleType){
+    if(this.stat != TutoringStat.WAITING_ACCEPT){
+      throw new MediateIllegalStateException("수락 대기 중 상태가 아닙니다.");
+    }
+    this.currentUserRole = roleType;
     publish();
   }
 
-  public boolean acceptTutoring() {
+  public void acceptTutoring(RoleType roleType) {
     if (this.stat != TutoringStat.WAITING_ACCEPT) {
       throw new MediateIllegalStateException("수락 대기 중 상태가 아닙니다.");
     }
     this.stat = TutoringStat.LEARNING;
     this.startedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    this.currentUserRole = roleType;
     publish();
-    return true;
   }
 
-  public boolean refuseTutoring() {
-    if (this.stat != TutoringStat.WAITING_ACCEPT) {
-      throw new MediateIllegalStateException("수락 대기 중 상태가 아닙니다.");
-    }
-    this.stat = TutoringStat.REFUSE;
-    this.finishedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-    publish();
-    return true;
-  }
-
-  public boolean cancelTutoring() {
+  public void cancelTutoring(RoleType roleType) {
     if (this.stat != TutoringStat.LEARNING) {
       throw new MediateIllegalStateException("학습 중 상태가 아닙니다.");
     }
     this.stat = TutoringStat.CANCEL;
     this.finishedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    this.currentUserRole = roleType;
     publish();
-    return true;
   }
 
   // 엔티티 수정 메서드

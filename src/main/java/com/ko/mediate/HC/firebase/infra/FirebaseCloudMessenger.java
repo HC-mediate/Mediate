@@ -1,9 +1,9 @@
-package com.ko.mediate.HC.notification.infra;
+package com.ko.mediate.HC.firebase.infra;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.ko.mediate.HC.notification.FcmMessage;
+import com.ko.mediate.HC.firebase.FcmMessage;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class FirebaseCloudMessageService {
-  private final Logger logger = LoggerFactory.getLogger(FirebaseCloudMessageService.class);
+public class FirebaseCloudMessenger {
+  private final Logger logger = LoggerFactory.getLogger(FirebaseCloudMessenger.class);
 
   @Value("${firebase.config-path}")
   private String firebaseConfigPath;
@@ -49,7 +49,7 @@ public class FirebaseCloudMessageService {
     logger.info(response.body().string());
   }
 
-  public String makeMessage(String targetToken, String title, String body)
+  private String makeMessage(String targetToken, String title, String body)
       throws JsonProcessingException {
     FcmMessage fcmMessage =
         FcmMessage.builder()
