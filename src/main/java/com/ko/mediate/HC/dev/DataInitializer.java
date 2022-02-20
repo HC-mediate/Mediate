@@ -47,5 +47,24 @@ public class DataInitializer implements ApplicationRunner {
 
     tutoringRepository.save(
         Tutoring.builder().tutorId(tutorId).tuteeId(tuteeId).tutoringName("수학을 정복하자!").build());
+    saveTutorsAndTuteesForPaging();
+  }
+
+  public void saveTutorsAndTuteesForPaging(){
+    String tutorId = "tutor";
+    String tuteeId = "tutee";
+    for(int i = 0; i < 10; i++){
+      accountRepository.save(new Account(tutorId + i, passwordEncoder.encode(tutorId + i),
+          "010-1234-56780", RoleType.ROLE_TUTOR.name()));
+      accountRepository.save(new Account(tuteeId + i, passwordEncoder.encode(tuteeId + i),
+          "010-1234-56780", RoleType.ROLE_TUTOR.name()));
+    }
+    for(int i = 0; i < 10; i++){
+      tutorRepository.save(
+          new Tutor(
+              tutorId + i, "아무개" + i, "서울시 용산구", Curriculum.HIGH, new AcademicInfo("아무대학교", "아무학과", "3학년")));
+      tuteeRepository.save(
+          new Tutee(tuteeId + i, "튜티아무개" + i, "서울시 용산구", new AcademicInfo("아무고등학교", "인문계", "3학년")));
+    }
   }
 }
