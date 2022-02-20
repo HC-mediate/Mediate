@@ -1,5 +1,7 @@
 package com.ko.mediate.HC.tutee.controller;
 
+import com.ko.mediate.HC.auth.annotation.TokenAccount;
+import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
 import com.ko.mediate.HC.tutee.application.TuteeCommandExecutor;
 import com.ko.mediate.HC.tutee.application.TuteeQueryProcessor;
 import com.ko.mediate.HC.tutee.application.request.TuteeSignupDto;
@@ -8,18 +10,18 @@ import com.ko.mediate.HC.tutee.application.response.GetTuteeDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,17 +39,18 @@ public class TuteeController {
   }
 
   @ApiOperation(value = "튜티 마이페이지 정보 조회")
-  @GetMapping(value = "/tutees/mypage/{accountId}")
-  @PreAuthorize("@tokenProvider.isUserToken(#authValue, #accountId)")
-  public ResponseEntity<GetTuteeAccountDto> getTuteeAccount(
-      @RequestHeader("Authorization") String authValue, @PathVariable String accountId) {
-    return ResponseEntity.ok(tuteeQueryProcessor.getTuteeAccount(accountId));
+  @GetMapping(value = "/tutees/mypage")
+  public ResponseEntity<GetTuteeAccountDto> getTuteeAccount(@TokenAccount TokenAccountInfo token) {
+    return ResponseEntity.ok(tuteeQueryProcessor.getTuteeAccount(token));
   }
 
   @ApiOperation(value = "튜티 정보 목록 조회")
   @GetMapping(value = "/tutees")
-  public ResponseEntity<List<GetTuteeDto>> getAllTutee() {
-    return ResponseEntity.ok(tuteeQueryProcessor.getAllTutee());
+  public ResponseEntity<Page<GetTuteeDto>> getAllTutee(
+      @RequestParam(value = "page", defaultValue = "0") int page,
+      @RequestParam(value = "size", defaultValue = "5") int size) {
+    PageRequest pageRequest = PageRequest.of(page, size);
+    return ResponseEntity.ok(tuteeQueryProcessor.getAllTutee(pageRequest));
   }
 
   @ApiOperation(value = "튜티 정보 상세 조회")

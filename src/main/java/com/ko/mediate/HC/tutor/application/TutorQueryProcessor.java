@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutor.application;
 
+import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutor.domain.Tutor;
@@ -7,9 +8,9 @@ import com.ko.mediate.HC.tutor.application.response.GetTutorAccountDto;
 import com.ko.mediate.HC.tutor.application.response.GetTutorDto;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.auth.domain.Account;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class TutorQueryProcessor {
   private final JpaTutorRepository tutorRepository;
-  public List<GetTutorDto> getAllTutor() {
-    return tutorRepository.findAll().stream()
+
+  public Page<GetTutorDto> getAllTutor(PageRequest pageRequest) {
+    return tutorRepository
+        .findAll(pageRequest)
         .map(
             t -> {
               AcademicInfo info = t.getAcademicInfo();
@@ -31,8 +34,7 @@ public class TutorQueryProcessor {
                       info.getGrade(),
                       t.getAddress());
               return dto;
-            })
-        .collect(Collectors.toList());
+            });
   }
 
   public GetTutorDto getTutorDetail(String accountId) {
@@ -45,8 +47,8 @@ public class TutorQueryProcessor {
         tutor.getName(), info.getSchool(), info.getMajor(), info.getGrade(), tutor.getAddress());
   }
 
-  public GetTutorAccountDto getTutorAccount(String accountId) {
-    return tutorRepository.findTutorAccountInfoById(accountId).stream()
+  public GetTutorAccountDto getTutorAccount(TokenAccountInfo token) {
+    return tutorRepository.findTutorAccountInfoById(token.getAccountId()).stream()
         .map(
             o -> {
               Tutor t = (Tutor) o[0];
