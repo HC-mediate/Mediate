@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.io.ParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -33,7 +34,8 @@ public class TuteeController {
   private final TuteeCommandExecutor tuteeCommandExecutor;
 
   @PostMapping(value = "/tutees/signup", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<String> Signup(@Valid @RequestBody TuteeSignupDto dto) {
+  public ResponseEntity<String> Signup(@Valid @RequestBody TuteeSignupDto dto)
+      throws ParseException {
     tuteeCommandExecutor.tuteeJoin(dto);
     return ResponseEntity.ok("회원가입 완료");
   }

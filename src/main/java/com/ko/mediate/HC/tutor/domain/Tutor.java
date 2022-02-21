@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutor.domain;
 
+import com.ko.mediate.HC.common.Coordinate;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.auth.domain.AccountId;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
@@ -12,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Getter;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.ParseException;
 
 @Entity
 @Getter
@@ -34,16 +37,27 @@ public class Tutor {
   @Enumerated(value = EnumType.STRING)
   private Curriculum curriculum; // 교과 과정
 
-  @Embedded private AcademicInfo academicInfo; // 튜터의 학생 정보
+  @Embedded
+  private AcademicInfo academicInfo; // 튜터의 학생 정보
+
+  @Column(name = "location")
+  private Point location;
 
   protected Tutor() {};
 
-  public Tutor(String accountId, String name, String address, Curriculum curriculum, AcademicInfo academicInfo) {
+  public Tutor(
+      String accountId,
+      String name,
+      String address,
+      Curriculum curriculum,
+      AcademicInfo academicInfo,
+      Coordinate coordinate) throws ParseException {
     this.accountId = new AccountId(accountId);
     this.name = name;
     this.address = address;
     this.curriculum = curriculum;
     this.academicInfo = academicInfo;
+    this.location = Coordinate.convertCoordinateToPoint(coordinate);
   }
 
   public String getStringAccountId() {

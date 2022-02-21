@@ -2,6 +2,7 @@ package com.ko.mediate.HC.tutee.application.request;
 
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,4 +42,12 @@ public class TuteeSignupDto {
 
   @ApiModelProperty(value = "튜터/튜티 타입", required = true)
   private RoleType type;
+
+  @ApiModelProperty(value = "위도 좌표(Y)", required = true)
+  @DecimalMin(value = "0.0", message = "유효하지 않은 좌표값입니다.")
+  private Double latitude;
+
+  @ApiModelProperty(value = "경도 좌표(X)", required = true)
+  @DecimalMin(value = "0.0", message = "유효하지 않은 좌표값입니다.")
+  private Double longitude;
 }

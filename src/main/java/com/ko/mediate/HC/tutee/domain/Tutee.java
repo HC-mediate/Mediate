@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutee.domain;
 
+import com.ko.mediate.HC.common.Coordinate;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.auth.domain.AccountId;
 import javax.persistence.Column;
@@ -10,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Getter;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.ParseException;
 
 @Entity
 @Getter
@@ -31,13 +34,18 @@ public class Tutee {
   @Column(name = "address")
   private String address;
 
+  @Column(name = "location")
+  private Point location;
+
   protected Tutee() {};
 
-  public Tutee(String accountId, String name, String address, AcademicInfo academicInfo) {
+  public Tutee(String accountId, String name, String address, AcademicInfo academicInfo, Coordinate coordinate)
+      throws ParseException {
     this.accountId = new AccountId(accountId);
     this.name = name;
     this.academicInfo = academicInfo;
     this.address = address;
+    this.location = Coordinate.convertCoordinateToPoint(coordinate);
   }
 
   public String getStringAccountId(){
