@@ -1,12 +1,11 @@
 package com.ko.mediate.HC.tutor.application.request;
 
-import com.ko.mediate.HC.common.Coordinate;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,9 +54,11 @@ public class TutorSignupDto {
 
   @ApiModelProperty(value = "위도 좌표(Y)", required = true)
   @DecimalMin(value = "0.0", message = "유효하지 않은 좌표값입니다.")
+  @NotNull(message = "좌표값은 반드시 넣어야 합니다.")
   private Double latitude;
 
   @ApiModelProperty(value = "경도 좌표(X)", required = true)
   @DecimalMin(value = "0.0", message = "유효하지 않은 좌표값입니다.")
+  @NotNull(message = "좌표값은 반드시 넣어야 합니다.")
   private Double longitude;
 }
