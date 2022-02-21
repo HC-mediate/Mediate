@@ -1,0 +1,17 @@
+spring:
+  config:
+    activate:
+      on-profile: local-maria
+
+  datasource:
+    url: jdbc:mariadb://localhost:3308/test
+    username: root
+    password: root
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
