@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.config.profile;
+package com.ko.mediate.HC.common.profile;
 
 import java.util.Arrays;
 import java.util.List;
