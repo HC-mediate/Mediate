@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.tutee.application;
 
-import com.ko.mediate.HC.common.Coordinate;
+import com.ko.mediate.HC.common.domain.GeometryReader;
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import com.ko.mediate.HC.auth.application.AccountService;
 import com.ko.mediate.HC.tutoring.application.RoleType;
@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TuteeCommandExecutor {
   private final JpaTuteeRepository tuteeRepository;
   private final AccountService accountService;
+  private final GeometryReader geometryReader;
 
   @Transactional
   public void tuteeJoin(TuteeSignupDto dto) throws ParseException {
@@ -30,7 +31,7 @@ public class TuteeCommandExecutor {
             dto.getName(),
             dto.getAddress(),
             info,
-            new Coordinate(dto.getLatitude(), dto.getLongitude()));
+            geometryReader.convertCoordinateToPoint(dto.getLatitude(), dto.getLongitude()));
     tuteeRepository.save(tutee);
   }
 }

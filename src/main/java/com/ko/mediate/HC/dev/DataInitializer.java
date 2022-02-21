@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.dev;
 
 import com.ko.mediate.HC.auth.domain.Account;
-import com.ko.mediate.HC.common.Coordinate;
+import com.ko.mediate.HC.common.domain.GeometryReader;
 import com.ko.mediate.HC.tutee.Infra.JpaTuteeRepository;
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
@@ -30,6 +30,7 @@ public class DataInitializer implements ApplicationRunner {
   private final JpaTutoringRepository tutoringRepository;
   private final JpaAccountRepository accountRepository;
   private final PasswordEncoder passwordEncoder;
+  private final GeometryReader geometryReader;
 
   @Override
   public void run(ApplicationArguments args) throws Exception {
@@ -48,14 +49,14 @@ public class DataInitializer implements ApplicationRunner {
             "서울시 용산구",
             Curriculum.HIGH,
             new AcademicInfo("아무대학교", "아무학과", "3학년"),
-            new Coordinate(123.123, 123.123)));
+            geometryReader.convertCoordinateToPoint(123.123, 123.123)));
     tuteeRepository.save(
         new Tutee(
             tuteeId,
             "튜티아무개",
             "서울시 용산구",
             new AcademicInfo("아무고등학교", "인문계", "3학년"),
-            new Coordinate(123.123, 123.123)));
+            geometryReader.convertCoordinateToPoint(123.123, 123.123)));
 
     tutoringRepository.save(
         Tutoring.builder().tutorId(tutorId).tuteeId(tuteeId).tutoringName("수학을 정복하자!").build());
@@ -87,14 +88,14 @@ public class DataInitializer implements ApplicationRunner {
               "서울시 용산구",
               Curriculum.HIGH,
               new AcademicInfo("아무대학교", "아무학과", "3학년"),
-              new Coordinate(123.123, 123.123)));
+              geometryReader.convertCoordinateToPoint(123.123, 123.123)));
       tuteeRepository.save(
           new Tutee(
               tuteeId + i,
               "튜티아무개" + i,
               "서울시 용산구",
               new AcademicInfo("아무고등학교", "인문계", "3학년"),
-              new Coordinate(123.123, 123.123)));
+              geometryReader.convertCoordinateToPoint(123.123, 123.123)));
     }
   }
 }

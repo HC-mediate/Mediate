@@ -1,6 +1,5 @@
 package com.ko.mediate.HC.tutor.domain;
 
-import com.ko.mediate.HC.common.Coordinate;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.auth.domain.AccountId;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
@@ -14,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Getter;
 import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.io.ParseException;
 
 @Entity
 @Getter
@@ -51,13 +49,13 @@ public class Tutor {
       String address,
       Curriculum curriculum,
       AcademicInfo academicInfo,
-      Coordinate coordinate) throws ParseException {
+      Point location){
     this.accountId = new AccountId(accountId);
     this.name = name;
     this.address = address;
     this.curriculum = curriculum;
     this.academicInfo = academicInfo;
-    this.location = Coordinate.convertCoordinateToPoint(coordinate);
+    this.location = location;
   }
 
   public String getStringAccountId() {
