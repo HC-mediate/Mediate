@@ -8,7 +8,6 @@ import com.ko.mediate.HC.tutoring.application.RoleType;
 import com.ko.mediate.HC.tutor.application.request.TutorSignupDto;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.io.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,7 @@ public class TutorCommandExecutor {
   private final GeometryConverter geometryConverter;
 
   @Transactional
-  public void tutorJoin(TutorSignupDto dto) throws ParseException {
+  public void tutorJoin(TutorSignupDto dto){
     accountService.isOverlapAccountId(dto.getId());
     accountService.saveAccount(
         dto.getId(), dto.getPassword(), dto.getPhoneNum(), RoleType.ROLE_TUTOR);

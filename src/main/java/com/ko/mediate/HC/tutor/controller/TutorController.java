@@ -12,7 +12,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.io.ParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -34,16 +33,14 @@ public class TutorController {
   private final TutorCommandExecutor tutorCommandExecutor;
 
   @PostMapping(value = "/tutors/signup", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<String> Signup(@Valid @RequestBody TutorSignupDto dto)
-      throws ParseException {
+  public ResponseEntity<String> Signup(@Valid @RequestBody TutorSignupDto dto) {
     tutorCommandExecutor.tutorJoin(dto);
     return ResponseEntity.ok("회원가입 완료");
   }
 
   @ApiOperation(value = "튜터 마이페이지 정보 조회")
   @GetMapping(value = "/tutors/mypage")
-  public ResponseEntity<GetTutorAccountDto> getTutorAccount(
-      @TokenAccount TokenAccountInfo token) {
+  public ResponseEntity<GetTutorAccountDto> getTutorAccount(@TokenAccount TokenAccountInfo token) {
     return ResponseEntity.ok(tutorQueryProcessor.getTutorAccount(token));
   }
 

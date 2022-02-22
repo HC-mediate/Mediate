@@ -8,7 +8,6 @@ import com.ko.mediate.HC.tutee.application.request.TuteeSignupDto;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.tutee.Infra.JpaTuteeRepository;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.io.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,7 @@ public class TuteeCommandExecutor {
   private final GeometryConverter geometryConverter;
 
   @Transactional
-  public void tuteeJoin(TuteeSignupDto dto) throws ParseException {
+  public void tuteeJoin(TuteeSignupDto dto){
     accountService.isOverlapAccountId(dto.getId());
     accountService.saveAccount(
         dto.getId(), dto.getPassword(), dto.getPhoneNum(), RoleType.ROLE_TUTEE);

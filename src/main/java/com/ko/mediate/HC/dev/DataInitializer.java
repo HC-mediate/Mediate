@@ -13,7 +13,6 @@ import com.ko.mediate.HC.tutoring.domain.Tutoring;
 import com.ko.mediate.HC.tutoring.infra.JpaAccountRepository;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.io.ParseException;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
@@ -33,7 +32,7 @@ public class DataInitializer implements ApplicationRunner {
   private final GeometryConverter geometryConverter;
 
   @Override
-  public void run(ApplicationArguments args) throws Exception {
+  public void run(ApplicationArguments args) {
     String tutorId = "tutor", tuteeId = "tutee";
     accountRepository.save(
         new Account(
@@ -63,7 +62,7 @@ public class DataInitializer implements ApplicationRunner {
     saveTutorsAndTuteesForPaging();
   }
 
-  public void saveTutorsAndTuteesForPaging() throws ParseException {
+  public void saveTutorsAndTuteesForPaging() {
     String tutorId = "tutor";
     String tuteeId = "tutee";
     for (int i = 0; i < 10; i++) {
