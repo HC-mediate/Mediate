@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.tutor.application;
 
-import com.ko.mediate.HC.common.domain.GeometryReader;
+import com.ko.mediate.HC.common.domain.GeometryConverter;
 import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.ko.mediate.HC.auth.application.AccountService;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TutorCommandExecutor {
   private final JpaTutorRepository tutorRepository;
   private final AccountService accountService;
-  private final GeometryReader geometryReader;
+  private final GeometryConverter geometryConverter;
 
   @Transactional
   public void tutorJoin(TutorSignupDto dto) throws ParseException {
@@ -32,7 +32,7 @@ public class TutorCommandExecutor {
             dto.getAddress(),
             dto.getCurriculum(),
             info,
-            geometryReader.convertCoordinateToPoint(dto.getLatitude(), dto.getLongitude()));
+            geometryConverter.convertCoordinateToPoint(dto.getLatitude(), dto.getLongitude()));
     tutorRepository.save(tutor);
   }
 }
