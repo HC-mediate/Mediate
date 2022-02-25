@@ -16,10 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TutoringCommandExecutor {
   private final JpaTutoringRepository tutoringRepository;
-  private final JpaTutoringCustomRepository tutoringCustomRepository;
 
   public Tutoring findByTutoringIdWithAuth(long tutoringId, String accountId, RoleType roleType) {
-    return tutoringCustomRepository
+    return tutoringRepository
         .findTutoringByAccountIdAndRole(tutoringId, accountId, roleType)
         .orElseThrow(() -> new MediateNotFoundException("튜터링에 속한 계정이 없습니다."));
   }

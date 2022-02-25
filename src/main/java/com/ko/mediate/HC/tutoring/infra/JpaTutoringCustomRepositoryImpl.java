@@ -7,15 +7,17 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import java.util.function.Supplier;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
 import static com.ko.mediate.HC.tutoring.domain.QTutoring.tutoring;
 
 @Repository
-public class TutoringCustomRepositoryImpl implements JpaTutoringCustomRepository {
+public class JpaTutoringCustomRepositoryImpl extends QuerydslRepositorySupport implements JpaTutoringCustomRepository {
   private final JPAQueryFactory queryFactory;
 
-  public TutoringCustomRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
+  public JpaTutoringCustomRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
+    super(Tutoring.class);
     this.queryFactory = jpaQueryFactory;
   }
 
