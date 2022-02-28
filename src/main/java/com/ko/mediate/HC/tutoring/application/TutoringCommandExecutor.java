@@ -6,7 +6,6 @@ import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseType;
 import com.ko.mediate.HC.tutoring.domain.Tutoring;
-import com.ko.mediate.HC.tutoring.infra.JpaTutoringCustomRepository;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

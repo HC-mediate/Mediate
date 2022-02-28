@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  database:
+    # 'database'서비스에서 참조할 이미지
+    image: mariadb
+    ports:
+      - "3308:3306"
+    restart: always
+    environment:
+      # 환경 설정에 필요한 설정들. server코드와 싱크를 맞추어야 한다.
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE : mediate

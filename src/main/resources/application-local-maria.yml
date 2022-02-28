@@ -4,7 +4,7 @@ spring:
       on-profile: local-maria
 
   datasource:
-    url: jdbc:mariadb://localhost:3308/test
+    url: jdbc:mariadb://localhost:3308/mediate
     username: root
     password: root
     driver-class-name: org.mariadb.jdbc.Driver

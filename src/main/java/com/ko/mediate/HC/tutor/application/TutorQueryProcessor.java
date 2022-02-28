@@ -2,10 +2,10 @@ package com.ko.mediate.HC.tutor.application;
 
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
-import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.ko.mediate.HC.tutor.application.response.GetTutorAccountDto;
 import com.ko.mediate.HC.tutor.application.response.GetTutorDto;
+import com.ko.mediate.HC.tutor.domain.TutorRepository;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.auth.domain.Account;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TutorQueryProcessor {
-  private final JpaTutorRepository tutorRepository;
+  private final TutorRepository tutorRepository;
 
   public Page<GetTutorDto> getAllTutor(PageRequest pageRequest) {
     return tutorRepository
