@@ -15,7 +15,7 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-    database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
+    database-platform: com.ko.mediate.HC.common.Infra.CustomMysqlDialect
   decorator:
     datasource:
       p6spy.enable-logging: false
