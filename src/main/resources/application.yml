@@ -3,8 +3,8 @@ spring:
     group:
       local: local-db, local-secret
       local-maria: local-maria, local-secret
-      prod1: prod-db, prod-secret
-      prod2: prod-db, prod-secret
+      prod1: prod, prod-db, prod-secret
+      prod2: prod, prod-db, prod-secret
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
