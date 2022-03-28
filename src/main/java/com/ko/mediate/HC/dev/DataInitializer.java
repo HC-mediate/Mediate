@@ -1,11 +1,12 @@
 package com.ko.mediate.HC.dev;
 
 import com.ko.mediate.HC.auth.domain.Account;
+import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.common.domain.GeometryConverter;
 import com.ko.mediate.HC.tutee.Infra.JpaTuteeRepository;
 import com.ko.mediate.HC.tutee.domain.Tutee;
+import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutor.domain.Tutor;
-import com.ko.mediate.HC.tutor.domain.TutorRepository;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
@@ -19,6 +20,7 @@ import org.locationtech.jts.geom.Point;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +29,7 @@ import org.springframework.stereotype.Component;
 @Profile(value = {"local", "local-maria"})
 public class DataInitializer implements ApplicationRunner {
 
-  private final TutorRepository tutorRepository;
+  private final JpaTutorRepository tutorRepository;
   private final JpaTuteeRepository tuteeRepository;
   private final JpaTutoringRepository tutoringRepository;
   private final JpaAccountRepository accountRepository;
@@ -95,10 +97,7 @@ public class DataInitializer implements ApplicationRunner {
               m.get(id)));
     }
     List<Tutor> results =
-        tutorRepository.findTutorOrderByDistance(
-            geometryConverter.convertCoordinateToPoint(126.9019532, 37.5170112),
-            2000,0, 5
-            );
+        tutorRepository.findTutorOrderByDistance(PageRequest.of(0, 5), new DistanceCondition(126.9019532, 37.5170112, 5));
     for (Tutor t : results)
       System.out.println(t.getName());
   }

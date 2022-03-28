@@ -1,15 +1,18 @@
 package com.ko.mediate.HC.tutor.application;
 
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
+import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
+import com.ko.mediate.HC.tutor.application.response.GetTutorListDto;
 import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.ko.mediate.HC.tutor.application.response.GetTutorAccountDto;
 import com.ko.mediate.HC.tutor.application.response.GetTutorDto;
-import com.ko.mediate.HC.tutor.domain.TutorRepository;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.auth.domain.Account;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,23 +21,26 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TutorQueryProcessor {
-  private final TutorRepository tutorRepository;
+  private final JpaTutorRepository tutorRepository;
 
-  public Page<GetTutorDto> getAllTutor(PageRequest pageRequest) {
-    return tutorRepository
-        .findAll(pageRequest)
-        .map(
-            t -> {
-              AcademicInfo info = t.getAcademicInfo();
-              GetTutorDto dto =
-                  new GetTutorDto(
-                      t.getName(),
-                      info.getSchool(),
-                      info.getMajor(),
-                      info.getGrade(),
-                      t.getAddress());
-              return dto;
-            });
+  public GetTutorListDto getAllTutorByDistance(
+      PageRequest pageRequest, DistanceCondition condition) {
+    List<GetTutorDto> contents =
+        tutorRepository.findTutorOrderByDistance(pageRequest, condition).stream()
+            .map(
+                t -> {
+                  AcademicInfo info = t.getAcademicInfo();
+                  GetTutorDto dto =
+                      new GetTutorDto(
+                          t.getName(),
+                          info.getSchool(),
+                          info.getMajor(),
+                          info.getGrade(),
+                          t.getAddress());
+                  return dto;
+                })
+            .collect(Collectors.toList());
+    return new GetTutorListDto(contents, contents.size() > 0);
   }
 
   public GetTutorDto getTutorDetail(String accountId) {

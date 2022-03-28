@@ -2,11 +2,13 @@ package com.ko.mediate.HC.tutor.controller;
 
 import com.ko.mediate.HC.auth.annotation.TokenAccount;
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.tutor.application.TutorCommandExecutor;
 import com.ko.mediate.HC.tutor.application.TutorQueryProcessor;
 import com.ko.mediate.HC.tutor.application.request.TutorSignupDto;
 import com.ko.mediate.HC.tutor.application.response.GetTutorAccountDto;
 import com.ko.mediate.HC.tutor.application.response.GetTutorDto;
+import com.ko.mediate.HC.tutor.application.response.GetTutorListDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -46,11 +48,15 @@ public class TutorController {
 
   @ApiOperation(value = "튜터 정보 목록 조회")
   @GetMapping(value = "/tutors")
-  public ResponseEntity<Page<GetTutorDto>> getAllTutor(
+  public ResponseEntity<GetTutorListDto> getAllTutor(
       @RequestParam(value = "page", defaultValue = "0") int page,
-      @RequestParam(value = "size", defaultValue = "5") int size) {
+      @RequestParam(value = "size", defaultValue = "5") int size,
+      @RequestParam(value = "longitude", required = true) double longitude,
+      @RequestParam(value = "latitude", required = true) double latitude,
+      @RequestParam(value = "radius", defaultValue = "5") int radius) {
     PageRequest pageRequest = PageRequest.of(page, size);
-    return ResponseEntity.ok(tutorQueryProcessor.getAllTutor(pageRequest));
+    DistanceCondition condition = new DistanceCondition(longitude, latitude, radius);
+    return ResponseEntity.ok(tutorQueryProcessor.getAllTutorByDistance(pageRequest, condition));
   }
 
   @ApiOperation(value = "튜터 정보 상세 조회")
