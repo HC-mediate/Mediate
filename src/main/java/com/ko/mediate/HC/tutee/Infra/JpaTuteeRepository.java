@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JpaTuteeRepository extends JpaRepository<Tutee, Long> {
+public interface JpaTuteeRepository extends JpaRepository<Tutee, Long>, JpaTuteeCustomRepository {
 
   @Query("SELECT t FROM Tutee t WHERE t.accountId.accountId = :accountId")
   Optional<Tutee> findByAccountId(@Param("accountId") String accountId);

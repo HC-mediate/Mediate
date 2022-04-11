@@ -1,7 +1,6 @@
 package com.ko.mediate.HC.tutor.Infra;
 
 import com.ko.mediate.HC.common.domain.DistanceCondition;
-import com.ko.mediate.HC.common.domain.GeometryConverter;
 import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;

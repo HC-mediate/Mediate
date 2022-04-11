@@ -2,17 +2,18 @@ package com.ko.mediate.HC.tutee.controller;
 
 import com.ko.mediate.HC.auth.annotation.TokenAccount;
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.tutee.application.TuteeCommandExecutor;
 import com.ko.mediate.HC.tutee.application.TuteeQueryProcessor;
 import com.ko.mediate.HC.tutee.application.request.TuteeSignupDto;
 import com.ko.mediate.HC.tutee.application.response.GetTuteeAccountDto;
 import com.ko.mediate.HC.tutee.application.response.GetTuteeDto;
+import com.ko.mediate.HC.tutee.application.response.GetTuteeListDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -46,11 +47,15 @@ public class TuteeController {
 
   @ApiOperation(value = "튜티 정보 목록 조회")
   @GetMapping(value = "/tutees")
-  public ResponseEntity<Page<GetTuteeDto>> getAllTutee(
+  public ResponseEntity<GetTuteeListDto> getAllTutee(
       @RequestParam(value = "page", defaultValue = "0") int page,
-      @RequestParam(value = "size", defaultValue = "5") int size) {
+      @RequestParam(value = "size", defaultValue = "5") int size,
+      @RequestParam(value = "longitude", required = true) double longitude,
+      @RequestParam(value = "latitude", required = true) double latitude,
+      @RequestParam(value = "radius", defaultValue = "5") int radius) {
     PageRequest pageRequest = PageRequest.of(page, size);
-    return ResponseEntity.ok(tuteeQueryProcessor.getAllTutee(pageRequest));
+    DistanceCondition condition = new DistanceCondition(longitude, latitude, radius);
+    return ResponseEntity.ok(tuteeQueryProcessor.getAllTuteeByDistance(pageRequest, condition));
   }
 
   @ApiOperation(value = "튜티 정보 상세 조회")
