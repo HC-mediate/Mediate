@@ -18,11 +18,11 @@ public class TuteeCommandExecutor {
   private final GeometryConverter geometryConverter;
 
   @Transactional
-  public void tuteeJoin(TuteeSignupDto dto){
+  public void tuteeJoin(TuteeSignupDto dto) {
     AcademicInfo info = new AcademicInfo(dto.getSchool(), dto.getGrade());
     Tutee tutee =
         new Tutee(
-            dto.getId(),
+            dto.getAccountId(),
             dto.getName(),
             dto.getAddress(),
             info,

@@ -21,13 +21,13 @@ public class Tutee {
   private Long id;
 
   @Embedded
-  private AcademicInfo academicInfo;
-
-  @Embedded
   private AccountId accountId;
 
   @Column(name = "name")
   private String name;
+
+  @Embedded
+  private AcademicInfo academicInfo;
 
   @Column(name = "address")
   private String address;
@@ -43,9 +43,5 @@ public class Tutee {
     this.academicInfo = academicInfo;
     this.address = address;
     this.location = location;
-  }
-
-  public String getStringAccountId(){
-    return this.accountId.getAccountId();
   }
 }

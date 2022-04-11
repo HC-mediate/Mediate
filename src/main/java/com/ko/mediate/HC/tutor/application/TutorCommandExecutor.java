@@ -20,7 +20,7 @@ public class TutorCommandExecutor {
     AcademicInfo info = new AcademicInfo(dto.getSchool(), dto.getMajor(), dto.getGrade());
     Tutor tutor =
         new Tutor(
-            dto.getId(),
+            dto.getAccountId(),
             dto.getName(),
             dto.getAddress(),
             dto.getCurriculum(),

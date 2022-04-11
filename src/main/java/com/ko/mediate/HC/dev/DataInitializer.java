@@ -49,7 +49,7 @@ public class DataInitializer implements ApplicationRunner {
     tutorRepository.save(
         new Tutor(
             tutorId,
-            "아무개",
+            "튜터 아무개",
             "서울시 용산구",
             Curriculum.HIGH,
             new AcademicInfo("아무대학교", "아무학과", "3학년"),
@@ -57,7 +57,7 @@ public class DataInitializer implements ApplicationRunner {
     tuteeRepository.save(
         new Tutee(
             tuteeId,
-            "튜티아무개",
+            "튜티 아무개",
             "서울시 용산구",
             new AcademicInfo("아무고등학교", "인문계", "3학년"),
             geometryConverter.convertCoordinateToPoint(123.123, 58.123)));
@@ -90,7 +90,7 @@ public class DataInitializer implements ApplicationRunner {
       tutorRepository.save(
           new Tutor(
               id,
-              id,
+              "튜터",
               "서울시 용산구",
               Curriculum.HIGH,
               new AcademicInfo("아무대학교", "아무학과", "3학년"),
@@ -99,6 +99,6 @@ public class DataInitializer implements ApplicationRunner {
     List<Tutor> results =
         tutorRepository.findTutorOrderByDistance(PageRequest.of(0, 5), new DistanceCondition(126.9019532, 37.5170112, 5));
     for (Tutor t : results)
-      System.out.println(t.getName());
+      System.out.println(t.getAccountId().getAccountId());
   }
 }
