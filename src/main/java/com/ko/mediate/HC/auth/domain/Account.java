@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.auth.domain;
 
+import com.ko.mediate.HC.tutoring.application.RoleType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -55,5 +56,13 @@ public class Account {
 
   public String getStringAccountId(){
     return this.accountId.getAccountId();
+  }
+
+  public void joinTutor(){
+    this.authority = RoleType.ROLE_TUTOR.name();
+  }
+
+  public void joinTutee(){
+    this.authority = RoleType.ROLE_TUTEE.name();
   }
 }

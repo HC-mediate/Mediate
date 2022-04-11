@@ -23,7 +23,7 @@ public class AccountService {
   }
 
   public void saveAccount(
-      String id, String rawPassword, String name, String phoneNum, RoleType roleType) {
+      String id, String rawPassword, String name, String phoneNum) {
     checkOverlapAccountId(id);
     Account account =
         Account.builder()
@@ -31,7 +31,7 @@ public class AccountService {
             .password(passwordEncoder.encode(rawPassword))
             .name(name)
             .phoneNum(phoneNum)
-            .authority(roleType.name())
+            .authority(RoleType.ROLE_USER.name())
             .build();
     accountRepository.save(account);
   }

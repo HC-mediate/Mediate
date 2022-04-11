@@ -5,7 +5,8 @@ import java.util.Locale;
 
 public enum RoleType {
   ROLE_TUTOR("ROLE_TUTOR"),
-  ROLE_TUTEE("ROLE_TUTEE");
+  ROLE_TUTEE("ROLE_TUTEE"),
+  ROLE_USER("ROLE_USER");
 
   private final String roleString;
 

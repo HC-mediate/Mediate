@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -54,13 +55,10 @@ public class AuthController {
     return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
   }
 
-  @PostMapping("/signup")
-  @ApiOperation(
-      value = "회원가입",
-      notes = "계정의 회원가입을 하는 메서드입니다.")
+  @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ApiOperation(value = "회원가입", notes = "계정의 회원가입을 하는 메서드입니다.")
   public ResponseEntity Signup(@Valid @RequestBody SignupDto dto) {
-    accountService.saveAccount(
-        dto.getId(), dto.getPassword(), dto.getName(), dto.getPhoneNum(), dto.getRoleType());
+    accountService.saveAccount(dto.getAccountId(), dto.getPassword(), dto.getName(), dto.getPhoneNum());
     return ResponseEntity.ok("회원가입이 완료되었습니다.");
   }
 }
