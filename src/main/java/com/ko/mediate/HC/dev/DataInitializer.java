@@ -41,10 +41,10 @@ public class DataInitializer implements ApplicationRunner {
     String tutorId = "tutor", tuteeId = "tutee";
     accountRepository.save(
         new Account(
-            tutorId, passwordEncoder.encode(tutorId), "010-1234-5678", RoleType.ROLE_TUTOR.name()));
+            tutorId, passwordEncoder.encode(tutorId), "튜터 아무개", "010-1234-5678", RoleType.ROLE_TUTOR.name()));
     accountRepository.save(
         new Account(
-            tuteeId, passwordEncoder.encode(tuteeId), "010-1234-5678", RoleType.ROLE_TUTEE.name()));
+            tuteeId, passwordEncoder.encode(tuteeId), "튜티 아무개", "010-1234-5678", RoleType.ROLE_TUTEE.name()));
 
     tutorRepository.save(
         new Tutor(
@@ -84,7 +84,7 @@ public class DataInitializer implements ApplicationRunner {
     for (String id : m.keySet()) {
       accountRepository.save(
           new Account(
-              id, passwordEncoder.encode(id), "010-1234-56780", RoleType.ROLE_TUTOR.name()));
+              id, passwordEncoder.encode(id), "아무개", "010-1234-56780", RoleType.ROLE_TUTOR.name()));
     }
     for (String id : m.keySet()) {
       tutorRepository.save(

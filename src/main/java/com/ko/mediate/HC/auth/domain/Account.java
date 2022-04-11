@@ -25,6 +25,9 @@ public class Account {
   @Column(name = "account_pw")
   private String password;
 
+  @Column(name = "name")
+  private String name;
+
   @Column(name = "is_activated")
   private Boolean isActivated;
 
@@ -37,10 +40,11 @@ public class Account {
   protected Account() {};
 
   @Builder
-  public Account(String accountId, String password, String phoneNum, String authority) {
+  public Account(String accountId, String password, String name, String phoneNum, String authority) {
     this.accountId = new AccountId(accountId);
     this.password = password;
     this.authority = authority;
+    this.name = name;
     this.isActivated = true;
     this.phoneNum = phoneNum;
   }

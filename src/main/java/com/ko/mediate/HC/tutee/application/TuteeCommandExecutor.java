@@ -15,14 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TuteeCommandExecutor {
   private final JpaTuteeRepository tuteeRepository;
-  private final AccountService accountService;
   private final GeometryConverter geometryConverter;
 
   @Transactional
   public void tuteeJoin(TuteeSignupDto dto){
-    accountService.isOverlapAccountId(dto.getId());
-    accountService.saveAccount(
-        dto.getId(), dto.getPassword(), dto.getPhoneNum(), RoleType.ROLE_TUTEE);
     AcademicInfo info = new AcademicInfo(dto.getSchool(), dto.getGrade());
     Tutee tutee =
         new Tutee(

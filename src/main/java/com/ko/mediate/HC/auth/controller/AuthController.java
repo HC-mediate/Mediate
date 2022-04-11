@@ -1,5 +1,7 @@
 package com.ko.mediate.HC.auth.controller;
 
+import com.ko.mediate.HC.auth.application.AccountService;
+import com.ko.mediate.HC.auth.application.request.SignupDto;
 import com.ko.mediate.HC.firebase.application.FirebaseCloudService;
 import com.ko.mediate.HC.jwt.JwtFilter;
 import com.ko.mediate.HC.jwt.TokenProvider;
@@ -29,6 +31,7 @@ public class AuthController {
   private final TokenProvider tokenProvider;
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
   private final FirebaseCloudService firebaseCloudService;
+  private final AccountService accountService;
 
   @PostMapping("/auth")
   @ApiOperation(
@@ -49,5 +52,15 @@ public class AuthController {
 
     firebaseCloudService.renewFcmToken(loginDto);
     return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
+  }
+
+  @PostMapping("/signup")
+  @ApiOperation(
+      value = "회원가입",
+      notes = "계정의 회원가입을 하는 메서드입니다.")
+  public ResponseEntity Signup(@Valid @RequestBody SignupDto dto) {
+    accountService.saveAccount(
+        dto.getId(), dto.getPassword(), dto.getName(), dto.getPhoneNum(), dto.getRoleType());
+    return ResponseEntity.ok("회원가입이 완료되었습니다.");
   }
 }
