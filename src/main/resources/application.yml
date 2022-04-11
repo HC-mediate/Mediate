@@ -6,6 +6,3 @@ spring:
       prod1: prod, prod-db, prod-secret
       prod2: prod, prod-db, prod-secret
       test: local-secret
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher

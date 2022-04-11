@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 @EnableWebMvc
-@Profile({"local","prod1", "prod2"})
+@Profile({"local","prod1", "prod2", "local-maria"})
 public class SwaggerConfig implements WebMvcConfigurer {
   @Bean
   public Docket api() {
