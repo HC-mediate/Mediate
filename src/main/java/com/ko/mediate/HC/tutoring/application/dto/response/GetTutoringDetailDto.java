@@ -17,9 +17,9 @@ public class GetTutoringDetailDto {
   @ApiModelProperty(value = "시작 일자")
   private String startedAt;
 
-  @ApiModelProperty(value = "숙제 목록")
-  private List<GetHomeworkDto> homeworks;
+  @ApiModelProperty(value = "진행 주차")
+  private int doingWeek;
 
-  @ApiModelProperty(value = "진행도 목록")
-  private List<GetProgressDto> progresses;
+  @ApiModelProperty(value = "총 주차")
+  private int totalWeek;
 }

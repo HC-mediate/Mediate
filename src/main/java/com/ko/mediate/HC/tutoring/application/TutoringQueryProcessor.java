@@ -1,13 +1,8 @@
 package com.ko.mediate.HC.tutoring.application;
 
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
-import com.ko.mediate.HC.common.exception.MediateNotFoundException;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetHomeworkDto;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetProgressDto;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTutoringDetailDto;
-import com.ko.mediate.HC.tutoring.domain.Tutoring;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,5 +33,6 @@ public class TutoringQueryProcessor {
                   return new GetProgressDto(p.getId(), p.getContent(), p.getIsFinished());
                 })
             .collect(Collectors.toList()));
+    return null;
   }
 }
