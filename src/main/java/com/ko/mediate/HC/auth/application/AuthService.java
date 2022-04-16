@@ -2,7 +2,7 @@ package com.ko.mediate.HC.auth.application;
 
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.domain.AccountId;
-import com.ko.mediate.HC.tutoring.infra.JpaAccountRepository;
+import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +24,11 @@ public class AuthService implements UserDetailsService {
   public UserDetails loadUserByUsername(String accountId) throws AuthenticationException {
     return accountRepository
         .findByAccountId(new AccountId(accountId))
-        .map(user -> createUser(accountId, user))
+        .map(user -> createUser(user))
         .orElseThrow(() -> new BadCredentialsException("등록된 아이디가 없습니다."));
   }
 
-  private User createUser(String accountId, Account account) {
+  public User createUser(Account account) {
     if (!account.isActivated()) {
       throw new BadCredentialsException("활성화되지 않은 아이디입니다.");
     }
