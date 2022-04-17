@@ -23,7 +23,7 @@ public class AuthService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String accountId) throws AuthenticationException {
     return accountRepository
-        .findByAccountId(new AccountId(accountId))
+        .findByAccountId(accountId)
         .map(user -> createUser(user))
         .orElseThrow(() -> new BadCredentialsException("등록된 아이디가 없습니다."));
   }

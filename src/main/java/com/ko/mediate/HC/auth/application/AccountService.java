@@ -16,7 +16,7 @@ public class AccountService {
   private final PasswordEncoder passwordEncoder;
 
   public void checkOverlapAccountId(String accountId) {
-    if (accountRepository.findByAccountId(new AccountId(accountId)).isPresent()) {
+    if (accountRepository.findByAccountId(accountId).isPresent()) {
       throw new MediateIllegalStateException(String.format("이미 존재하는 ID입니다. [%s]", accountId));
     }
   }

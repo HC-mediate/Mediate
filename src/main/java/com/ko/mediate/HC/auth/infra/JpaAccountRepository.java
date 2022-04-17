@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JpaAccountRepository extends JpaRepository<Account, Long> {
 
-  @Query("SELECT a FROM Account a WHERE a.accountId = :accountId")
-  Optional<Account> findByAccountId(@Param("accountId") AccountId accountId);
+  @Query("SELECT a FROM Account a WHERE a.accountId.accountId = :accountId")
+  Optional<Account> findByAccountId(@Param("accountId") String accountId);
 }

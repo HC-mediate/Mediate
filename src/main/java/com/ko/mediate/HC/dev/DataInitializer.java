@@ -11,7 +11,7 @@ import com.ko.mediate.HC.tutoring.application.RoleType;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import com.ko.mediate.HC.tutoring.domain.Tutoring;
-import com.ko.mediate.HC.tutoring.infra.JpaAccountRepository;
+import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
 import java.util.HashMap;
 import java.util.List;
