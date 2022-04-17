@@ -21,7 +21,7 @@ public class Progress {
   private Tutoring tutoring;
 
   @Column(name = "week")
-  private Integer week;
+  private Long week;
 
   @Column(name = "content")
   private String content;
@@ -31,7 +31,7 @@ public class Progress {
 
   protected Progress() {};
 
-  public Progress(int week, String content, boolean isComplete) {
+  public Progress(long week, String content, boolean isComplete) {
     this.week = week;
     this.content = content;
     this.isCompleted = isComplete;
@@ -49,7 +49,12 @@ public class Progress {
     return this.isCompleted;
   }
 
-  // 연관관계 편의 메서드
+  public void modifyProgress(long week, String content, boolean isCompleted) {
+    this.week = week;
+    this.content = content;
+    this.isCompleted = isCompleted;
+  }
+
   public void changeTutoring(Tutoring tutoring) {
     this.tutoring = tutoring;
   }

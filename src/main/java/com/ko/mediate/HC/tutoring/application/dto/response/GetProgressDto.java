@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetProgressDto {
+  @ApiModelProperty(value = "Progress ID")
+  private long progressId;
+
   @ApiModelProperty(value = "진행 주차")
   private long week;
 

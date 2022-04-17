@@ -3,6 +3,7 @@ package com.ko.mediate.HC.tutoring.controller;
 import com.ko.mediate.HC.auth.annotation.TokenAccount;
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
 import com.ko.mediate.HC.tutoring.application.TutoringCommandExecutor;
+import com.ko.mediate.HC.tutoring.application.dto.request.RequestProgressDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
 import io.swagger.annotations.Api;
@@ -61,5 +62,36 @@ public class TutoringCommandController {
       @Valid @RequestBody RequestTutoringDto dto) {
     commandExecutor.updateTutoring(tutoringId, token, dto);
     return ResponseEntity.ok("튜터링 정보가 업데이트 되었습니다.");
+  }
+
+  @ApiOperation(value = "튜터링 진행도를 추가하는 api")
+  @PostMapping(
+      value = "/tutorings/{tutoringId}/progress",
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<String> createProgressInTutoring(
+      @PathVariable long tutoringId, @Valid @RequestBody RequestProgressDto dto) {
+    commandExecutor.addProgressInTutoring(tutoringId, dto);
+    return ResponseEntity.ok("튜터링 진행도를 추가했습니다.");
+  }
+
+  @ApiOperation(value = "튜터링 진행도를 수정하는 api")
+  @PutMapping(
+      value = "/tutorings/{tutoringId}/progress/{progressId}",
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<String> modifyProgressInTutoring(
+      @PathVariable long tutoringId,
+      @PathVariable long progressId, @Valid @RequestBody RequestProgressDto dto) {
+    commandExecutor.modifyProgressInTutoring(tutoringId, progressId, dto);
+    return ResponseEntity.ok("튜터링 진행도를 수정했습니다.");
+  }
+
+  @ApiOperation(value = "튜터링 진행도를 삭제하는 api")
+  @DeleteMapping(
+      value = "/tutorings/{tutoringId}/progress/{progressId}",
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<String> removeProgressInTutoring(
+      @PathVariable long tutoringId, @PathVariable long progressId) {
+    commandExecutor.removeProgressInTutoring(tutoringId, progressId);
+    return ResponseEntity.ok("튜터링 진행도를 삭제했습니다.");
   }
 }

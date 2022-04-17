@@ -2,6 +2,7 @@ package com.ko.mediate.HC.tutoring.domain;
 
 import com.ko.mediate.HC.auth.domain.AccountId;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
+import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -54,12 +55,23 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
   @Column(name = "finished_at")
   private String finishedAt;
 
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(
+      mappedBy = "tutoring",
+      fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
   private List<Progress> progresses = new ArrayList<>();
+
+  @Column(name = "done_week")
+  private Long doneWeek;
+
+  @Column(name = "total_week")
+  private Long totalWeek;
 
   @Transient private RoleType currentUserRole;
 
-  protected Tutoring() {};
+  protected Tutoring() {}
+  ;
 
   @Builder
   public Tutoring(String tutoringName, String tutorId, String tuteeId) {
@@ -67,6 +79,8 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
     this.tutorId = new AccountId(tutorId);
     this.tuteeId = new AccountId(tuteeId);
     this.stat = TutoringStat.WAITING_ACCEPT;
+    this.totalWeek = 0L;
+    this.doneWeek = 0L;
   }
 
   public void requestTutoring(RoleType roleType) {
@@ -108,18 +122,37 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
     return this;
   }
 
-  public void addProgress(Progress progress){
+  public void addProgress(Progress progress) {
     this.progresses.add(progress);
     progress.changeTutoring(this);
+    this.totalWeek++;
+    if (progress.isComplete()) {
+      this.doneWeek++;
+    }
   }
 
-  public void modifyProgress(long tutoringId, Progress progress){
-    this.progresses.removeIf(p -> p.getId() == tutoringId);
-    this.progresses.add(progress);
-    progress.changeTutoring(this);
+  public void modifyProgress(long progressId, int week, String content, boolean isCompleted) {
+    Progress progress =
+        this.progresses.stream()
+            .filter(p -> p.getId() == progressId)
+            .findFirst()
+            .orElseThrow(() -> new MediateNotFoundException("Progress ID를 찾을 수 없습니다."));
+    progress.modifyProgress(week, content, isCompleted);
+    if (progress.getIsCompleted()) {
+      doneWeek++;
+    }
   }
 
-  public void removeProgress(long tutoringId){
-    this.progresses.removeIf(p -> p.getId() == tutoringId);
+  public void removeProgress(long progressId) {
+    Progress progress =
+        this.progresses.stream()
+            .filter(p -> p.getId() == progressId)
+            .findFirst()
+            .orElseThrow(() -> new MediateNotFoundException("Progress ID가 없습니다."));
+    if (progress.isComplete()) {
+      this.doneWeek--;
+    }
+    this.totalWeek--;
+    this.progresses.remove(progress);
   }
 }

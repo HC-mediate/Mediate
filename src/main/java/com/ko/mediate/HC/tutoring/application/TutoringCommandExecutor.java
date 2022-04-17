@@ -2,9 +2,11 @@ package com.ko.mediate.HC.tutoring.application;
 
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
+import com.ko.mediate.HC.tutoring.application.dto.request.RequestProgressDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseType;
+import com.ko.mediate.HC.tutoring.domain.Progress;
 import com.ko.mediate.HC.tutoring.domain.Tutoring;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,12 @@ public class TutoringCommandExecutor {
     return tutoringRepository
         .findTutoringByAccountIdAndRole(tutoringId, accountId, roleType)
         .orElseThrow(() -> new MediateNotFoundException("튜터링에 속한 계정이 없습니다."));
+  }
+
+  private Tutoring findByTutoringIdWithDetail(long tutoringId) {
+    return tutoringRepository
+        .findByTutoringIdWithDetail(tutoringId)
+        .orElseThrow(() -> new MediateNotFoundException("ID가 없습니다."));
   }
 
   @Transactional
@@ -66,5 +74,24 @@ public class TutoringCommandExecutor {
         findByTutoringIdWithAuth(
             tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));
     tutoring.changeTutoringName(dto.getTutoringName());
+  }
+
+  @Transactional
+  public void addProgressInTutoring(long tutoringId, RequestProgressDto dto) {
+    Tutoring tutoring = findByTutoringIdWithDetail(tutoringId);
+    tutoring.addProgress(new Progress(dto.getWeek(), dto.getContent(), dto.getIsCompleted()));
+    tutoringRepository.save(tutoring);
+  }
+
+  @Transactional
+  public void modifyProgressInTutoring(long tutoringId, long progressId, RequestProgressDto dto) {
+    Tutoring tutoring = findByTutoringIdWithDetail(tutoringId);
+    tutoring.modifyProgress(progressId, dto.getWeek(), dto.getContent(), dto.getIsCompleted());
+  }
+
+  @Transactional
+  public void removeProgressInTutoring(long tutoringId, long progressId) {
+    Tutoring tutoring = findByTutoringIdWithDetail(tutoringId);
+    tutoring.removeProgress(progressId);
   }
 }

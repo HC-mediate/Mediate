@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetTutoringDto {
+  @ApiModelProperty(value = "튜터링 ID")
+  private long tutoringId;
+
   @ApiModelProperty(value = "튜터링 이름")
   private String tutoringName;
 
@@ -18,8 +21,8 @@ public class GetTutoringDto {
   private String startedAt;
 
   @ApiModelProperty(value = "진행 주차")
-  private int doingWeek;
+  private long doingWeek;
 
   @ApiModelProperty(value = "총 주차")
-  private int totalWeek;
+  private long totalWeek;
 }
