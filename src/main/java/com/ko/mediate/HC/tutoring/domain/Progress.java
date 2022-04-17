@@ -20,30 +20,33 @@ public class Progress {
   @ManyToOne
   private Tutoring tutoring;
 
+  @Column(name = "week")
+  private Integer week;
+
   @Column(name = "content")
   private String content;
 
-  @Column(name = "is_finished")
-  private Boolean isFinished;
+  @Column(name = "is_completed")
+  private Boolean isCompleted;
 
   protected Progress() {};
 
-  public Progress(Tutoring tutoring, String content, Boolean isComplete) {
-    this.tutoring = tutoring;
+  public Progress(int week, String content, boolean isComplete) {
+    this.week = week;
     this.content = content;
-    this.isFinished = isComplete;
+    this.isCompleted = isComplete;
   }
 
   public void complete() {
-    this.isFinished = true;
+    this.isCompleted = true;
   }
 
   public void notComplete() {
-    this.isFinished = false;
+    this.isCompleted = false;
   }
 
-  public boolean isComplete() {
-    return this.isFinished.booleanValue();
+  public Boolean isComplete() {
+    return this.isCompleted;
   }
 
   // 연관관계 편의 메서드

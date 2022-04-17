@@ -59,8 +59,7 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
 
   @Transient private RoleType currentUserRole;
 
-  protected Tutoring() {}
-  ;
+  protected Tutoring() {};
 
   @Builder
   public Tutoring(String tutoringName, String tutorId, String tuteeId) {
@@ -107,5 +106,20 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
   private Tutoring publish() {
     this.registerEvent(new TutoringPublishedEvent(this));
     return this;
+  }
+
+  public void addProgress(Progress progress){
+    this.progresses.add(progress);
+    progress.changeTutoring(this);
+  }
+
+  public void modifyProgress(long tutoringId, Progress progress){
+    this.progresses.removeIf(p -> p.getId() == tutoringId);
+    this.progresses.add(progress);
+    progress.changeTutoring(this);
+  }
+
+  public void removeProgress(long tutoringId){
+    this.progresses.removeIf(p -> p.getId() == tutoringId);
   }
 }
