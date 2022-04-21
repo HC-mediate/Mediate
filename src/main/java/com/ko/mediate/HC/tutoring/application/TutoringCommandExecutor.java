@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.tutoring.application;
 
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestProgressDto;
 import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
@@ -31,7 +32,7 @@ public class TutoringCommandExecutor {
   }
 
   @Transactional
-  public TutoringResponseType responseTutoring(
+  public CommonResponseDto responseTutoring(
       long tutoringId, TokenAccountInfo token, TutoringResponseDto dto) {
     Tutoring tutoring =
         findByTutoringIdWithAuth(
@@ -43,7 +44,7 @@ public class TutoringCommandExecutor {
       tutoring.acceptTutoring(RoleType.fromString(token.getAuthority()));
     }
     tutoringRepository.save(tutoring);
-    return dto.getResponseType();
+    return new CommonResponseDto("튜터링이 " + dto.getResponseType().getMessage() + " 되었습니다.");
   }
 
   @Transactional

@@ -2,6 +2,7 @@ package com.ko.mediate.HC.tutor.controller;
 
 import com.ko.mediate.HC.auth.annotation.TokenAccount;
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.tutor.application.TutorCommandExecutor;
 import com.ko.mediate.HC.tutor.application.TutorQueryProcessor;
@@ -34,9 +35,9 @@ public class TutorController {
   private final TutorCommandExecutor tutorCommandExecutor;
 
   @PostMapping(value = "/tutors/signup", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<String> Signup(@Valid @RequestBody TutorSignupDto dto) {
+  public ResponseEntity<CommonResponseDto> Signup(@Valid @RequestBody TutorSignupDto dto) {
     tutorCommandExecutor.tutorJoin(dto);
-    return ResponseEntity.ok("회원가입 완료");
+    return ResponseEntity.ok(new CommonResponseDto("튜터 정보 등록을 완료했습니다."));
   }
 
   @ApiOperation(value = "튜터 마이페이지 정보 조회")

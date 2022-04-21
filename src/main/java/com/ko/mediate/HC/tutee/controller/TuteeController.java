@@ -2,6 +2,7 @@ package com.ko.mediate.HC.tutee.controller;
 
 import com.ko.mediate.HC.auth.annotation.TokenAccount;
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.tutee.application.TuteeCommandExecutor;
 import com.ko.mediate.HC.tutee.application.TuteeQueryProcessor;
@@ -34,9 +35,9 @@ public class TuteeController {
   private final TuteeCommandExecutor tuteeCommandExecutor;
 
   @PostMapping(value = "/tutees/signup", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<String> Signup(@Valid @RequestBody TuteeSignupDto dto) {
+  public ResponseEntity<CommonResponseDto> Signup(@Valid @RequestBody TuteeSignupDto dto) {
     tuteeCommandExecutor.tuteeJoin(dto);
-    return ResponseEntity.ok("회원가입 완료");
+    return ResponseEntity.ok(new CommonResponseDto("회원가입 완료"));
   }
 
   @ApiOperation(value = "튜티 마이페이지 정보 조회")

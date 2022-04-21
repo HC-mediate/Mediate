@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.homework.controller;
 
+import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.homework.application.HomeworkCommandExecutor;
 import com.ko.mediate.HC.homework.application.HomeworkQueryProcessor;
 import com.ko.mediate.HC.homework.application.request.CreateHomeworkDto;
@@ -37,14 +38,14 @@ public class HomeworkController {
   }
 
   @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity createHomework(@RequestBody CreateHomeworkDto dto) {
+  public ResponseEntity<CommonResponseDto> createHomework(@RequestBody CreateHomeworkDto dto) {
     homeworkCommandExecutor.createHomework(dto);
-    return ResponseEntity.ok("숙제를 추가하였습니다.");
+    return ResponseEntity.ok(new CommonResponseDto("숙제를 추가하였습니다."));
   }
 
   @PutMapping(value = "{homeworkId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity modifyHomework(@PathVariable Long homeworkId, @RequestBody UpdateHomeworkDto dto) {
+  public ResponseEntity<CommonResponseDto> modifyHomework(@PathVariable Long homeworkId, @RequestBody UpdateHomeworkDto dto) {
     homeworkCommandExecutor.modifyHomework(homeworkId, dto);
-    return ResponseEntity.ok("숙제를 수정하였습니다.");
+    return ResponseEntity.ok(new CommonResponseDto("숙제를 수정하였습니다."));
   }
 }

@@ -2,6 +2,7 @@ package com.ko.mediate.HC.auth.controller;
 
 import com.ko.mediate.HC.auth.application.AccountService;
 import com.ko.mediate.HC.auth.application.request.SignupDto;
+import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.firebase.application.FirebaseCloudService;
 import com.ko.mediate.HC.jwt.JwtFilter;
 import com.ko.mediate.HC.jwt.TokenProvider;
@@ -28,6 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
 @Api(tags = {"로그인용 api"})
+//todo: 응답 메시지 통일하기
+//todo: 커뮤니티 CRUD
+//todo: 커뮤니티 인기 글 조회 캐싱
 public class AuthController {
   private final TokenProvider tokenProvider;
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -59,6 +63,6 @@ public class AuthController {
   @ApiOperation(value = "회원가입", notes = "계정의 회원가입을 하는 메서드입니다.")
   public ResponseEntity Signup(@Valid @RequestBody SignupDto dto) {
     accountService.saveAccount(dto.getAccountId(), dto.getPassword(), dto.getName(), dto.getPhoneNum());
-    return ResponseEntity.ok("회원가입이 완료되었습니다.");
+    return ResponseEntity.ok(new CommonResponseDto("회원가입이 완료되었습니다."));
   }
 }
