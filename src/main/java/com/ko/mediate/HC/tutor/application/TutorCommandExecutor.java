@@ -1,10 +1,9 @@
 package com.ko.mediate.HC.tutor.application;
 
 import com.ko.mediate.HC.auth.domain.Account;
-import com.ko.mediate.HC.auth.domain.AccountId;
 import com.ko.mediate.HC.common.domain.GeometryConverter;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
-import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
+import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.ko.mediate.HC.tutor.application.request.TutorSignupDto;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;

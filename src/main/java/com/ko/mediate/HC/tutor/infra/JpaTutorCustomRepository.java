@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.tutor.Infra;
+package com.ko.mediate.HC.tutor.infra;
 
 import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.tutor.domain.Tutor;

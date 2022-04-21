@@ -1,13 +1,12 @@
 package com.ko.mediate.HC.tutee.application;
 
 import com.ko.mediate.HC.auth.domain.Account;
-import com.ko.mediate.HC.auth.domain.AccountId;
 import com.ko.mediate.HC.common.domain.GeometryConverter;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import com.ko.mediate.HC.tutee.application.request.TuteeSignupDto;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
-import com.ko.mediate.HC.tutee.Infra.JpaTuteeRepository;
+import com.ko.mediate.HC.tutee.infra.JpaTuteeRepository;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

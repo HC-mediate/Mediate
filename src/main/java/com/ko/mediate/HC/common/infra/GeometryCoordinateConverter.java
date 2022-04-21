@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.common.Infra;
+package com.ko.mediate.HC.common.infra;
 
 import com.ko.mediate.HC.common.domain.GeometryConverter;
 import org.locationtech.jts.geom.Coordinate;

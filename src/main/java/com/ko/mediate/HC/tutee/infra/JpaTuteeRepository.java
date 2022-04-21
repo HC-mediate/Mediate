@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.tutee.Infra;
+package com.ko.mediate.HC.tutee.infra;
 
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import java.util.List;

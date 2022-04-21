@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.common.Infra;
+package com.ko.mediate.HC.common.infra;
 
 import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.spatial.dialect.mysql.MySQL56SpatialDialect;

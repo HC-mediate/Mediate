@@ -1,7 +1,7 @@
-package com.ko.mediate.HC.tutee.Infra;
+package com.ko.mediate.HC.tutor.infra;
 
 import com.ko.mediate.HC.common.domain.DistanceCondition;
-import com.ko.mediate.HC.tutee.domain.Tutee;
+import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -9,28 +9,28 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
-import static com.ko.mediate.HC.tutee.domain.QTutee.tutee;
+import static com.ko.mediate.HC.tutor.domain.QTutor.tutor;
 
 @Repository
-public class JpaTuteeCustomRepositoryImpl extends QuerydslRepositorySupport
-    implements JpaTuteeCustomRepository {
+public class JpaTutorCustomRepositoryImpl extends QuerydslRepositorySupport
+    implements JpaTutorCustomRepository {
   private final JPAQueryFactory queryFactory;
 
-  public JpaTuteeCustomRepositoryImpl(JPAQueryFactory queryFactory) {
-    super(Tutee.class);
+  public JpaTutorCustomRepositoryImpl(JPAQueryFactory queryFactory) {
+    super(Tutor.class);
     this.queryFactory = queryFactory;
   }
 
   @Override
-  public List<Tutee> findTutorOrderByDistance(
+  public List<Tutor> findTutorOrderByDistance(
       PageRequest pageRequest, DistanceCondition condition) {
     return queryFactory
-        .selectFrom(tutee)
+        .selectFrom(tutor)
         .where(
             Expressions.numberTemplate(
                     Double.class,
                     "function('ST_Distance_Sphere', {0}, POINT({1}, {2}))",
-                    tutee.location,
+                    tutor.location,
                     condition.getLongitude(),
                     condition.getLatitude())
                 .loe(condition.getRadius() * 1000))
@@ -38,7 +38,7 @@ public class JpaTuteeCustomRepositoryImpl extends QuerydslRepositorySupport
             Expressions.numberTemplate(
                     Double.class,
                     "function('ST_Distance_Sphere', {0}, POINT({1}, {2}))",
-                    tutee.location,
+                    tutor.location,
                     condition.getLongitude(),
                     condition.getLatitude())
                 .asc())

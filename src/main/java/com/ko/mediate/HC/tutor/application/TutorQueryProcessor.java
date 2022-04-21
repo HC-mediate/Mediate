@@ -3,7 +3,7 @@ package com.ko.mediate.HC.tutor.application;
 import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
 import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
-import com.ko.mediate.HC.tutor.Infra.JpaTutorRepository;
+import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutor.application.response.GetTutorListDto;
 import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.ko.mediate.HC.tutor.application.response.GetTutorAccountDto;
