@@ -22,7 +22,7 @@ public class S3Uploader {
   private final String UPLOAD_DIR = "article-image";
 
   @Value("${cloud.aws.s3.bucket}")
-  public String bucket;
+  private String bucket;
 
   public String upload(MultipartFile multipartFile) throws IOException {
     File uploadFile =

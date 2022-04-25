@@ -7,15 +7,19 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import io.findify.s3mock.S3Mock;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
 public class S3MockConfig {
-    private final String region = "ap-northeast-2";
+    @Value("${cloud.aws.region.static}")
+    private String region;
 
-    private final String bucket = "mediate-article-image";
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
     //S3Mock을 빌드할때 포트나 메모리에 저장할 지 실제로 저장할 지 같은 것 등등을 설정 가능하다.
     @Bean
     public S3Mock s3Mock() {

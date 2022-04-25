@@ -5,7 +5,7 @@ spring:
       local-maria: local-maria, local-secret, aws
       prod1: prod, prod-db, prod-secret
       prod2: prod, prod-db, prod-secret
-      test: local-db, local-secret, aws
+      test: local-db, local-secret, test-aws
   servlet:
     multipart:
       max-file-size: 3MB
