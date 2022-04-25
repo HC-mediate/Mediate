@@ -3,8 +3,8 @@ spring:
     group:
       local: local-db, local-secret, aws
       local-maria: local-maria, local-secret, aws
-      prod1: prod, prod-db, prod-secret
-      prod2: prod, prod-db, prod-secret
+      prod1: prod, prod-db, prod-secret, aws
+      prod2: prod, prod-db, prod-secret, aws
       test: local-db, local-secret, test-aws
   servlet:
     multipart:
