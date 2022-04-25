@@ -1,8 +1,18 @@
 spring:
   profiles:
     group:
-      local: local-db, local-secret
-      local-maria: local-maria, local-secret
+      local: local-db, local-secret, aws
+      local-maria: local-maria, local-secret, aws
       prod1: prod, prod-db, prod-secret
       prod2: prod, prod-db, prod-secret
       test: local-secret
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 10MB
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error

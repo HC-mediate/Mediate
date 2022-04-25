@@ -29,9 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
 @Api(tags = {"로그인용 api"})
-//todo: 응답 메시지 통일하기
-//todo: 커뮤니티 CRUD
-//todo: 커뮤니티 인기 글 조회 캐싱
 public class AuthController {
   private final TokenProvider tokenProvider;
   private final AuthenticationManagerBuilder authenticationManagerBuilder;

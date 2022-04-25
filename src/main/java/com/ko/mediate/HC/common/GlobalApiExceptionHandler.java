@@ -11,6 +11,8 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Path;
 import javax.validation.Path.Node;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import static com.ko.mediate.HC.common.ErrorResponseBuilder.*;
@@ -97,6 +100,19 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
             invalidParameters);
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
+  }
+
+  // 업로드 파일의 크기가 제한을 넘어서는 경우
+  @ExceptionHandler({MaxUploadSizeExceededException.class})
+  public ResponseEntity<Object> handleMaxUploadSizeExceeded(
+      final MaxUploadSizeExceededException ex, final ServletWebRequest request) {
+    final ErrorResponseDto errorResponseDto =
+        build(
+            ex.getClass().getSimpleName(),
+            HttpStatus.PAYLOAD_TOO_LARGE.getReasonPhrase(),
+            HttpStatus.PAYLOAD_TOO_LARGE);
+    log(ex, request);
+    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(errorResponseDto);
   }
 
   // 메시지 컨버터에서 변환할 수 없는 경우
