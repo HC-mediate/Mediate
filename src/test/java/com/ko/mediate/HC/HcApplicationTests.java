@@ -3,6 +3,7 @@ package com.ko.mediate.HC;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
+import com.ko.mediate.HC.community.infra.JpaArticleRepository;
 import com.ko.mediate.HC.homework.infra.JpaHomeworkRepository;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutee.infra.JpaTuteeRepository;
@@ -16,6 +17,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,7 +25,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
+
 @SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class HcApplicationTests {
 	@Autowired
@@ -36,6 +40,9 @@ public class HcApplicationTests {
 	protected JpaHomeworkRepository homeworkRepository;
 	@Autowired
 	protected JpaAccountRepository accountRepository;
+	@Autowired
+	protected JpaArticleRepository articleRepository;
+
 	@Autowired
 	private TokenProvider tokenProvider;
 	@Autowired

@@ -60,7 +60,6 @@ public class S3Uploader {
 
   // 로컬에 파일 업로드 하기
   private Optional<File> convert(MultipartFile file) throws IOException {
-    System.out.println(System.getProperty("user.dir") + File.separator + file.getOriginalFilename());
     File convertFile = new File(System.getProperty("user.dir") + File.separator + file.getOriginalFilename());
     if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
       try (FileOutputStream fos =
