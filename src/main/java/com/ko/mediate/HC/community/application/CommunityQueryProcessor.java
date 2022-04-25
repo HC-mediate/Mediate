@@ -3,7 +3,6 @@ package com.ko.mediate.HC.community.application;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.community.application.dto.response.GetArticleDetailDto;
 import com.ko.mediate.HC.community.application.dto.response.GetArticleDto;
-import com.ko.mediate.HC.community.application.dto.response.GetArticleImageDto;
 import com.ko.mediate.HC.community.application.dto.response.GetArticleListDto;
 import com.ko.mediate.HC.community.domain.Article;
 import com.ko.mediate.HC.community.infra.JpaArticleRepository;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,10 +32,11 @@ public class CommunityQueryProcessor {
     return new GetArticleListDto(getArticleDtos, getArticleDtos.size() == 0);
   }
 
+  @Cacheable(value = "articleDetail", key = "#id")
   public GetArticleDetailDto getArticleDetailById(Long id) {
     return new GetArticleDetailDto(
         articleRepository
-            .findById(id)
+            .findByIdWithImages(id)
             .orElseThrow(() -> new MediateNotFoundException("ID를 찾을 수 없습니다.")));
   }
 }

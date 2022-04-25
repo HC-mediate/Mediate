@@ -22,3 +22,6 @@ spring:
   decorator:
     datasource:
       p6spy.enable-logging: false
+  redis:
+    host: 127.0.0.1
+    port: 6379

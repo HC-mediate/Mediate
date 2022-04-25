@@ -27,11 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-//todo: 글 수정 API
-//todo: 인기글 캐싱
-//todo: 방문마다 조회수 +1
-//todo: 좋아요 +1
-//todo: 북마크, 댓글
+// todo: 글 수정 API
+// todo: 인기글 캐싱
+// todo: 방문마다 조회수 +1
+// todo: 좋아요 +1
+// todo: 북마크, 댓글
 public class ArticleController {
 
   private final CommunityCommandExecutor communityCommandExecutor;
@@ -43,8 +43,7 @@ public class ArticleController {
   public ResponseEntity<CommonResponseDto> createArticle(
       @TokenAccount TokenAccountInfo token,
       @RequestPart(value = "dto") RequestArticleDto dto,
-      @RequestPart(value = "imgFile") MultipartFile[] multipartFiles)
-      throws IOException {
+      @RequestPart(value = "imgFile", required = false) MultipartFile[] multipartFiles) {
     communityCommandExecutor.createArticle(token, dto, multipartFiles);
     return ResponseEntity.ok(new CommonResponseDto("글을 작성했습니다."));
   }
@@ -60,7 +59,7 @@ public class ArticleController {
     return ResponseEntity.ok(communityQueryProcessor.getArticleDetailById(id));
   }
 
-  @DeleteMapping("/artile/{id}")
+  @DeleteMapping("/article/{id}")
   public ResponseEntity<CommonResponseDto> deleteArticleById(
       @TokenAccount TokenAccountInfo token, @PathVariable long id) {
     communityCommandExecutor.deleteArticle(token, id);

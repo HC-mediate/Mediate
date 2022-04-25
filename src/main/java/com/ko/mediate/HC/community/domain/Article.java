@@ -14,10 +14,12 @@ import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter
 @Table(name = "tb_article")
+@DynamicInsert
 public class Article extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,11 +47,10 @@ public class Article extends BaseEntity {
 
   @Builder
   public Article(
-      String title, String content, String writeBy, List<ArticleImage> articleImageList) {
+      String title, String content, String writeBy) {
     this.title = title;
     this.content = content;
     this.writeBy = writeBy;
-    this.articleImageList = articleImageList;
   }
 
   public void addArticleImage(ArticleImage articleImage) {

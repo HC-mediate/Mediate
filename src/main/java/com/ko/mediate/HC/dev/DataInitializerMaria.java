@@ -26,8 +26,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Profile(value = {"local", "local-maria"})
-public class DataInitializer implements ApplicationRunner {
+@Profile(value = {"local-maria"})
+public class DataInitializerMaria implements ApplicationRunner {
 
   private final JpaTutorRepository tutorRepository;
   private final JpaTuteeRepository tuteeRepository;
