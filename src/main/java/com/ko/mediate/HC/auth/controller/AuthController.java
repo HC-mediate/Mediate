@@ -1,7 +1,10 @@
 package com.ko.mediate.HC.auth.controller;
 
+import com.ko.mediate.HC.auth.annotation.TokenAccount;
 import com.ko.mediate.HC.auth.application.AccountService;
 import com.ko.mediate.HC.auth.application.request.SignupDto;
+import com.ko.mediate.HC.auth.application.response.GetAccountInfoDto;
+import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
 import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.firebase.application.FirebaseCloudService;
 import com.ko.mediate.HC.jwt.JwtFilter;
@@ -20,6 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +63,14 @@ public class AuthController {
   @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
   @ApiOperation(value = "회원가입", notes = "계정의 회원가입을 하는 메서드입니다.")
   public ResponseEntity Signup(@Valid @RequestBody SignupDto dto) {
-    accountService.saveAccount(dto.getAccountId(), dto.getPassword(), dto.getName(), dto.getPhoneNum());
+    accountService.saveAccount(
+        dto.getAccountId(), dto.getPassword(), dto.getName(), dto.getPhoneNum());
     return ResponseEntity.ok(new CommonResponseDto("회원가입이 완료되었습니다."));
+  }
+
+  @ApiOperation(value = "마이페이지", notes = "현재 로그인된 튜터/튜티마다 마이페이지를 다르게 보여줍니다.")
+  @GetMapping(value = "/mypage")
+  public ResponseEntity<GetAccountInfoDto> getAccountInfo(@TokenAccount TokenAccountInfo token) {
+    return ResponseEntity.ok(accountService.getAccountInfo(token));
   }
 }

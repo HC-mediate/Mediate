@@ -38,3 +38,7 @@ out/
 /src/main/resources/firebase/
 
 src/main/resources/application-aws.yml
+
+rest/
+
+spy.log
