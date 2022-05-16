@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,20 +39,24 @@ public class Article extends BaseEntity {
   @Column(name = "like_count")
   private Long like;
 
-  @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(
+      mappedBy = "article",
+      fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
   private List<ArticleImage> articleImageList = new ArrayList<>();
 
-  @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Category> categories = new ArrayList<>();
+  @Enumerated(EnumType.STRING)
+  private Category category;
 
   protected Article() {}
 
   @Builder
-  public Article(
-      String title, String content, String writeBy) {
+  public Article(String title, String content, String writeBy, Category category) {
     this.title = title;
     this.content = content;
     this.writeBy = writeBy;
+    this.category = category;
   }
 
   public void addArticleImage(ArticleImage articleImage) {

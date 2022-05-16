@@ -4,6 +4,7 @@ import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.community.application.dto.response.GetArticleDetailDto;
 import com.ko.mediate.HC.community.application.dto.response.GetArticleDto;
 import com.ko.mediate.HC.community.application.dto.response.GetArticleListDto;
+import com.ko.mediate.HC.community.application.dto.response.GetPopularArticleDto;
 import com.ko.mediate.HC.community.domain.Article;
 import com.ko.mediate.HC.community.infra.JpaArticleRepository;
 import java.util.List;
@@ -38,5 +39,11 @@ public class CommunityQueryProcessor {
         articleRepository
             .findByIdWithImages(id)
             .orElseThrow(() -> new MediateNotFoundException("ID를 찾을 수 없습니다.")));
+  }
+
+  public GetPopularArticleDto getPopularArticle() {
+    return articleRepository
+        .findPopularArticleByCategory()
+        .orElseThrow(() -> new MediateNotFoundException("결과가 없습니다."));
   }
 }

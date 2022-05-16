@@ -41,6 +41,7 @@ public class CommunityCommandExecutor {
             .title(dto.getTitle())
             .content(dto.getContent())
             .writeBy(token.getAccountId())
+            .category(dto.getCategory())
             .build();
     Optional.ofNullable(multipartFiles)
         .ifPresent(

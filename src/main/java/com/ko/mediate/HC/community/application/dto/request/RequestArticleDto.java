@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.community.application.dto.request;
 
 import com.ko.mediate.HC.community.domain.ArticleType;
+import com.ko.mediate.HC.community.domain.Category;
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,4 +20,6 @@ public class RequestArticleDto {
   private String content;
 
   private ArticleType articleType;
+
+  private Category category;
 }
