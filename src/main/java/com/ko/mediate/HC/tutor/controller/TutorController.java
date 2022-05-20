@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.tutor.controller;
 
-import com.ko.mediate.HC.auth.annotation.TokenAccount;
-import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.auth.annotation.LoginUser;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.tutor.application.TutorCommandExecutor;
@@ -42,7 +42,7 @@ public class TutorController {
 
   @ApiOperation(value = "튜터 마이페이지 정보 조회")
   @GetMapping(value = "/tutors/mypage")
-  public ResponseEntity<GetTutorAccountDto> getTutorAccount(@TokenAccount TokenAccountInfo token) {
+  public ResponseEntity<GetTutorAccountDto> getTutorAccount(@LoginUser UserInfo token) {
     return ResponseEntity.ok(tutorQueryProcessor.getTutorAccount(token));
   }
 

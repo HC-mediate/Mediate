@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.tutoring.application;
 
-import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestProgressDto;
@@ -33,7 +33,7 @@ public class TutoringCommandExecutor {
 
   @Transactional
   public CommonResponseDto responseTutoring(
-      long tutoringId, TokenAccountInfo token, TutoringResponseDto dto) {
+      long tutoringId, UserInfo token, TutoringResponseDto dto) {
     Tutoring tutoring =
         findByTutoringIdWithAuth(
             tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));
@@ -48,7 +48,7 @@ public class TutoringCommandExecutor {
   }
 
   @Transactional
-  public void requestTutoring(RequestTutoringDto dto, TokenAccountInfo token) {
+  public void requestTutoring(RequestTutoringDto dto, UserInfo token) {
     Tutoring tutoring =
         Tutoring.builder()
             .tutoringName(dto.getTutoringName())
@@ -60,7 +60,7 @@ public class TutoringCommandExecutor {
   }
 
   @Transactional
-  public boolean cancelTutoring(long tutoringId, TokenAccountInfo token) {
+  public boolean cancelTutoring(long tutoringId, UserInfo token) {
     Tutoring tutoring =
         findByTutoringIdWithAuth(
             tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));
@@ -70,7 +70,7 @@ public class TutoringCommandExecutor {
   }
 
   @Transactional
-  public void updateTutoring(long tutoringId, TokenAccountInfo token, RequestTutoringDto dto) {
+  public void updateTutoring(long tutoringId, UserInfo token, RequestTutoringDto dto) {
     Tutoring tutoring =
         findByTutoringIdWithAuth(
             tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class TokenAccountInfo {
+public class UserInfo {
   private String accountId;
   private String authority;
 }

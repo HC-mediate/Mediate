@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.tutee.application;
 
-import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutee.application.response.GetTuteeListDto;
@@ -48,7 +48,7 @@ public class TuteeQueryProcessor {
     return new GetTuteeDto(tutee.getName(), info.getSchool(), info.getGrade(), tutee.getAddress());
   }
 
-  public GetTuteeAccountDto getTuteeAccount(TokenAccountInfo token) {
+  public GetTuteeAccountDto getTuteeAccount(UserInfo token) {
     return tuteeRepository.findTuteeAccountInfoById(token.getAccountId()).stream()
         .map(
             o -> {

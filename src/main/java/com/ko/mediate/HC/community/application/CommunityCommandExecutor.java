@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.community.application;
 
-import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.exception.MediateFileExceedLimitException;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.common.infra.S3Uploader;
@@ -32,7 +32,7 @@ public class CommunityCommandExecutor {
 
   @Transactional
   public void createArticle(
-      TokenAccountInfo token, RequestArticleDto dto, MultipartFile[] multipartFiles) {
+      UserInfo token, RequestArticleDto dto, MultipartFile[] multipartFiles) {
     if (multipartFiles != null && multipartFiles.length > 5) {
       throw new MediateFileExceedLimitException("이미지는 최대 5개까지 첨부 가능합니다.");
     }
@@ -64,7 +64,7 @@ public class CommunityCommandExecutor {
 
   @Transactional
   @CacheEvict(value = "articleDetail", key = "#id")
-  public void deleteArticle(TokenAccountInfo token, Long id) {
+  public void deleteArticle(UserInfo token, Long id) {
     Article article = findByIdAndWriteBy(id, token.getAccountId());
     articleRepository.delete(article);
   }

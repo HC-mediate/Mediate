@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.tutor.application;
 
-import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
@@ -53,7 +53,7 @@ public class TutorQueryProcessor {
         tutor.getName(), info.getSchool(), info.getMajor(), info.getGrade(), tutor.getAddress());
   }
 
-  public GetTutorAccountDto getTutorAccount(TokenAccountInfo token) {
+  public GetTutorAccountDto getTutorAccount(UserInfo token) {
     return tutorRepository.findTutorAccountInfoById(token.getAccountId()).stream()
         .map(
             o -> {

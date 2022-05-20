@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.tutoring.controller;
 
-import com.ko.mediate.HC.auth.annotation.TokenAccount;
-import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.auth.annotation.LoginUser;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.tutoring.application.TutoringCommandExecutor;
 import com.ko.mediate.HC.tutoring.application.dto.request.RequestProgressDto;
@@ -32,7 +32,7 @@ public class TutoringCommandController {
   @PostMapping(value = "/tutorings", produces = MediaType.APPLICATION_JSON_VALUE)
   @ApiOperation(value = "튜터링을 생성(제안)하는 api")
   public ResponseEntity<CommonResponseDto> requestTutoring(
-      @TokenAccount TokenAccountInfo token, @Valid @RequestBody RequestTutoringDto dto) {
+      @LoginUser UserInfo token, @Valid @RequestBody RequestTutoringDto dto) {
     commandExecutor.requestTutoring(dto, token);
     return ResponseEntity.status(HttpStatus.CREATED).body(new CommonResponseDto("요청을 보냈습니다."));
   }
@@ -40,7 +40,7 @@ public class TutoringCommandController {
   @ApiOperation(value = "튜터링 제안에 대한 응답을 보내는 api")
   @PostMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CommonResponseDto> responseTutoring(
-      @TokenAccount TokenAccountInfo token,
+      @LoginUser UserInfo token,
       @PathVariable long tutoringId,
       @Valid @RequestBody TutoringResponseDto dto) {
     return ResponseEntity.status(HttpStatus.CREATED)
@@ -50,7 +50,7 @@ public class TutoringCommandController {
   @ApiOperation(value = "튜터링을 취소하는 api")
   @DeleteMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CommonResponseDto> cancelTutoring(
-      @TokenAccount TokenAccountInfo token, @PathVariable long tutoringId) {
+      @LoginUser UserInfo token, @PathVariable long tutoringId) {
     commandExecutor.cancelTutoring(tutoringId, token);
     return ResponseEntity.ok(new CommonResponseDto("튜터링이 취소되었습니다."));
   }
@@ -58,7 +58,7 @@ public class TutoringCommandController {
   @ApiOperation(value = "튜터링 정보를 업데이트하는 api")
   @PutMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CommonResponseDto> updateTutoring(
-      @TokenAccount TokenAccountInfo token,
+      @LoginUser UserInfo token,
       @PathVariable long tutoringId,
       @Valid @RequestBody RequestTutoringDto dto) {
     commandExecutor.updateTutoring(tutoringId, token, dto);

@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.tutee.controller;
 
-import com.ko.mediate.HC.auth.annotation.TokenAccount;
-import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.auth.annotation.LoginUser;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.tutee.application.TuteeCommandExecutor;
@@ -42,7 +42,7 @@ public class TuteeController {
 
   @ApiOperation(value = "튜티 마이페이지 정보 조회")
   @GetMapping(value = "/tutees/mypage")
-  public ResponseEntity<GetTuteeAccountDto> getTuteeAccount(@TokenAccount TokenAccountInfo token) {
+  public ResponseEntity<GetTuteeAccountDto> getTuteeAccount(@LoginUser UserInfo token) {
     return ResponseEntity.ok(tuteeQueryProcessor.getTuteeAccount(token));
   }
 

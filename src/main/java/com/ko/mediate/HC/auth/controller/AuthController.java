@@ -1,10 +1,10 @@
 package com.ko.mediate.HC.auth.controller;
 
-import com.ko.mediate.HC.auth.annotation.TokenAccount;
+import com.ko.mediate.HC.auth.annotation.LoginUser;
 import com.ko.mediate.HC.auth.application.AccountService;
 import com.ko.mediate.HC.auth.application.request.SignupDto;
 import com.ko.mediate.HC.auth.application.response.GetAccountInfoDto;
-import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.firebase.application.FirebaseCloudService;
 import com.ko.mediate.HC.jwt.JwtFilter;
@@ -70,7 +70,7 @@ public class AuthController {
 
   @ApiOperation(value = "마이페이지", notes = "현재 로그인된 튜터/튜티마다 마이페이지를 다르게 보여줍니다.")
   @GetMapping(value = "/mypage")
-  public ResponseEntity<GetAccountInfoDto> getAccountInfo(@TokenAccount TokenAccountInfo token) {
+  public ResponseEntity<GetAccountInfoDto> getAccountInfo(@LoginUser UserInfo token) {
     return ResponseEntity.ok(accountService.getAccountInfo(token));
   }
 }

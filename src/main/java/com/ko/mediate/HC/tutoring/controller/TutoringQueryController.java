@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.tutoring.controller;
 
-import com.ko.mediate.HC.auth.annotation.TokenAccount;
-import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.auth.annotation.LoginUser;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.tutoring.application.TutoringQueryProcessor;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTutoringDetailDto;
 import com.ko.mediate.HC.tutoring.application.dto.response.GetTutoringDto;
@@ -26,7 +26,7 @@ public class TutoringQueryController {
   @ApiOperation(value = "튜터링 정보 요약 조회")
   @GetMapping(value = "/tutorings")
   public ResponseEntity<List<GetTutoringDto>> getAllTutoringByAccountId(
-      @TokenAccount TokenAccountInfo token) {
+      @LoginUser UserInfo token) {
     return ResponseEntity.ok(tutoringQueryProcessor.getAllTutoringByAccountId(token));
   }
 

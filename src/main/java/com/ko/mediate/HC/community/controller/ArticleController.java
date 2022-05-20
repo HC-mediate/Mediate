@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.community.controller;
 
-import com.ko.mediate.HC.auth.annotation.TokenAccount;
-import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.auth.annotation.LoginUser;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.community.application.CommunityCommandExecutor;
 import com.ko.mediate.HC.community.application.CommunityQueryProcessor;
@@ -41,7 +41,7 @@ public class ArticleController {
       value = "/articles",
       consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<CommonResponseDto> createArticle(
-      @TokenAccount TokenAccountInfo token,
+      @LoginUser UserInfo token,
       @RequestPart(value = "dto") RequestArticleDto dto,
       @RequestPart(value = "imgFile", required = false) MultipartFile[] multipartFiles) {
     communityCommandExecutor.createArticle(token, dto, multipartFiles);
@@ -61,7 +61,7 @@ public class ArticleController {
 
   @DeleteMapping("/articles/{id}")
   public ResponseEntity<CommonResponseDto> deleteArticleById(
-      @TokenAccount TokenAccountInfo token, @PathVariable long id) {
+      @LoginUser UserInfo token, @PathVariable long id) {
     communityCommandExecutor.deleteArticle(token, id);
     return ResponseEntity.ok(new CommonResponseDto("글을 삭제했습니다."));
   }

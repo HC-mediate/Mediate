@@ -2,7 +2,7 @@ package com.ko.mediate.HC.auth.application;
 
 import com.ko.mediate.HC.auth.application.response.GetAccountInfoDto;
 import com.ko.mediate.HC.auth.exception.AccountNotFountException;
-import com.ko.mediate.HC.auth.resolver.TokenAccountInfo;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import com.ko.mediate.HC.tutee.infra.JpaTuteeRepository;
@@ -42,7 +42,7 @@ public class AccountService {
     accountRepository.save(account);
   }
 
-  public GetAccountInfoDto getAccountInfo(TokenAccountInfo token) {
+  public GetAccountInfoDto getAccountInfo(UserInfo token) {
     Account account =
         accountRepository
             .findByAccountId(token.getAccountId())

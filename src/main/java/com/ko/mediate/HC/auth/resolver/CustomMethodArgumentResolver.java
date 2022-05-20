@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.auth.resolver;
 
-import com.ko.mediate.HC.auth.annotation.TokenAccount;
+import com.ko.mediate.HC.auth.annotation.LoginUser;
 import com.ko.mediate.HC.common.exception.MediateNotFoundToken;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import java.util.Map;
@@ -20,8 +20,8 @@ public class CustomMethodArgumentResolver implements HandlerMethodArgumentResolv
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
-    return parameter.getParameterAnnotation(TokenAccount.class) != null
-        && parameter.getParameterType().equals(TokenAccountInfo.class);
+    return parameter.getParameterAnnotation(LoginUser.class) != null
+        && parameter.getParameterType().equals(UserInfo.class);
   }
 
   @Override
@@ -39,6 +39,6 @@ public class CustomMethodArgumentResolver implements HandlerMethodArgumentResolv
     Map<String, Object> decodedToken = tokenProvider.decode(authorizationHeader.substring(7));
     String accountId = String.valueOf(decodedToken.getOrDefault("sub", ""));
     String authority = String.valueOf(decodedToken.getOrDefault("auth", ""));
-    return new TokenAccountInfo(accountId, authority);
+    return new UserInfo(accountId, authority);
   }
 }
