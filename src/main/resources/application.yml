@@ -1,18 +1,34 @@
 spring:
   profiles:
     group:
-      local: local-db, local-secret, aws
-      local-maria: local-maria, local-secret, aws
-      prod1: prod, prod-db, prod-secret, aws
-      prod2: prod, prod-db, prod-secret, aws
-      test: local-db, local-secret, test-aws
+      local: local-h2
+      local-maria: local-maria
+      prod1: prod-db
+      prod2: prod-db
+    include:
+      - aws
+      - secret
   servlet:
     multipart:
       max-file-size: 3MB
       max-request-size: 10MB
+  redis:
+    host: 127.0.0.1
+    port: 6378
 logging:
   level:
     com:
       amazonaws:
         util:
           EC2MetadataUtils: error
+cloud:
+  aws:
+    credentials:
+      access-key: dummy-password
+      secret-key: dummy-password
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: mediate-article-image
+    stack:
+      auto: false

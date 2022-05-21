@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: local-db
+      on-profile: local-h2
   h2:
     console:
       enabled: true
@@ -21,7 +21,4 @@ spring:
         show_sql: true
   decorator:
     datasource:
-      p6spy.enable-logging: false
-  redis:
-    host: 127.0.0.1
-    port: 6378
+      p6spy.enable-logging: true
