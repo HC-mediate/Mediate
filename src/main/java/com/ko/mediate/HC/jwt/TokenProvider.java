@@ -25,8 +25,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TokenProvider implements InitializingBean {
-  private static final String AUTHORITIES_KEY = "auth";
+public class TokenProvider {
+  private static final String AUTHORITIES_KEY = "authority";
+  private static final String ACCOUNT_KEY = "account";
   private final String secret;
   private final long tokenValidityInMilliseconds;
   private Key key; // 복호화된 키가 들어감
@@ -35,14 +36,10 @@ public class TokenProvider implements InitializingBean {
   public TokenProvider(
       @Value("${jwt.secret}") String secret,
       @Value("${jwt.token-validity-in-seconds}") long tokenValidityInMilliseconds) {
-    this.secret = secret;
-    this.tokenValidityInMilliseconds = tokenValidityInMilliseconds;
-  }
-
-  @Override
-  public void afterPropertiesSet() throws Exception {
     byte[] keyBytes = Decoders.BASE64.decode(secret);
     this.key = Keys.hmacShaKeyFor(keyBytes);
+    this.secret = secret;
+    this.tokenValidityInMilliseconds = tokenValidityInMilliseconds;
   }
 
   public String createToken(Authentication authentication) {
@@ -51,12 +48,15 @@ public class TokenProvider implements InitializingBean {
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
 
+    String accountId = (String)authentication.getPrincipal();
+
     long now = (new Date()).getTime();
     Date validity = new Date(now + this.tokenValidityInMilliseconds);
 
     return Jwts.builder()
         .setSubject(authentication.getName())
         .claim(AUTHORITIES_KEY, authorities)
+        .claim(ACCOUNT_KEY, accountId)
         .signWith(key, SignatureAlgorithm.HS512)
         .setExpiration(validity)
         .compact();
@@ -70,7 +70,7 @@ public class TokenProvider implements InitializingBean {
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
 
-    User principal = new User(claims.getSubject(), "", authorities);
+    User principal = new User(claims.get(ACCOUNT_KEY).toString(), "", authorities);
     return new UsernamePasswordAuthenticationToken(principal, token, authorities);
   }
 
