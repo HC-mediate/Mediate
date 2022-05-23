@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutor.domain;
 
+import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.domain.AccountId;
 import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
@@ -8,9 +9,13 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import org.locationtech.jts.geom.Point;
 
@@ -18,15 +23,11 @@ import org.locationtech.jts.geom.Point;
 @Getter
 @Table(name = "tb_tutor")
 public class Tutor {
-  @Id
-  @GeneratedValue
-  private Long id;
+  @Id @GeneratedValue private Long id;
 
-  @Embedded
-  private AccountId accountId;
-
-  @Column(name = "name")
-  private String name;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "account_email")
+  private Account account;
 
   @Column(name = "address")
   private String address;
@@ -40,14 +41,15 @@ public class Tutor {
   @Column(name = "location")
   private Point location;
 
-  protected Tutor() {};
+  protected Tutor() {}
+  ;
 
-  public Tutor(String accountId, String name, String address, Curriculum curriculum, AcademicInfo academicInfo, Point location) {
-    this.accountId = new AccountId(accountId);
-    this.name = name;
+  @Builder
+  public Tutor(Account account, String address, Curriculum curriculum, String school, String major, String grade, Point location){
+    this.account = account;
     this.address = address;
     this.curriculum = curriculum;
-    this.academicInfo = academicInfo;
     this.location = location;
+    this.academicInfo = new AcademicInfo(school, major, grade);
   }
 }

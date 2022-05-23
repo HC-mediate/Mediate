@@ -31,14 +31,15 @@ public class CustomMethodArgumentResolver implements HandlerMethodArgumentResolv
       NativeWebRequest webRequest,
       WebDataBinderFactory binderFactory)
       throws RuntimeException {
-    String authorizationHeader = webRequest.getHeader("Authorization");
-    if (authorizationHeader == null) {
+    String authorization = webRequest.getHeader("Authorization");
+    if (authorization == null) {
       throw new MediateNotFoundToken("인증 토큰 값이 없습니다.");
     }
 
-    Map<String, Object> decodedToken = tokenProvider.decode(authorizationHeader.substring(7));
-    String accountId = String.valueOf(decodedToken.getOrDefault("sub", ""));
-    String authority = String.valueOf(decodedToken.getOrDefault("auth", ""));
-    return new UserInfo(accountId, authority);
+    Map<String, Object> decodedToken = tokenProvider.decode(authorization.substring(7));
+    Long accountId = Long.valueOf(String.valueOf(decodedToken.getOrDefault("accountId", "")));
+    String authority = String.valueOf(decodedToken.getOrDefault("authority", ""));
+    String accountEmail = String.valueOf(decodedToken.getOrDefault("accountEmail", ""));
+    return new UserInfo(accountId, accountEmail, authority);
   }
 }

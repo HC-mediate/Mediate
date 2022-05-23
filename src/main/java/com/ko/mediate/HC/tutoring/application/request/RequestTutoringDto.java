@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.tutoring.application.dto.request;
+package com.ko.mediate.HC.tutoring.application.request;
 
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotEmpty;
@@ -16,9 +16,9 @@ public class RequestTutoringDto {
 
   @ApiModelProperty(value = "튜터 ID")
   @NotEmpty(message = "튜터의 ID는 반드시 있어야 합니다.")
-  private String tutorId;
+  private String tutorEmail;
 
   @ApiModelProperty(value = "튜티 ID")
   @NotEmpty(message = "튜티의 ID는 반드시 있어야 합니다.")
-  private String tuteeId;
+  private String tuteeEmail;
 }

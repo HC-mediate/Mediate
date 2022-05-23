@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.tutoring.application.dto.response;
+package com.ko.mediate.HC.tutoring.application.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 public class TokenDto {
-  String token;
+  String refreshToken;
+  String accessToken;
 }

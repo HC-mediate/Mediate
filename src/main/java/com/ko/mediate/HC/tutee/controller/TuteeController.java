@@ -35,8 +35,9 @@ public class TuteeController {
   private final TuteeCommandExecutor tuteeCommandExecutor;
 
   @PostMapping(value = "/tutees/signup", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<CommonResponseDto> Signup(@Valid @RequestBody TuteeSignupDto dto) {
-    tuteeCommandExecutor.tuteeJoin(dto);
+  public ResponseEntity<CommonResponseDto> Signup(
+      @LoginUser UserInfo userInfo, @Valid @RequestBody TuteeSignupDto dto) {
+    tuteeCommandExecutor.tuteeJoin(userInfo, dto);
     return ResponseEntity.ok(new CommonResponseDto("회원가입 완료"));
   }
 

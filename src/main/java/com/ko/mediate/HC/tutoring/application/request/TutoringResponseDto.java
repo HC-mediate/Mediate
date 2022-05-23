@@ -1,8 +1,6 @@
-package com.ko.mediate.HC.tutoring.application.dto.request;
+package com.ko.mediate.HC.tutoring.application.request;
 
-import com.ko.mediate.HC.tutoring.application.RoleType;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -3,10 +3,10 @@ package com.ko.mediate.HC.tutoring.application;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
-import com.ko.mediate.HC.tutoring.application.dto.request.RequestProgressDto;
-import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseDto;
-import com.ko.mediate.HC.tutoring.application.dto.request.RequestTutoringDto;
-import com.ko.mediate.HC.tutoring.application.dto.request.TutoringResponseType;
+import com.ko.mediate.HC.tutoring.application.request.RequestProgressDto;
+import com.ko.mediate.HC.tutoring.application.request.TutoringResponseDto;
+import com.ko.mediate.HC.tutoring.application.request.RequestTutoringDto;
+import com.ko.mediate.HC.tutoring.application.request.TutoringResponseType;
 import com.ko.mediate.HC.tutoring.domain.Progress;
 import com.ko.mediate.HC.tutoring.domain.Tutoring;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
@@ -19,9 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class TutoringCommandExecutor {
   private final JpaTutoringRepository tutoringRepository;
 
-  public Tutoring findByTutoringIdWithAuth(long tutoringId, String accountId, RoleType roleType) {
+  public Tutoring findByTutoringIdWithAuth(long tutoringId, UserInfo userInfo, RoleType roleType) {
     return tutoringRepository
-        .findTutoringByAccountIdAndRole(tutoringId, accountId, roleType)
+        .findTutoringByAccountIdAndRole(tutoringId, userInfo.getAccountEmail(), roleType)
         .orElseThrow(() -> new MediateNotFoundException("튜터링에 속한 계정이 없습니다."));
   }
 
@@ -33,47 +33,47 @@ public class TutoringCommandExecutor {
 
   @Transactional
   public CommonResponseDto responseTutoring(
-      long tutoringId, UserInfo token, TutoringResponseDto dto) {
+      long tutoringId, UserInfo userInfo, TutoringResponseDto dto) {
     Tutoring tutoring =
         findByTutoringIdWithAuth(
-            tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));
+            tutoringId, userInfo, RoleType.fromString(userInfo.getAuthority()));
 
     if (TutoringResponseType.REFUSE == dto.getResponseType()) {
-      tutoring.cancelTutoring(RoleType.fromString(token.getAuthority()));
+      tutoring.cancelTutoring(RoleType.fromString(userInfo.getAuthority()));
     } else if (TutoringResponseType.ACCEPT == dto.getResponseType()) {
-      tutoring.acceptTutoring(RoleType.fromString(token.getAuthority()));
+      tutoring.acceptTutoring(RoleType.fromString(userInfo.getAuthority()));
     }
     tutoringRepository.save(tutoring);
     return new CommonResponseDto("튜터링이 " + dto.getResponseType().getMessage() + " 되었습니다.");
   }
 
   @Transactional
-  public void requestTutoring(RequestTutoringDto dto, UserInfo token) {
+  public void requestTutoring(RequestTutoringDto dto, UserInfo userInfo) {
     Tutoring tutoring =
         Tutoring.builder()
             .tutoringName(dto.getTutoringName())
-            .tutorId(dto.getTutorId())
-            .tuteeId(dto.getTuteeId())
+            .tutorEmail(dto.getTutorEmail())
+            .tuteeEmail(dto.getTuteeEmail())
             .build();
-    tutoring.requestTutoring(RoleType.fromString(token.getAuthority()));
+    tutoring.requestTutoring(RoleType.fromString(userInfo.getAuthority()));
     tutoringRepository.save(tutoring);
   }
 
   @Transactional
-  public boolean cancelTutoring(long tutoringId, UserInfo token) {
+  public boolean cancelTutoring(long tutoringId, UserInfo userInfo) {
     Tutoring tutoring =
         findByTutoringIdWithAuth(
-            tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));
-    tutoring.cancelTutoring(RoleType.fromString(token.getAuthority()));
+            tutoringId, userInfo, RoleType.fromString(userInfo.getAuthority()));
+    tutoring.cancelTutoring(RoleType.fromString(userInfo.getAuthority()));
     tutoringRepository.save(tutoring);
     return true;
   }
 
   @Transactional
-  public void updateTutoring(long tutoringId, UserInfo token, RequestTutoringDto dto) {
+  public void updateTutoring(long tutoringId, UserInfo userInfo, RequestTutoringDto dto) {
     Tutoring tutoring =
         findByTutoringIdWithAuth(
-            tutoringId, token.getAccountId(), RoleType.fromString(token.getAuthority()));
+            tutoringId, userInfo, RoleType.fromString(userInfo.getAuthority()));
     tutoring.changeTutoringName(dto.getTutoringName());
   }
 

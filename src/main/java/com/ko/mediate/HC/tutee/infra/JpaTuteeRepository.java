@@ -11,10 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JpaTuteeRepository extends JpaRepository<Tutee, Long>, JpaTuteeCustomRepository {
 
-  @Query("SELECT t FROM Tutee t WHERE t.accountId.accountId = :accountId")
-  Optional<Tutee> findByAccountId(@Param("accountId") String accountId);
-
-  @Query(
-      "SELECT t, a FROM Tutee t, Account a WHERE t.accountId.accountId = :accountId and a.accountId.accountId = :accountId")
-  List<Object[]> findTuteeAccountInfoById(@Param("accountId") String accountId);
+  @Query("SELECT t FROM Tutee t JOIN FETCH t.account a WHERE t.account.email = :accountEmail")
+  Optional<Tutee> findByAccountEmail(@Param("accountEmail") String email);
 }

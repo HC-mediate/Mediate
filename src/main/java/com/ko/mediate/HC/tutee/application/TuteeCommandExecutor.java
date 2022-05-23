@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.tutee.application;
 
 import com.ko.mediate.HC.auth.domain.Account;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.domain.GeometryConverter;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutee.domain.Tutee;
@@ -20,19 +21,22 @@ public class TuteeCommandExecutor {
   private final JpaAccountRepository accountRepository;
 
   @Transactional
-  public void tuteeJoin(TuteeSignupDto dto) {
-    AcademicInfo info = new AcademicInfo(dto.getSchool(), dto.getGrade());
-    Tutee tutee =
-        new Tutee(
-            dto.getAccountId(),
-            dto.getName(),
-            dto.getAddress(),
-            info,
-            geometryConverter.convertCoordinateToPoint(dto.getLatitude(), dto.getLongitude()));
-    tuteeRepository.save(tutee);
-
-    Account account = accountRepository.findByAccountId(dto.getAccountId())
-        .orElseThrow(() -> new MediateNotFoundException("ID가 없습니다."));
+  public void tuteeJoin(UserInfo userInfo, TuteeSignupDto dto) {
+    Account account =
+        accountRepository
+            .findAccountByEmail(userInfo.getAccountEmail())
+            .orElseThrow(MediateNotFoundException::new);
     account.joinTutee();
+
+    Tutee tutee =
+        Tutee.builder()
+            .account(account)
+            .school(dto.getSchool())
+            .major(dto.getMajor())
+            .grade(dto.getGrade())
+            .location(
+                geometryConverter.convertCoordinateToPoint(dto.getLatitude(), dto.getLongitude()))
+            .build();
+    tuteeRepository.save(tutee);
   }
 }

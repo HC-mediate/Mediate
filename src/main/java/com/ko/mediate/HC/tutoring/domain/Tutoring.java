@@ -37,13 +37,11 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
   @Column(name = "tutoring_name")
   private String tutoringName;
 
-  @Embedded
-  @AttributeOverride(name = "accountId", column = @Column(name = "tutor_id"))
-  private AccountId tutorId;
+  @Column(name = "tutor_email")
+  private String tutorEmail;
 
-  @Embedded
-  @AttributeOverride(name = "accountId", column = @Column(name = "tutee_id"))
-  private AccountId tuteeId;
+  @Column(name = "tutee_email")
+  private String tuteeEmail;
 
   @Column(name = "tutoring_stat")
   @Enumerated(EnumType.STRING)
@@ -74,10 +72,10 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
   ;
 
   @Builder
-  public Tutoring(String tutoringName, String tutorId, String tuteeId) {
+  public Tutoring(String tutoringName, String tutorEmail, String tuteeEmail) {
     this.tutoringName = tutoringName;
-    this.tutorId = new AccountId(tutorId);
-    this.tuteeId = new AccountId(tuteeId);
+    this.tutorEmail = tutorEmail;
+    this.tuteeEmail = tuteeEmail;
     this.stat = TutoringStat.WAITING_ACCEPT;
     this.totalWeek = 0L;
     this.doneWeek = 0L;

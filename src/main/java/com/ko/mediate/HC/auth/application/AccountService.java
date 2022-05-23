@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.auth.application;
 
+import com.ko.mediate.HC.auth.application.request.SignUpDto;
 import com.ko.mediate.HC.auth.application.response.GetAccountInfoDto;
 import com.ko.mediate.HC.auth.exception.AccountNotFountException;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
@@ -23,44 +24,43 @@ public class AccountService {
   private final JpaTuteeRepository tuteeRepository;
   private final PasswordEncoder passwordEncoder;
 
-  public void checkOverlapAccountId(String accountId) {
-    if (accountRepository.findByAccountId(accountId).isPresent()) {
-      throw new MediateIllegalStateException(String.format("이미 존재하는 ID입니다. [%s]", accountId));
+  public void checkExistEmail(String email) {
+    if (accountRepository.existsByEmail(email)) {
+      throw new MediateIllegalStateException(String.format("이미 존재하는 email입니다. [%s]", email));
     }
   }
 
-  public void saveAccount(String id, String rawPassword, String name, String phoneNum) {
-    checkOverlapAccountId(id);
+  public void saveAccount(SignUpDto dto) {
+    checkExistEmail(dto.getEmail());
     Account account =
         Account.builder()
-            .accountId(id)
-            .password(passwordEncoder.encode(rawPassword))
-            .name(name)
-            .phoneNum(phoneNum)
+            .email(dto.getEmail())
+            .password(passwordEncoder.encode(dto.getPassword()))
+            .name(dto.getName())
+            .phoneNum(dto.getPhoneNum())
             .authority(RoleType.ROLE_USER.name())
             .build();
     accountRepository.save(account);
   }
 
-  public GetAccountInfoDto getAccountInfo(UserInfo token) {
-    Account account =
-        accountRepository
-            .findByAccountId(token.getAccountId())
-            .orElseThrow(AccountNotFountException::new);
-
-    if (token.getAuthority().equals(RoleType.ROLE_TUTOR.toString())) {
+  public GetAccountInfoDto getAccountInfo(UserInfo userInfo) {
+    if (userInfo.getAuthority().equals(RoleType.ROLE_TUTOR.toString())) {
       Tutor tutor =
           tutorRepository
-              .findByAccountId(token.getAccountId())
+              .findTutorByAccountEmail(userInfo.getAccountEmail())
               .orElseThrow(AccountNotFountException::new);
-      return GetAccountInfoDto.fromEntity(account, tutor);
-    } else if (token.getAuthority().equals(RoleType.ROLE_TUTEE.toString())) {
+      return GetAccountInfoDto.fromEntity(tutor);
+    } else if (userInfo.getAuthority().equals(RoleType.ROLE_TUTEE.toString())) {
       Tutee tutee =
           tuteeRepository
-              .findByAccountId(token.getAccountId())
+              .findByAccountEmail(userInfo.getAccountEmail())
               .orElseThrow(AccountNotFountException::new);
-      return GetAccountInfoDto.fromEntity(account, tutee);
+      return GetAccountInfoDto.fromEntity(tutee);
     } else {
+      Account account =
+          accountRepository
+              .findById(userInfo.getAccountId())
+              .orElseThrow(AccountNotFountException::new);
       return GetAccountInfoDto.fromEntity(account);
     }
   }

@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.tutoring.application.dto.request;
+package com.ko.mediate.HC.tutoring.application.request;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;

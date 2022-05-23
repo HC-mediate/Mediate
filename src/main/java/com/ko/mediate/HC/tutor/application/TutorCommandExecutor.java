@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.tutor.application;
 
 import com.ko.mediate.HC.auth.domain.Account;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.domain.GeometryConverter;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
@@ -19,23 +20,28 @@ public class TutorCommandExecutor {
   private final JpaAccountRepository accountRepository;
   private final GeometryConverter geometryConverter;
 
-  @Transactional
-  public void tutorJoin(TutorSignupDto dto) {
-    AcademicInfo info = new AcademicInfo(dto.getSchool(), dto.getMajor(), dto.getGrade());
-    Tutor tutor =
-        new Tutor(
-            dto.getAccountId(),
-            dto.getName(),
-            dto.getAddress(),
-            dto.getCurriculum(),
-            info,
-            geometryConverter.convertCoordinateToPoint(dto.getLatitude(), dto.getLongitude()));
-    tutorRepository.save(tutor);
+  private Account findAccountByEmail(UserInfo userInfo) {
+    return accountRepository
+        .findById(userInfo.getAccountId())
+        .orElseThrow(MediateNotFoundException::new);
+  }
 
-    Account account =
-        accountRepository
-            .findByAccountId(dto.getAccountId())
-            .orElseThrow(() -> new MediateNotFoundException("ID가 없습니다."));
+  @Transactional
+  public void tutorJoin(UserInfo userInfo, TutorSignupDto dto) {
+    Account account = findAccountByEmail(userInfo);
     account.joinTutor();
+
+    Tutor tutor =
+        Tutor.builder()
+            .account(account)
+            .school(dto.getSchool())
+            .major(dto.getMajor())
+            .grade(dto.getGrade())
+            .address(dto.getAddress())
+            .curriculum(dto.getCurriculum())
+            .location(
+                geometryConverter.convertCoordinateToPoint(dto.getLatitude(), dto.getLongitude()))
+            .build();
+    tutorRepository.save(tutor);
   }
 }

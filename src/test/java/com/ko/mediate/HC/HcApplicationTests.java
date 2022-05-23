@@ -56,20 +56,20 @@ public class HcApplicationTests {
 
 	@BeforeEach
 	void saveAccount(){
-		Account account = new Account("tutor1", passwordEncoder.encode("tutor"), "튜터", "010-1234-5678", "ROLE_TUTOR");
-		Tutor tutor = new Tutor("tutor1", "튜터", "address_tutor", Curriculum.HIGH, new AcademicInfo("아무대학교", "컴공", "3학년"),
-				null);
-		Tutee tutee = new Tutee("tutee1", "튜티", "address_tutee", new AcademicInfo("아무고등학교", "인문계", "2학년"),
-				null);
-
-		accountRepository.saveAndFlush(account);
-		tutorRepository.saveAndFlush(tutor);
-		tuteeRepository.saveAndFlush(tutee);
-
-		List<GrantedAuthority> authorityList = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
-		UsernamePasswordAuthenticationToken authenticationToken =
-				new UsernamePasswordAuthenticationToken("tutor1", "tutor", authorityList);
-		token = tokenProvider.createToken(authenticationToken);
+//		Account account = new Account("tutor1", passwordEncoder.encode("tutor"), "튜터", "010-1234-5678", "ROLE_TUTOR");
+//		Tutor tutor = new Tutor("tutor1", "튜터", "address_tutor", Curriculum.HIGH, new AcademicInfo("아무대학교", "컴공", "3학년"),
+//				null);
+//		Tutee tutee = new Tutee("tutee1", "튜티", "address_tutee", new AcademicInfo("아무고등학교", "인문계", "2학년"),
+//				null);
+//
+//		accountRepository.saveAndFlush(account);
+//		tutorRepository.saveAndFlush(tutor);
+//		tuteeRepository.saveAndFlush(tutee);
+//
+//		List<GrantedAuthority> authorityList = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+//		UsernamePasswordAuthenticationToken authenticationToken =
+//				new UsernamePasswordAuthenticationToken("tutor1", "tutor", authorityList);
+//		token = tokenProvider.createAccessToken(authenticationToken);
 	}
 
 }

@@ -11,14 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TuteeSignupDto {
-  @ApiModelProperty(value = "튜티 이름", required = true)
-  @NotEmpty(message = "이름을 입력해주세요")
-  private String name;
-
-  @ApiModelProperty(value = "계정 ID", required = true)
-  @NotEmpty(message = "계정 ID를 입력해주세요")
-  private String accountId;
-
   @ApiModelProperty(value = "학교 이름", required = true)
   @NotEmpty(message = "학교 이름을 입력해주세요")
   private String school;
@@ -26,6 +18,9 @@ public class TuteeSignupDto {
   @ApiModelProperty(value = "학년", required = true)
   @NotEmpty(message = "학년을 입력해주세요")
   private String grade;
+
+  @ApiModelProperty(value = "인문계/실업계 등등")
+  private String major;
 
   @ApiModelProperty(value = "튜터링 가능 지역", required = true)
   @NotEmpty(message = "튜터링 가능 지역은 반드시 있어야 합니다.")

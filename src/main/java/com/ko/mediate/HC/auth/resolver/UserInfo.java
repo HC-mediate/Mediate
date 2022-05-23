@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class UserInfo {
-  private String accountId;
+  private Long accountId;
+  private String accountEmail;
   private String authority;
 }

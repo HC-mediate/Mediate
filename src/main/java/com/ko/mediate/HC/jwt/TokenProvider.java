@@ -26,50 +26,63 @@ import org.springframework.stereotype.Component;
 @Component
 public class TokenProvider {
   private static final String AUTHORITIES_KEY = "authority";
-  private static final String ACCOUNT_KEY = "account";
+  private static final String ACCOUNT_ID_KEY = "accountId";
+  private static final String ACCOUNT_EMAIL_KEY = "accountEmail";
   private final String secret;
-  private final long tokenValidityInMilliseconds;
+  private final long accessTokenValidityInMilliseconds;
+  private final long refreshTokenValidityInMilliseconds;
   private Key key; // 복호화된 키가 들어감
   private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
   public TokenProvider(
       @Value("${jwt.secret}") String secret,
-      @Value("${jwt.token-validity-in-seconds}") long tokenValidityInMilliseconds) {
+      @Value("${jwt.access.expired-time}") long accessTokenValidityInMilliseconds,
+      @Value("${jwt.refresh.expired-time}") long refreshTokenValidityInMilliseconds) {
     byte[] keyBytes = Decoders.BASE64.decode(secret);
     this.key = Keys.hmacShaKeyFor(keyBytes);
     this.secret = secret;
-    this.tokenValidityInMilliseconds = tokenValidityInMilliseconds;
+    this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
+    this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
   }
 
-  public String createToken(Authentication authentication) {
+  private String createToken(
+      Long accountId, Authentication authentication, long tokenValidityInMilliseconds) {
     String authorities =
         authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
-
-    String accountId = (String) authentication.getPrincipal();
+    String accountEmail = (String) authentication.getPrincipal();
 
     long now = (new Date()).getTime();
-    Date validity = new Date(now + this.tokenValidityInMilliseconds);
+    Date validity = new Date(now + tokenValidityInMilliseconds);
 
     return Jwts.builder()
         .setSubject(authentication.getName())
         .claim(AUTHORITIES_KEY, authorities)
-        .claim(ACCOUNT_KEY, accountId)
+        .claim(ACCOUNT_ID_KEY, accountId)
+        .claim(ACCOUNT_EMAIL_KEY, accountEmail)
         .signWith(key, SignatureAlgorithm.HS512)
         .setExpiration(validity)
         .compact();
   }
 
+  public String createAccessToken(Long accountId, Authentication authentication) {
+    return createToken(accountId, authentication, this.accessTokenValidityInMilliseconds);
+  }
+
+  public String createRefreshToken(Long accountId, Authentication authentication) {
+    return createToken(accountId, authentication, this.refreshTokenValidityInMilliseconds);
+  }
+
   public Authentication getAuthentication(String token) {
-    Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    Claims claims = decode(token);
 
     Collection<? extends GrantedAuthority> authorities =
         Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
 
-    User principal = new User(claims.get(ACCOUNT_KEY).toString(), "", authorities);
+    User principal = new User(claims.get(ACCOUNT_ID_KEY).toString(), "", authorities);
     return new UsernamePasswordAuthenticationToken(principal, token, authorities);
   }
 

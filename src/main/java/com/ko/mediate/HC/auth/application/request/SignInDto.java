@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class SignInDto {
-  @ApiModelProperty(value = "계정 ID")
-  @NotBlank(message = "계정 ID는 반드시 있어야 합니다.")
-  private String accountId;
+  @ApiModelProperty(value = "계정 이메일")
+  @NotBlank(message = "계정 이메일은 반드시 있어야 합니다.")
+  private String accountEmail;
 
   @ApiModelProperty(value = "계정 비밀번호")
   @NotBlank(message = "비밀번호는 반드시 있어야 합니다.")

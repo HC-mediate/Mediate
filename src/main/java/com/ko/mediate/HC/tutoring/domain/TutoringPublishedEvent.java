@@ -8,8 +8,8 @@ import org.springframework.context.ApplicationEvent;
 public class TutoringPublishedEvent extends ApplicationEvent {
   private final Tutoring tutoring;
   private final RoleType currentRole;
-  private String sendToAccountId;
-  private String fromToAccountId;
+  private String sendToAccountEmail;
+  private String fromToAccountEmail;
   private String title;
   private String body;
 
@@ -23,32 +23,32 @@ public class TutoringPublishedEvent extends ApplicationEvent {
 
   private void setSendToAccountId() {
     if (currentRole == RoleType.ROLE_TUTOR) {
-      this.sendToAccountId = tutoring.getTuteeId().getAccountId();
-      this.fromToAccountId = tutoring.getTutorId().getAccountId();
+      this.sendToAccountEmail = tutoring.getTuteeEmail();
+      this.fromToAccountEmail = tutoring.getTutorEmail();
     } else if (currentRole == RoleType.ROLE_TUTEE) {
-      this.sendToAccountId = tutoring.getTutorId().getAccountId();
-      this.fromToAccountId = tutoring.getTuteeId().getAccountId();
+      this.sendToAccountEmail = tutoring.getTutorEmail();
+      this.fromToAccountEmail = tutoring.getTuteeEmail();
     } else {
-      this.sendToAccountId = null;
+      this.sendToAccountEmail = null;
     }
   }
 
   private void setPushMessage(){
     TutoringStat stat = tutoring.getStat();
     if(TutoringStat.WAITING_ACCEPT == stat){
-      title = fromToAccountId + "님이 튜터링을 제안하였습니다.";
+      title = fromToAccountEmail + "님이 튜터링을 제안하였습니다.";
       body = "튜터링 이름: " + tutoring.getTutoringName();
     }
     else if(TutoringStat.LEARNING == stat){
-      title = fromToAccountId + "님이 튜터링 제안을 수락하였습니다.";
+      title = fromToAccountEmail + "님이 튜터링 제안을 수락하였습니다.";
       body = "이제부터 학습을 시작합니다!";
     }
     else if(TutoringStat.CANCEL == stat){
-      title = fromToAccountId + "님이 튜터링 제안을 거절하거나 취소하였습니다.";
+      title = fromToAccountEmail + "님이 튜터링 제안을 거절하거나 취소하였습니다.";
       body = "아쉽네요 ㅠㅠ";
     }
     else if(TutoringStat.COMPLETE_TUTORING == stat){
-      title = fromToAccountId + "님과의 튜터링이 종료되었습니다.";
+      title = fromToAccountEmail + "님과의 튜터링이 종료되었습니다.";
       body = "수고 많았습니다!";
     }
   }

@@ -17,8 +17,8 @@ public class FcmToken {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "account_id", unique = true)
-  private String accountId;
+  @Column(name = "account_email", unique = true)
+  private String accountEmail;
 
   @Column(name = "fcm_token")
   private String fcmToken;
@@ -26,8 +26,8 @@ public class FcmToken {
   protected FcmToken(){};
 
   @Builder
-  public FcmToken(String accountId, String fcmToken) {
-    this.accountId = accountId;
+  public FcmToken(String accountEmail, String fcmToken) {
+    this.accountEmail = accountEmail;
     this.fcmToken = fcmToken;
   }
 

@@ -1,6 +1,8 @@
 package com.ko.mediate.HC.auth.domain;
 
 import com.ko.mediate.HC.tutoring.application.RoleType;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -8,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,11 +22,10 @@ public class Account {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Embedded
-  @Column(unique = true)
-  private AccountId accountId;
+  @Column(name = "email", unique = true)
+  private String email;
 
-  @Column(name = "account_pw")
+  @Column(name = "password")
   private String password;
 
   @Column(name = "name")
@@ -38,11 +40,15 @@ public class Account {
   @Column(name = "phone_num")
   private String phoneNum;
 
-  protected Account() {};
+  @Transient
+  private Set<RoleType> roles = new HashSet<>();
+
+  protected Account() {}
+  ;
 
   @Builder
-  public Account(String accountId, String password, String name, String phoneNum, String authority) {
-    this.accountId = new AccountId(accountId);
+  public Account(String email, String password, String name, String phoneNum, String authority) {
+    this.email = email;
     this.password = password;
     this.authority = authority;
     this.name = name;
@@ -54,15 +60,11 @@ public class Account {
     return this.isActivated;
   }
 
-  public String getStringAccountId(){
-    return this.accountId.getAccountId();
-  }
-
-  public void joinTutor(){
+  public void joinTutor() {
     this.authority = RoleType.ROLE_TUTOR.name();
   }
 
-  public void joinTutee(){
+  public void joinTutee() {
     this.authority = RoleType.ROLE_TUTEE.name();
   }
 }

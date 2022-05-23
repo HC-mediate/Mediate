@@ -1,15 +1,23 @@
 package com.ko.mediate.HC.AuthTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ko.mediate.HC.auth.application.request.SignUpDto;
+import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -19,40 +27,29 @@ public class AuthTest {
   @Autowired private PasswordEncoder passwordEncoder;
   @Autowired private JpaAccountRepository accountRepository;
   @Autowired private MockMvc mvc;
-  @Autowired ObjectMapper objectMapper;
-  private static String password;
-  private static int order = 1; // 매 시도마다 아이디를 다르게 하기 위함.
+  @Autowired private ObjectMapper objectMapper;
 
-//  @BeforeEach
-//  public void setup() {
-//    password = passwordEncoder.encode("test");
-//    Account account =
-//        new Account("test" + ++order, password, "USER");
-//    accountRepository.save(account);
-//  }
+  static SignUpDto signUp() {
+    return new SignUpDto("test@naver.com", "test", "test_nickname", "010-1234-5678");
+  }
 
-//  @Test
-//  @DisplayName("올바른 로그인 시도")
-//  public void validAuth() throws Exception {
-//    String id = "test" + order;
-//    String params = objectMapper.writeValueAsString(new LoginDto(id, "test"));
-//    mvc.perform(post("/api/auth").contentType(MediaType.APPLICATION_JSON).content(params))
-//        .andExpect(status().isOk())
-//        .andDo(print());
-//  }
-//
-//  @Test
-//  @DisplayName("아이디, 비번 틀린 시도")
-//  public void invalidAuth() throws Exception {
-//    String id = "test" + order;
-//    String params = objectMapper.writeValueAsString(new LoginDto(id, "1234"));
-//    mvc.perform(post("/api/auth").contentType(MediaType.APPLICATION_JSON).content(params))
-//        .andExpect(status().isBadRequest())
-//        .andDo(print());
-//    id = "test1" + order;
-//    params = objectMapper.writeValueAsString(new LoginDto(id, "1234"));
-//    mvc.perform(post("/api/auth").contentType(MediaType.APPLICATION_JSON).content(params))
-//        .andExpect(status().isBadRequest())
-//        .andDo(print());
-//  }
+  @DisplayName("회원가입 테스트")
+  @Test
+  void signUpTest() throws Exception {
+    // given
+    SignUpDto dto = signUp();
+
+    // when, then
+    mvc.perform(
+            post("/api/sign-up")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().is2xxSuccessful())
+        .andDo(print());
+
+    Account account = accountRepository.findAccountByEmail(dto.getEmail()).get();
+    assertThat(account.getEmail()).isEqualTo(dto.getEmail());
+    assertThat(account.getName()).isEqualTo(dto.getName());
+    assertThat(account.getPhoneNum()).isEqualTo(dto.getPhoneNum());
+  }
 }
