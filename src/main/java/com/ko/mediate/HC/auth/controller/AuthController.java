@@ -2,7 +2,8 @@ package com.ko.mediate.HC.auth.controller;
 
 import com.ko.mediate.HC.auth.annotation.LoginUser;
 import com.ko.mediate.HC.auth.application.AccountService;
-import com.ko.mediate.HC.auth.application.request.SignupDto;
+import com.ko.mediate.HC.auth.application.request.SignInDto;
+import com.ko.mediate.HC.auth.application.request.SignUpDto;
 import com.ko.mediate.HC.auth.application.response.GetAccountInfoDto;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.CommonResponseDto;
@@ -10,7 +11,6 @@ import com.ko.mediate.HC.firebase.application.FirebaseCloudService;
 import com.ko.mediate.HC.jwt.JwtFilter;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutoring.application.dto.response.TokenDto;
-import com.ko.mediate.HC.tutoring.application.dto.request.LoginDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
@@ -39,15 +39,15 @@ public class AuthController {
   private final FirebaseCloudService firebaseCloudService;
   private final AccountService accountService;
 
-  @PostMapping("/auth")
+  @PostMapping("/sign-in")
   @ApiOperation(
       value = "로그인",
       notes = "성공시 jwt 토큰을 헤더와 응답 값에 넣어 반환합니다.",
       produces = "application/json",
       response = TokenDto.class)
-  public ResponseEntity<TokenDto> Authorize(@Valid @RequestBody LoginDto loginDto) {
+  public ResponseEntity<TokenDto> signIn(@Valid @RequestBody SignInDto dto) {
     UsernamePasswordAuthenticationToken authenticationToken =
-        new UsernamePasswordAuthenticationToken(loginDto.getId(), loginDto.getPassword());
+        new UsernamePasswordAuthenticationToken(dto.getAccountId(), dto.getPassword());
     Authentication authentication =
         authenticationManagerBuilder.getObject().authenticate(authenticationToken);
     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -56,21 +56,21 @@ public class AuthController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-    firebaseCloudService.renewFcmToken(loginDto);
+    firebaseCloudService.renewFcmToken(dto);
     return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
   }
 
-  @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/sign-up", produces = MediaType.APPLICATION_JSON_VALUE)
   @ApiOperation(value = "회원가입", notes = "계정의 회원가입을 하는 메서드입니다.")
-  public ResponseEntity Signup(@Valid @RequestBody SignupDto dto) {
+  public ResponseEntity signUp(@Valid @RequestBody SignUpDto dto) {
     accountService.saveAccount(
-        dto.getAccountId(), dto.getPassword(), dto.getName(), dto.getPhoneNum());
+        dto.getAccountId(), dto.getPassword(), dto.getNickname(), dto.getPhoneNum());
     return ResponseEntity.ok(new CommonResponseDto("회원가입이 완료되었습니다."));
   }
 
   @ApiOperation(value = "마이페이지", notes = "현재 로그인된 튜터/튜티마다 마이페이지를 다르게 보여줍니다.")
   @GetMapping(value = "/mypage")
-  public ResponseEntity<GetAccountInfoDto> getAccountInfo(@LoginUser UserInfo token) {
-    return ResponseEntity.ok(accountService.getAccountInfo(token));
+  public ResponseEntity<GetAccountInfoDto> getAccountInfo(@LoginUser UserInfo userInfo) {
+    return ResponseEntity.ok(accountService.getAccountInfo(userInfo));
   }
 }

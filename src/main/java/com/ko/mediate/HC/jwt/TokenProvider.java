@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,7 +47,7 @@ public class TokenProvider {
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
 
-    String accountId = (String)authentication.getPrincipal();
+    String accountId = (String) authentication.getPrincipal();
 
     long now = (new Date()).getTime();
     Date validity = new Date(now + this.tokenValidityInMilliseconds);
@@ -79,15 +78,14 @@ public class TokenProvider {
       Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
       return true;
     } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-      logger.info("잘못된 JWT 서명입니다.");
+      throw new io.jsonwebtoken.security.SecurityException("잘못된 JWT 서명입니다.");
     } catch (ExpiredJwtException e) {
-      logger.info("만료된 JWT 토큰입니다.");
+      throw new ExpiredJwtException(null, null, "만료된 JWT 토큰입니다.");
     } catch (UnsupportedJwtException e) {
-      logger.info("지원되지 않는 JWT 토큰입니다.");
+      throw new UnsupportedJwtException("지원되지 않는 JWT 토큰입니다.");
     } catch (IllegalArgumentException e) {
-      logger.info("JWT 토큰이 잘못되었습니다.");
+      throw new IllegalArgumentException("JWT 토큰이 잘못되었습니다.");
     }
-    return false;
   }
 
   public Claims decode(String token) {
