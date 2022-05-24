@@ -4,10 +4,10 @@ import com.ko.mediate.HC.auth.application.AccountService;
 import com.ko.mediate.HC.auth.application.AuthService;
 import com.ko.mediate.HC.auth.application.request.SignInDto;
 import com.ko.mediate.HC.auth.application.request.SignUpDto;
-import com.ko.mediate.HC.common.CommonResponseDto;
+import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import com.ko.mediate.HC.firebase.application.FirebaseCloudService;
 import com.ko.mediate.HC.jwt.JwtFilter;
-import com.ko.mediate.HC.tutoring.application.response.TokenDto;
+import com.ko.mediate.HC.auth.application.response.TokenDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
@@ -16,8 +16,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,5 +54,15 @@ public class AuthController {
   public ResponseEntity signUp(@Valid @RequestBody SignUpDto dto) {
     accountService.saveAccount(dto);
     return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @PostMapping("/refresh")
+  public ResponseEntity reissueToken(
+      @RequestHeader(value = "Refresh") String refreshToken) {
+    if(!StringUtils.hasText(refreshToken)){
+      throw new MediateIllegalStateException("리프레쉬 토큰 값이 비어있습니다.");
+    }
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(authService.reissueAccessTokenByRefreshToken(refreshToken));
   }
 }

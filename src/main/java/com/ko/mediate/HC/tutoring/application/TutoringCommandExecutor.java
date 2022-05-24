@@ -34,14 +34,12 @@ public class TutoringCommandExecutor {
   @Transactional
   public CommonResponseDto responseTutoring(
       long tutoringId, UserInfo userInfo, TutoringResponseDto dto) {
-    Tutoring tutoring =
-        findByTutoringIdWithAuth(
-            tutoringId, userInfo, RoleType.fromString(userInfo.getAuthority()));
+    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getAuthority());
 
     if (TutoringResponseType.REFUSE == dto.getResponseType()) {
-      tutoring.cancelTutoring(RoleType.fromString(userInfo.getAuthority()));
+      tutoring.cancelTutoring(userInfo.getAuthority());
     } else if (TutoringResponseType.ACCEPT == dto.getResponseType()) {
-      tutoring.acceptTutoring(RoleType.fromString(userInfo.getAuthority()));
+      tutoring.acceptTutoring(userInfo.getAuthority());
     }
     tutoringRepository.save(tutoring);
     return new CommonResponseDto("튜터링이 " + dto.getResponseType().getMessage() + " 되었습니다.");
@@ -55,25 +53,21 @@ public class TutoringCommandExecutor {
             .tutorEmail(dto.getTutorEmail())
             .tuteeEmail(dto.getTuteeEmail())
             .build();
-    tutoring.requestTutoring(RoleType.fromString(userInfo.getAuthority()));
+    tutoring.requestTutoring(userInfo.getAuthority());
     tutoringRepository.save(tutoring);
   }
 
   @Transactional
   public boolean cancelTutoring(long tutoringId, UserInfo userInfo) {
-    Tutoring tutoring =
-        findByTutoringIdWithAuth(
-            tutoringId, userInfo, RoleType.fromString(userInfo.getAuthority()));
-    tutoring.cancelTutoring(RoleType.fromString(userInfo.getAuthority()));
+    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getAuthority());
+    tutoring.cancelTutoring(userInfo.getAuthority());
     tutoringRepository.save(tutoring);
     return true;
   }
 
   @Transactional
   public void updateTutoring(long tutoringId, UserInfo userInfo, RequestTutoringDto dto) {
-    Tutoring tutoring =
-        findByTutoringIdWithAuth(
-            tutoringId, userInfo, RoleType.fromString(userInfo.getAuthority()));
+    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getAuthority());
     tutoring.changeTutoringName(dto.getTutoringName());
   }
 

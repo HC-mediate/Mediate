@@ -26,8 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class HomeworkTest extends HcApplicationTests {
 
-  @Autowired
-  private MockMvc mvc;
+  @Autowired private MockMvc mvc;
   private Long homeworkId;
 
   @BeforeEach
@@ -54,7 +53,7 @@ public class HomeworkTest extends HcApplicationTests {
     mvc.perform(
             post("/api/homework")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", BEARER + token)
+                .header("Authorization", BEARER + accessToken)
                 .content(objectMapper.writeValueAsString(homework)))
         .andExpect(status().isOk())
         .andDo(print());
@@ -69,7 +68,7 @@ public class HomeworkTest extends HcApplicationTests {
       value = {"/api/homework/tutee/:tutee1", "/api/homework/tutor/:tutor1"},
       delimiter = ':')
   public void getAllHomeworkTest(String url, String tuteeId) throws Exception {
-    mvc.perform(get(url + tuteeId).header("Authorization", BEARER + token))
+    mvc.perform(get(url + tuteeId).header("Authorization", BEARER + accessToken))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[0].title").value("1주차 숙제"))
         .andExpect(jsonPath("$[0].homeworkId").value(homeworkId))
@@ -88,7 +87,7 @@ public class HomeworkTest extends HcApplicationTests {
     mvc.perform(
             put(url + String.valueOf(homeworkId))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", BEARER + token)
+                .header("Authorization", BEARER + accessToken)
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isOk())
         .andDo(print());

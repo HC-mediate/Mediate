@@ -8,6 +8,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -21,7 +22,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 @EnableCaching
 @EnableRedisRepositories
-public class RedisRepositoryConfig {
+public class RedisConfig {
   @Value("${spring.redis.host}")
   private String redisHost;
 
@@ -34,6 +35,7 @@ public class RedisRepositoryConfig {
   private final String ARTICLE_DETAIL = "articleDetail";
 
   @Bean
+  @Profile({"local", "prod1", "prod2"})
   public RedisConnectionFactory redisConnectionFactory() {
     return new LettuceConnectionFactory(redisHost, redisPort);
   }
@@ -64,9 +66,11 @@ public class RedisRepositoryConfig {
   }
 
   @Bean
-  public RedisTemplate<?, ?> redisTemplate() {
-    RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+  public RedisTemplate<String, Object> redisTemplate() {
+    RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
     redisTemplate.setConnectionFactory(redisConnectionFactory());
+    redisTemplate.setKeySerializer(new StringRedisSerializer());
+    redisTemplate.setValueSerializer(new StringRedisSerializer());
     return redisTemplate;
   }
 }

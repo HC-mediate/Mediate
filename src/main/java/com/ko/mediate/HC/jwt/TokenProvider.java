@@ -1,5 +1,7 @@
 package com.ko.mediate.HC.jwt;
 
+import com.ko.mediate.HC.auth.resolver.UserInfo;
+import com.ko.mediate.HC.tutoring.application.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -12,7 +14,6 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,32 +48,36 @@ public class TokenProvider {
   }
 
   private String createToken(
-      Long accountId,
-      String accountEmail,
-      List<String> authorities,
-      long tokenValidityInMilliseconds) {
-    String authority = authorities.stream().collect(Collectors.joining(","));
+      Long accountId, String accountEmail, String authority, long tokenValidityInMilliseconds) {
 
     long now = (new Date()).getTime();
     Date validity = new Date(now + tokenValidityInMilliseconds);
 
     return Jwts.builder()
         .claim(AUTHORITIES_KEY, authority)
-        .claim(ACCOUNT_ID_KEY, accountId)
+        .claim(ACCOUNT_ID_KEY, String.valueOf(accountId))
         .claim(ACCOUNT_EMAIL_KEY, accountEmail)
         .signWith(key, SignatureAlgorithm.HS512)
         .setExpiration(validity)
         .compact();
   }
 
-  public String createAccessToken(Long accountId, String accountEmail, List<String> authorities) {
+  public String createAccessToken(Long accountId, String accountEmail, RoleType roleType) {
     return createToken(
-        accountId, accountEmail, authorities, this.accessTokenValidityInMilliseconds);
+        accountId, accountEmail, roleType.toString(), this.accessTokenValidityInMilliseconds);
   }
 
-  public String createRefreshToken(Long accountId, String accountEmail, List<String> authorities) {
+  public String createRefreshToken(Long accountId, String accountEmail, RoleType roleType) {
     return createToken(
-        accountId, accountEmail, authorities, this.refreshTokenValidityInMilliseconds);
+        accountId, accountEmail, roleType.toString(), this.refreshTokenValidityInMilliseconds);
+  }
+
+  public UserInfo getUserInfoFromToken(String token) {
+    Claims claims = decode(token);
+    return new UserInfo(
+        Long.valueOf((String) claims.get(ACCOUNT_ID_KEY)),
+        (String) claims.get(ACCOUNT_EMAIL_KEY),
+        RoleType.fromString((String) claims.get(AUTHORITIES_KEY)));
   }
 
   public Authentication getAuthentication(String token) {
@@ -100,6 +105,16 @@ public class TokenProvider {
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("JWT 토큰이 잘못되었습니다.");
     }
+  }
+
+  public long getExpiredTime(String token) {
+    return Jwts.parserBuilder()
+        .setSigningKey(key)
+        .build()
+        .parseClaimsJws(token)
+        .getBody()
+        .getExpiration()
+        .getTime();
   }
 
   public Claims decode(String token) {

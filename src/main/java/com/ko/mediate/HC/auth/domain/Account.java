@@ -1,10 +1,10 @@
 package com.ko.mediate.HC.auth.domain;
 
+import com.ko.mediate.HC.auth.exception.AccountPasswordNotEqualsException;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -66,5 +66,11 @@ public class Account {
 
   public void joinTutee() {
     this.authority = RoleType.ROLE_TUTEE.name();
+  }
+
+  public void authenticate(String encodePassword){
+    if(!password.equals(encodePassword)){
+      throw new AccountPasswordNotEqualsException();
+    }
   }
 }

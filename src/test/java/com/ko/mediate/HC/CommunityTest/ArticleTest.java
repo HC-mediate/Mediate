@@ -55,7 +55,7 @@ public class ArticleTest extends HcApplicationTests {
     mvc.perform((multipart(baseUrl)
         .file(mockMultipartFile).part(new MockPart("imgFile", mockMultipartFile.getBytes()))
         .file(dtoMutlipartFile).part(new MockPart("dto", dtoMutlipartFile.getBytes()))
-            .header("Authorization", BEARER + token)
+            .header("Authorization", BEARER + accessToken)
         .contentType(MediaType.MULTIPART_FORM_DATA)))
         .andDo(print())
         .andExpect(status().isOk());

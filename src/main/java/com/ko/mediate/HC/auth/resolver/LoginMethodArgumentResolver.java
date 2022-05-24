@@ -14,7 +14,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 @RequiredArgsConstructor
-public class CustomMethodArgumentResolver implements HandlerMethodArgumentResolver {
+public class LoginMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
   private final TokenProvider tokenProvider;
 
@@ -36,10 +36,6 @@ public class CustomMethodArgumentResolver implements HandlerMethodArgumentResolv
       throw new MediateNotFoundToken("인증 토큰 값이 없습니다.");
     }
 
-    Map<String, Object> decodedToken = tokenProvider.decode(authorization.substring(7));
-    Long accountId = Long.valueOf(String.valueOf(decodedToken.getOrDefault("accountId", "")));
-    String authority = String.valueOf(decodedToken.getOrDefault("authority", ""));
-    String accountEmail = String.valueOf(decodedToken.getOrDefault("accountEmail", ""));
-    return new UserInfo(accountId, accountEmail, authority);
+    return tokenProvider.getUserInfoFromToken(authorization.substring(7));
   }
 }
