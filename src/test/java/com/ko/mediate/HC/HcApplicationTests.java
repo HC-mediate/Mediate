@@ -8,6 +8,7 @@ import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.community.infra.JpaArticleRepository;
 import com.ko.mediate.HC.homework.infra.JpaHomeworkRepository;
 import com.ko.mediate.HC.jwt.TokenProvider;
+import com.ko.mediate.HC.jwt.TokenStorage;
 import com.ko.mediate.HC.tutee.infra.JpaTuteeRepository;
 import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutoring.application.RoleType;
@@ -33,6 +34,7 @@ public class HcApplicationTests {
 
   @Autowired private TokenProvider tokenProvider;
   @Autowired private PasswordEncoder passwordEncoder;
+  @Autowired private TokenStorage tokenStorage;
   protected List<Account> accountResults;
 
   protected String refreshToken, accessToken;
@@ -60,6 +62,9 @@ public class HcApplicationTests {
     saveId = accountResults.get(0).getId();
     saveEmail = accountResults.get(0).getEmail();
     savePassword = accountResults.get(0).getPassword();
+
+    tokenStorage.saveAccessToken(accessToken, saveId);
+    tokenStorage.saveRefreshToken(refreshToken, saveId);
   }
 
   @AfterEach
