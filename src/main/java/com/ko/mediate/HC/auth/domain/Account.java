@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.auth.domain;
 
-import com.ko.mediate.HC.auth.exception.AccountPasswordNotEqualsException;
+import com.ko.mediate.HC.auth.exception.AccountIncorrectPasswordException;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,9 +40,6 @@ public class Account {
   @Column(name = "phone_num")
   private String phoneNum;
 
-  @Transient
-  private Set<RoleType> roles = new HashSet<>();
-
   protected Account() {}
   ;
 
@@ -66,11 +63,5 @@ public class Account {
 
   public void joinTutee() {
     this.authority = RoleType.ROLE_TUTEE.name();
-  }
-
-  public void authenticate(String encodePassword){
-    if(!password.equals(encodePassword)){
-      throw new AccountPasswordNotEqualsException();
-    }
   }
 }

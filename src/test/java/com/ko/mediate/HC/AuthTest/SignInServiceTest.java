@@ -9,7 +9,7 @@ import static com.ko.mediate.HC.AuthTest.AccountFactory.*;
 
 import com.ko.mediate.HC.HcApplicationTests;
 import com.ko.mediate.HC.auth.application.AuthService;
-import com.ko.mediate.HC.auth.exception.AccountPasswordNotEqualsException;
+import com.ko.mediate.HC.auth.exception.AccountIncorrectPasswordException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,6 @@ public class SignInServiceTest extends HcApplicationTests {
   @Test
   void incorrectPasswordTest() {
     assertThatThrownBy(() -> authService.signIn(createSignInDto("test@google.com", "아무비밀번호")))
-        .isInstanceOf(AccountPasswordNotEqualsException.class);
+        .isInstanceOf(AccountIncorrectPasswordException.class);
   }
 }

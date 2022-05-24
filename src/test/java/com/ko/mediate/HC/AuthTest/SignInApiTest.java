@@ -30,10 +30,9 @@ public class SignInApiTest extends HcApplicationTests {
   @DisplayName("로그인 성공 테스트")
   @Test
   void loginTest() throws Exception {
-    //given
+    // given
     SignInDto dto = createSignInDto("test@google.com", "1234");
-
-    //when, then
+    // when, then
     mvc.perform(
             post("/api/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -51,5 +50,35 @@ public class SignInApiTest extends HcApplicationTests {
                 .header("Refresh", refreshToken)
                 .header("Authorization", "Bearer: " + accessToken))
         .andExpect(status().isCreated());
+  }
+
+  @DisplayName("비밀번호가 틀리면, 예외 메시지를 보낸다")
+  @Test
+  void incorrectPasswordTest() throws Exception {
+    // given
+    SignInDto dto = createSignInDto(saveEmail, "아무비빌번호");
+
+    // when, then
+    mvc.perform(
+            post("/api/sign-in")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(jsonPath("$.message").value("비밀번호가 일치하지 않습니다."))
+        .andDo(print());
+  }
+
+  @DisplayName("이메일이 없으면 예외 메시지를 보낸다")
+  @Test
+  void emailNotFoundTest() throws Exception {
+    // given
+    SignInDto dto = createSignInDto("qwer@gmail.com", "1234");
+
+    // when, then
+    mvc.perform(
+            post("/api/sign-in")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(jsonPath("$.message").exists())
+        .andDo(print());
   }
 }

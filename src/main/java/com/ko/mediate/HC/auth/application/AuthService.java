@@ -2,6 +2,7 @@ package com.ko.mediate.HC.auth.application;
 
 import com.ko.mediate.HC.auth.application.request.SignInDto;
 import com.ko.mediate.HC.auth.domain.Account;
+import com.ko.mediate.HC.auth.exception.AccountIncorrectPasswordException;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
@@ -43,13 +44,19 @@ public class AuthService implements UserDetailsService {
 
   public TokenDto signIn(SignInDto dto) {
     Account account = findAccountByEmail(dto.getAccountEmail());
-    account.authenticate(passwordEncoder.encode(dto.getPassword()));
+    authenticate(account.getPassword(), dto.getPassword());
     String refreshToken =
         tokenProvider.createRefreshToken(account.getId(), dto.getAccountEmail(), dto.getRoleType());
     String accessToken =
         tokenProvider.createAccessToken(account.getId(), dto.getAccountEmail(), dto.getRoleType());
     tokenStorage.saveRefreshToken(refreshToken, String.valueOf(account.getId()));
     return new TokenDto(refreshToken, accessToken);
+  }
+
+  private void authenticate(String encodePassword, String rawPassword) {
+    if (!passwordEncoder.matches(rawPassword, encodePassword)) {
+      throw new AccountIncorrectPasswordException();
+    }
   }
 
   public CustomUserDetails createUser(Account account) {
