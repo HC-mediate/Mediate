@@ -12,6 +12,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,19 +47,17 @@ public class TokenProvider {
   }
 
   private String createToken(
-      Long accountId, Authentication authentication, long tokenValidityInMilliseconds) {
-    String authorities =
-        authentication.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.joining(","));
-    String accountEmail = (String) authentication.getPrincipal();
+      Long accountId,
+      String accountEmail,
+      List<String> authorities,
+      long tokenValidityInMilliseconds) {
+    String authority = authorities.stream().collect(Collectors.joining(","));
 
     long now = (new Date()).getTime();
     Date validity = new Date(now + tokenValidityInMilliseconds);
 
     return Jwts.builder()
-        .setSubject(authentication.getName())
-        .claim(AUTHORITIES_KEY, authorities)
+        .claim(AUTHORITIES_KEY, authority)
         .claim(ACCOUNT_ID_KEY, accountId)
         .claim(ACCOUNT_EMAIL_KEY, accountEmail)
         .signWith(key, SignatureAlgorithm.HS512)
@@ -66,12 +65,14 @@ public class TokenProvider {
         .compact();
   }
 
-  public String createAccessToken(Long accountId, Authentication authentication) {
-    return createToken(accountId, authentication, this.accessTokenValidityInMilliseconds);
+  public String createAccessToken(Long accountId, String accountEmail, List<String> authorities) {
+    return createToken(
+        accountId, accountEmail, authorities, this.accessTokenValidityInMilliseconds);
   }
 
-  public String createRefreshToken(Long accountId, Authentication authentication) {
-    return createToken(accountId, authentication, this.refreshTokenValidityInMilliseconds);
+  public String createRefreshToken(Long accountId, String accountEmail, List<String> authorities) {
+    return createToken(
+        accountId, accountEmail, authorities, this.refreshTokenValidityInMilliseconds);
   }
 
   public Authentication getAuthentication(String token) {

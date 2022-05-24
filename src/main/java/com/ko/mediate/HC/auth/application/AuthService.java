@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,7 +27,7 @@ public class AuthService implements UserDetailsService {
   private final TokenProvider tokenProvider;
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-  private Account findAccountByEmail(String email){
+  private Account findAccountByEmail(String email) {
     return accountRepository.findAccountByEmail(email).orElseThrow(MediateNotFoundException::new);
   }
 
@@ -41,15 +40,17 @@ public class AuthService implements UserDetailsService {
   }
 
   public TokenDto signIn(SignInDto dto) {
-    UsernamePasswordAuthenticationToken authenticationToken =
-        new UsernamePasswordAuthenticationToken(dto.getAccountEmail(), dto.getPassword());
-    Authentication authentication =
-        authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+    authenticationManagerBuilder
+        .getObject()
+        .authenticate(
+            new UsernamePasswordAuthenticationToken(dto.getAccountEmail(), dto.getPassword()));
 
-    Account account = accountRepository.findAccountByEmail(dto.getAccountEmail()).orElseThrow();
-    String refreshToken = tokenProvider.createRefreshToken(account.getId(), authentication);
-    String accessToken = tokenProvider.createAccessToken(account.getId(), authentication);
-    return new TokenDto(refreshToken, accessToken);
+    Account account = findAccountByEmail(dto.getAccountEmail());
+    return new TokenDto(
+        tokenProvider.createRefreshToken(
+            account.getId(), dto.getAccountEmail(), List.of(dto.getRoleType().toString())),
+        tokenProvider.createAccessToken(
+            account.getId(), dto.getAccountEmail(), List.of(dto.getRoleType().toString())));
   }
 
   public User createUser(Account account) {

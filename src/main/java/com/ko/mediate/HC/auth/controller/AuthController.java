@@ -51,6 +51,6 @@ public class AuthController {
   @ApiOperation(value = "회원가입", notes = "계정의 회원가입을 하는 메서드입니다.")
   public ResponseEntity signUp(@Valid @RequestBody SignUpDto dto) {
     accountService.saveAccount(dto);
-    return ResponseEntity.ok(new CommonResponseDto("회원가입이 완료되었습니다."));
+    return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 }
