@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.AuthTest;
+package com.ko.mediate.HC.auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -6,11 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutoring.application.RoleType;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

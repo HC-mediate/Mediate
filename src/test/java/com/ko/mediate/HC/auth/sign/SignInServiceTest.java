@@ -1,11 +1,8 @@
-package com.ko.mediate.HC.AuthTest;
+package com.ko.mediate.HC.auth.sign;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.hamcrest.Matchers.*;
-import static com.ko.mediate.HC.AuthTest.AccountFactory.*;
+import static com.ko.mediate.HC.auth.AccountFactory.*;
 
 import com.ko.mediate.HC.HcApplicationTests;
 import com.ko.mediate.HC.auth.application.AuthService;

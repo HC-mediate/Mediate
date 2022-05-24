@@ -38,7 +38,7 @@ public class JwtFilter extends GenericFilterBean {
 
     if (StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
       UserInfo userInfo = tokenProvider.getUserInfoFromToken(accessToken);
-      if (Optional.ofNullable(tokenStorage.getAccessTokenById(String.valueOf(userInfo.getAccountId())))
+      if (Optional.ofNullable(tokenStorage.getAccessTokenById(userInfo.getAccountId()))
           .filter(extractToken -> extractToken.equals(accessToken))
           .isPresent()) {
         CustomUserDetails userDetails = authService.loadUserByUsername(userInfo.getAccountEmail());

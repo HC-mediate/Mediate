@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.AuthTest;
+package com.ko.mediate.HC.auth;
 
 import com.ko.mediate.HC.auth.application.request.SignInDto;
 import com.ko.mediate.HC.auth.application.request.SignUpDto;

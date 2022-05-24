@@ -13,8 +13,6 @@ import com.ko.mediate.HC.jwt.TokenStorage;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -49,7 +47,8 @@ public class AuthService implements UserDetailsService {
         tokenProvider.createRefreshToken(account.getId(), dto.getAccountEmail(), dto.getRoleType());
     String accessToken =
         tokenProvider.createAccessToken(account.getId(), dto.getAccountEmail(), dto.getRoleType());
-    tokenStorage.saveRefreshToken(refreshToken, String.valueOf(account.getId()));
+    tokenStorage.saveRefreshToken(refreshToken, account.getId());
+    tokenStorage.saveAccessToken(accessToken, account.getId());
     return new TokenDto(refreshToken, accessToken);
   }
 
@@ -75,7 +74,11 @@ public class AuthService implements UserDetailsService {
     String accessToken =
         tokenProvider.createAccessToken(
             userInfo.getAccountId(), userInfo.getAccountEmail(), userInfo.getAuthority());
-    tokenStorage.saveAccessToken(accessToken, String.valueOf(userInfo.getAccountId()));
+    tokenStorage.saveAccessToken(accessToken, userInfo.getAccountId());
     return new TokenDto(null, accessToken);
+  }
+
+  public void logout(UserInfo userInfo) {
+    tokenStorage.deleteRefreshAndAccessTokenById(userInfo.getAccountId());
   }
 }

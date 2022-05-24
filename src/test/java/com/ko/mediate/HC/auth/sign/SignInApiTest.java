@@ -1,20 +1,13 @@
-package com.ko.mediate.HC.AuthTest;
+package com.ko.mediate.HC.auth.sign;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.hamcrest.Matchers.*;
-import static com.ko.mediate.HC.AuthTest.AccountFactory.*;
+import static com.ko.mediate.HC.auth.AccountFactory.*;
 
 import com.ko.mediate.HC.HcApplicationTests;
 import com.ko.mediate.HC.auth.application.request.SignInDto;
-import com.ko.mediate.HC.auth.application.request.SignUpDto;
-import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.jwt.TokenProvider;
-import java.util.List;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +25,7 @@ public class SignInApiTest extends HcApplicationTests {
   void loginTest() throws Exception {
     // given
     SignInDto dto = createSignInDto("test@google.com", "1234");
+
     // when, then
     mvc.perform(
             post("/api/sign-in")
@@ -39,16 +33,14 @@ public class SignInApiTest extends HcApplicationTests {
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.refreshToken").exists())
-        .andExpect(jsonPath("$.accessToken").exists());
+        .andExpect(jsonPath("$.accessToken").exists())
+        .andDo(print());
   }
 
   @DisplayName("리프레쉬 토큰으로 액세스 토큰 발급하기")
   @Test
   void refreshTest() throws Exception {
-    mvc.perform(
-            post("/api/refresh")
-                .header("Refresh", refreshToken)
-                .header("Authorization", "Bearer: " + accessToken))
+    mvc.perform(post("/api/refresh").header("Refresh", refreshToken))
         .andExpect(status().isCreated());
   }
 

@@ -1,6 +1,6 @@
 package com.ko.mediate.HC;
 
-import static com.ko.mediate.HC.AuthTest.AccountFactory.createAccount;
+import static com.ko.mediate.HC.auth.AccountFactory.createAccount;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ko.mediate.HC.auth.domain.Account;
@@ -37,6 +37,7 @@ public class HcApplicationTests {
 
   protected String refreshToken, accessToken;
   protected String saveEmail, savePassword;
+  protected Long saveId;
   protected final String BEARER = "Bearer ";
 
   @BeforeEach
@@ -56,6 +57,7 @@ public class HcApplicationTests {
         tokenProvider.createAccessToken(
             accountResults.get(0).getId(), accountResults.get(0).getEmail(), RoleType.ROLE_USER);
 
+    saveId = accountResults.get(0).getId();
     saveEmail = accountResults.get(0).getEmail();
     savePassword = accountResults.get(0).getPassword();
   }

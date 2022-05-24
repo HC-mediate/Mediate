@@ -114,7 +114,7 @@ public class TokenProvider {
         .parseClaimsJws(token)
         .getBody()
         .getExpiration()
-        .getTime();
+        .getTime() - new Date().getTime();
   }
 
   public Claims decode(String token) {
