@@ -16,12 +16,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
+@DisplayName("로그아웃 테스트")
 public class LogoutApiTest extends HcApplicationTests {
   @Autowired AuthService authService;
   @Autowired MockMvc mvc;
   @Autowired TokenStorage tokenStorage;
 
-  @DisplayName("로그아웃 테스트. 같은 토큰으로 로그인할 수 없음")
+  @DisplayName("정상 로그아웃 테스트. 같은 토큰으로 로그인할 수 없음")
   @Test
   void logoutTest() throws Exception {
     // given

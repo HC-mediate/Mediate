@@ -24,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("숙제 CRUD 테스트")
 public class HomeworkTest extends HcApplicationTests {
 
   @Autowired private MockMvc mvc;

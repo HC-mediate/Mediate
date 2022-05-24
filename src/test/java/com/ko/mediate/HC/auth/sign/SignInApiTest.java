@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+@DisplayName("로그인 api 테스트")
 public class SignInApiTest extends HcApplicationTests {
   @Autowired MockMvc mvc;
   @Autowired PasswordEncoder passwordEncoder;

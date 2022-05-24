@@ -20,7 +20,7 @@ public class SignUpApiTest extends HcApplicationTests {
   @Autowired private MockMvc mvc;
   final String existEmail = "test@google.com";
 
-  @DisplayName("회원가입 테스트")
+  @DisplayName("회원가입 성공 테스트")
   @Test
   void signUpTest() throws Exception {
     // given

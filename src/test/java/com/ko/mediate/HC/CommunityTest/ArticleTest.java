@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("커뮤니티 글 테스트")
 @Import(S3MockConfig.class)
 public class ArticleTest extends HcApplicationTests {
   @Autowired private S3Uploader s3Uploader;
