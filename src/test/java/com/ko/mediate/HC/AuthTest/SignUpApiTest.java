@@ -31,8 +31,7 @@ public class SignUpApiTest extends HcApplicationTests {
             post("/api/sign-up")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
-        .andExpect(status().isCreated())
-        .andDo(print());
+        .andExpect(status().isCreated());
 
     Account account = accountRepository.findAccountByEmail(dto.getEmail()).get();
     assertThat(account.getEmail()).isEqualTo(dto.getEmail());
@@ -52,7 +51,6 @@ public class SignUpApiTest extends HcApplicationTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.message").value(containsString(existEmail)))
-        .andDo(print());
+        .andExpect(jsonPath("$.message").value(containsString(existEmail)));
   }
 }

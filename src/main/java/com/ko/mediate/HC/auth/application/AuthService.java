@@ -27,6 +27,7 @@ public class AuthService implements UserDetailsService {
   private final JpaAccountRepository accountRepository;
   private final TokenProvider tokenProvider;
   private final TokenStorage tokenStorage;
+  private final PasswordEncoder passwordEncoder;
 
   private Account findAccountByEmail(String email) {
     return accountRepository.findAccountByEmail(email).orElseThrow(MediateNotFoundException::new);
@@ -42,6 +43,7 @@ public class AuthService implements UserDetailsService {
 
   public TokenDto signIn(SignInDto dto) {
     Account account = findAccountByEmail(dto.getAccountEmail());
+    account.authenticate(passwordEncoder.encode(dto.getPassword()));
     String refreshToken =
         tokenProvider.createRefreshToken(account.getId(), dto.getAccountEmail(), dto.getRoleType());
     String accessToken =

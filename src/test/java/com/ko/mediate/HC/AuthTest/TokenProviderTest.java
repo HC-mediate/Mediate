@@ -3,6 +3,7 @@ package com.ko.mediate.HC.AuthTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import io.jsonwebtoken.Claims;
@@ -23,14 +24,11 @@ public class TokenProviderTest {
   void createTokenTest() {
     String token =
         tokenProvider.createAccessToken(
-            1L, "test@naver.com", RoleType.ROLE_USER);
-    Claims claims = tokenProvider.decode(token);
-    assertThat(claims.get("accountId")).isEqualTo(1);
-    assertThat(claims.get("accountEmail")).isEqualTo("test@naver.com");
-    List<String> authorities =
-        Arrays.stream(claims.get("authority").toString().split(",")).collect(Collectors.toList());
-    assertThat(authorities.contains("ROLE_USER"));
-    assertThat(authorities.contains("ROLE_TUTOR"));
+            1L, "test@naver.com", RoleType.ROLE_TUTEE);
+    UserInfo userInfo = tokenProvider.getUserInfoFromToken(token);
+    assertThat(userInfo.getAccountId()).isEqualTo(1L);
+    assertThat(userInfo.getAccountEmail()).isEqualTo("test@naver.com");
+    assertThat(userInfo.getAuthority()).isEqualTo(RoleType.ROLE_TUTEE);
   }
 
   @DisplayName("토큰 만료 테스트")

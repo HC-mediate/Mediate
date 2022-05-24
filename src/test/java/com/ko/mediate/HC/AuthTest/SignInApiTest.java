@@ -26,20 +26,21 @@ public class SignInApiTest extends HcApplicationTests {
   @Autowired MockMvc mvc;
   @Autowired PasswordEncoder passwordEncoder;
   @Autowired TokenProvider tokenProvider;
-  List<Account> results;
 
-  @DisplayName("로그인 테스트")
+  @DisplayName("로그인 성공 테스트")
   @Test
   void loginTest() throws Exception {
+    //given
     SignInDto dto = createSignInDto("test@google.com", "1234");
+
+    //when, then
     mvc.perform(
             post("/api/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.refreshToken").exists())
-        .andExpect(jsonPath("$.accessToken").exists())
-        .andDo(print());
+        .andExpect(jsonPath("$.accessToken").exists());
   }
 
   @DisplayName("리프레쉬 토큰으로 액세스 토큰 발급하기")

@@ -28,13 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-  @Bean
-  public PasswordEncoder passwordEncoder(){
-    return new BCryptPasswordEncoder();
-  }
-
   @Override
-  public void configure(WebSecurity web) throws Exception {
+  public void configure(WebSecurity web) {
     web
         .ignoring()
         .antMatchers("/h2-console/**", "/favicon.ico", "/profile")

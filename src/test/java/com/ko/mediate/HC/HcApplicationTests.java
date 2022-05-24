@@ -36,6 +36,7 @@ public class HcApplicationTests {
   protected List<Account> accountResults;
 
   protected String refreshToken, accessToken;
+  protected String saveEmail, savePassword;
   protected final String BEARER = "Bearer ";
 
   @BeforeEach
@@ -54,6 +55,9 @@ public class HcApplicationTests {
     accessToken =
         tokenProvider.createAccessToken(
             accountResults.get(0).getId(), accountResults.get(0).getEmail(), RoleType.ROLE_USER);
+
+    saveEmail = accountResults.get(0).getEmail();
+    savePassword = accountResults.get(0).getPassword();
   }
 
   @AfterEach
