@@ -10,8 +10,10 @@ import com.ko.mediate.HC.aws.exception.MediateUnsupportImageType;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -25,6 +27,9 @@ public class ProfileImageService {
   private final List<String> imageTypes = List.of("jpg", "jpeg", "png");
   private final String PREFIX_PROFILE = "profile_";
 
+  @Value("${cloud.aws.cloud_front.domain_name}")
+  private String CLOUD_FRONT;
+
   private Account findAccountById(Long accountId) {
     return accountRepository.findById(accountId).orElseThrow(MediateNotFoundException::new);
   }
@@ -34,13 +39,13 @@ public class ProfileImageService {
       throws IOException {
     validateImageFile(dto.getFile());
     Account account = findAccountById(userInfo.getAccountId());
-    if (StringUtils.hasText(account.getProfileUrl())) {
-      profileImageStorage.deleteFile(account.getProfileUrl());
+    if (Objects.nonNull(account.getProfileImage())) {
+      profileImageStorage.deleteFile(account.getProfileImage().getProfileKey());
     }
     String uploadKey = renameFileName(dto.getFile().getOriginalFilename());
-    String uploadUrl = profileImageStorage.uploadFile(dto.getFile(), uploadKey);
-    account.changeProfileImage(uploadUrl);
-    return new ProfileImageResponseDto(uploadKey, uploadUrl);
+    profileImageStorage.uploadFile(dto.getFile(), uploadKey);
+    account.changeProfileImage(uploadKey, CLOUD_FRONT + "/" + uploadKey);
+    return new ProfileImageResponseDto(uploadKey, CLOUD_FRONT + "/" + uploadKey);
   }
 
   private void validateImageFile(MultipartFile file) {

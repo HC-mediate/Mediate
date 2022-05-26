@@ -30,5 +30,7 @@ cloud:
       static: ap-northeast-2
     s3:
       bucket: mediate-image-bucket
+    cloud_front:
+      domain_name: https://dummy.cloudfront.net
     stack:
       auto: false

@@ -2,6 +2,7 @@ package com.ko.mediate.HC.auth.domain;
 
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -41,8 +42,7 @@ public class Account {
   @Column(name = "phone_num")
   private String phoneNum;
 
-  @Column(name = "profile_url")
-  private String profileUrl;
+  @Embedded private ProfileImage profileImage;
 
   protected Account() {}
   ;
@@ -54,6 +54,7 @@ public class Account {
       String name,
       String phoneNum,
       String authority,
+      String profileKey,
       String profileUrl) {
     this.email = email;
     this.password = password;
@@ -61,7 +62,7 @@ public class Account {
     this.name = name;
     this.isActivated = true;
     this.phoneNum = phoneNum;
-    this.profileUrl = profileUrl;
+    this.profileImage = new ProfileImage(profileKey, profileUrl);
   }
 
   @Builder
@@ -71,6 +72,7 @@ public class Account {
       String name,
       String phoneNum,
       RoleType role,
+      String profileKey,
       String profileUrl) {
     this.email = email;
     this.password = password;
@@ -78,11 +80,11 @@ public class Account {
     this.name = name;
     this.isActivated = true;
     this.phoneNum = phoneNum;
-    this.profileUrl = profileUrl;
+    this.profileImage = new ProfileImage(profileKey, profileUrl);
   }
 
-  public void changeProfileImage(String profileUrl) {
-    this.profileUrl = profileUrl;
+  public void changeProfileImage(String profileKey, String profileUrl) {
+    this.profileImage = new ProfileImage(profileKey, profileUrl);
   }
 
   public boolean isActivated() {

@@ -20,8 +20,8 @@ import org.springframework.test.web.servlet.ResultActions;
 public class ProfileApiTest extends BaseApiTest {
   @Autowired MockMvc mvc;
 
-  @Value("${cloud.aws.s3.bucket}")
-  String bucket;
+  @Value("${cloud.aws.cloud_front.domain_name}")
+  String cloud_front;
 
   @DisplayName("프로필 사진 업로드 테스트")
   @Test
@@ -45,7 +45,7 @@ public class ProfileApiTest extends BaseApiTest {
         .andDo(print());
 
     Account account = accountRepository.findById(accountHasNoProfile.getId()).get();
-    assertThat(account.getProfileUrl()).contains(ext, bucket);
+    assertThat(account.getProfileImage().getProfileUrl()).contains(ext, cloud_front);
   }
 
   @DisplayName("프로필 사진 변경 테스트")
@@ -70,6 +70,6 @@ public class ProfileApiTest extends BaseApiTest {
         .andDo(print());
 
     Account account = accountRepository.findById(accountHasProfile.getId()).get();
-    assertThat(account.getProfileUrl()).contains(ext, bucket);
+    assertThat(account.getProfileImage().getProfileUrl()).contains(ext, cloud_front);
   }
 }

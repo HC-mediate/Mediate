@@ -63,7 +63,7 @@ public class GetAccountInfoDto {
         .name(account.getName())
         .phoneNum(account.getPhoneNum())
         .type(RoleType.ROLE_USER)
-        .profileUrl(account.getProfileUrl())
+        .profileUrl(account.getProfileImage().getProfileUrl())
         .build();
   }
 
@@ -76,7 +76,7 @@ public class GetAccountInfoDto {
         .grade(tutor.getAcademicInfo().getGrade())
         .type(RoleType.ROLE_TUTOR)
         .phoneNum(tutor.getAccount().getPhoneNum())
-        .profileUrl(tutor.getAccount().getProfileUrl())
+        .profileUrl(tutor.getAccount().getProfileImage().getProfileUrl())
         .build();
   }
 
@@ -89,7 +89,7 @@ public class GetAccountInfoDto {
         .grade(tutee.getAcademicInfo().getGrade())
         .type(RoleType.ROLE_TUTEE)
         .phoneNum(tutee.getAccount().getPhoneNum())
-        .profileUrl(tutee.getAccount().getProfileUrl())
+        .profileUrl(tutee.getAccount().getProfileImage().getProfileUrl())
         .build();
   }
 }
