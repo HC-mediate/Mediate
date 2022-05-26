@@ -34,6 +34,9 @@ public class GetAccountInfoDto {
   @ApiModelProperty(value = "튜터/튜티 타입")
   private RoleType type;
 
+  @ApiModelProperty(value = "프로필 사진 경로")
+  private String profileUrl;
+
   @Builder
   private GetAccountInfoDto(
       String email,
@@ -42,6 +45,7 @@ public class GetAccountInfoDto {
       String schoolName,
       String grade,
       String major,
+      String profileUrl,
       RoleType type) {
     this.email = email;
     this.name = name;
@@ -49,6 +53,7 @@ public class GetAccountInfoDto {
     this.schoolName = schoolName;
     this.grade = grade;
     this.major = major;
+    this.profileUrl = profileUrl;
     this.type = type;
   }
 
@@ -58,6 +63,7 @@ public class GetAccountInfoDto {
         .name(account.getName())
         .phoneNum(account.getPhoneNum())
         .type(RoleType.ROLE_USER)
+        .profileUrl(account.getProfileUrl())
         .build();
   }
 
@@ -70,6 +76,7 @@ public class GetAccountInfoDto {
         .grade(tutor.getAcademicInfo().getGrade())
         .type(RoleType.ROLE_TUTOR)
         .phoneNum(tutor.getAccount().getPhoneNum())
+        .profileUrl(tutor.getAccount().getProfileUrl())
         .build();
   }
 
@@ -82,6 +89,7 @@ public class GetAccountInfoDto {
         .grade(tutee.getAcademicInfo().getGrade())
         .type(RoleType.ROLE_TUTEE)
         .phoneNum(tutee.getAccount().getPhoneNum())
+        .profileUrl(tutee.getAccount().getProfileUrl())
         .build();
   }
 }

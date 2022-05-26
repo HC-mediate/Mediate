@@ -3,9 +3,12 @@ package com.ko.mediate.HC;
 import static com.ko.mediate.HC.auth.AccountFactory.createAccount;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ko.mediate.HC.CommunityTest.S3MockConfig;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.community.infra.JpaArticleRepository;
+import com.ko.mediate.HC.config.LocalRedisConfig;
+import com.ko.mediate.HC.config.LocalTestRedisClientConfig;
 import com.ko.mediate.HC.homework.infra.JpaHomeworkRepository;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.jwt.TokenStorage;
@@ -18,12 +21,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
+@Import(S3MockConfig.class)
 public class HcApplicationTests {
   @Autowired protected ObjectMapper objectMapper;
   @Autowired protected JpaTutorRepository tutorRepository;
@@ -41,6 +47,7 @@ public class HcApplicationTests {
   protected String saveEmail, savePassword;
   protected Long saveId;
   protected final String BEARER = "Bearer ";
+  protected final String AUTHORIZATION = "Authorization";
 
   @BeforeEach
   void saveAccounts() {
@@ -51,7 +58,13 @@ public class HcApplicationTests {
                     "test@google.com",
                     passwordEncoder.encode("1234"),
                     "test_nickname",
-                    "ROLE_USER")));
+                    "ROLE_USER"),
+                createAccount(
+                    "test@daum.net",
+                    passwordEncoder.encode("1234"),
+                    "test_daum",
+                    "profile_url",
+                    RoleType.ROLE_TUTOR.name())));
     refreshToken =
         tokenProvider.createRefreshToken(
             accountResults.get(0).getId(), accountResults.get(0).getEmail(), RoleType.ROLE_USER);

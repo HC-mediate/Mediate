@@ -26,6 +26,17 @@ public class AccountFactory {
       .build();
   }
 
+  public static Account createAccount(String email, String password, String name, String profileUrl, String authority){
+    return Account.builder()
+      .email(email)
+      .password(password)
+      .name(name)
+      .authority(authority)
+      .phoneNum("010-1234-5678")
+      .profileUrl(profileUrl)
+      .build();
+  }
+
   public static SignInDto createSignInDto(String email, String password){
     return new SignInDto(email, password, RoleType.ROLE_USER, "token");
   }

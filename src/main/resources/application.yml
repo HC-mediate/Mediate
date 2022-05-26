@@ -29,6 +29,6 @@ cloud:
     region:
       static: ap-northeast-2
     s3:
-      bucket: mediate-article-image
+      bucket: mediate-image-bucket
     stack:
       auto: false
