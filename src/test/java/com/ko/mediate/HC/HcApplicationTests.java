@@ -7,8 +7,6 @@ import com.ko.mediate.HC.CommunityTest.S3MockConfig;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.community.infra.JpaArticleRepository;
-import com.ko.mediate.HC.config.LocalRedisConfig;
-import com.ko.mediate.HC.config.LocalTestRedisClientConfig;
 import com.ko.mediate.HC.homework.infra.JpaHomeworkRepository;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.jwt.TokenStorage;
@@ -48,6 +46,7 @@ public class HcApplicationTests {
   protected Long saveId;
   protected final String BEARER = "Bearer ";
   protected final String AUTHORIZATION = "Authorization";
+  protected Account profileHasAccount;
 
   @BeforeEach
   void saveAccounts() {
@@ -78,6 +77,8 @@ public class HcApplicationTests {
 
     tokenStorage.saveAccessToken(accessToken, saveId);
     tokenStorage.saveRefreshToken(refreshToken, saveId);
+
+    profileHasAccount = accountResults.get(1);
   }
 
   @AfterEach

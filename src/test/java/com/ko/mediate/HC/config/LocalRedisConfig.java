@@ -6,7 +6,11 @@ import java.io.InputStreamReader;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import org.junit.jupiter.api.Nested;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.util.StringUtils;
 import redis.embedded.RedisServer;
 
@@ -20,6 +24,14 @@ public class LocalRedisConfig {
     int port = isRedisRunning() ? findAvailablePort() : redisPort;
     redisServer = new RedisServer(port);
     redisServer.start();
+  }
+
+  @Nested
+  class LocalTestRedisClientConfig {
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+      return new LettuceConnectionFactory("127.0.0.1", redisPort);
+    }
   }
 
   @PreDestroy
@@ -68,7 +80,7 @@ public class LocalRedisConfig {
     StringBuilder pidInfo = new StringBuilder();
 
     try (BufferedReader input =
-      new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+        new BufferedReader(new InputStreamReader(process.getInputStream()))) {
 
       while ((line = input.readLine()) != null) {
         pidInfo.append(line);
