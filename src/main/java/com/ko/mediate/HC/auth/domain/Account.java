@@ -3,6 +3,8 @@ package com.ko.mediate.HC.auth.domain;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,8 +34,9 @@ public class Account {
   @Column(name = "is_activated")
   private Boolean isActivated;
 
-  @Column(name = "authority")
-  private String authority;
+  @Column(name = "role")
+  @Enumerated(EnumType.STRING)
+  private RoleType role;
 
   @Column(name = "phone_num")
   private String phoneNum;
@@ -45,17 +48,40 @@ public class Account {
   ;
 
   @Builder
-  public Account(String email, String password, String name, String phoneNum, String authority, String profileUrl) {
+  public Account(
+      String email,
+      String password,
+      String name,
+      String phoneNum,
+      String authority,
+      String profileUrl) {
     this.email = email;
     this.password = password;
-    this.authority = authority;
+    this.role = RoleType.fromString(authority);
     this.name = name;
     this.isActivated = true;
     this.phoneNum = phoneNum;
     this.profileUrl = profileUrl;
   }
 
-  public void changeProfileImage(String profileUrl){
+  @Builder
+  public Account(
+      String email,
+      String password,
+      String name,
+      String phoneNum,
+      RoleType role,
+      String profileUrl) {
+    this.email = email;
+    this.password = password;
+    this.role = role;
+    this.name = name;
+    this.isActivated = true;
+    this.phoneNum = phoneNum;
+    this.profileUrl = profileUrl;
+  }
+
+  public void changeProfileImage(String profileUrl) {
     this.profileUrl = profileUrl;
   }
 
@@ -64,10 +90,10 @@ public class Account {
   }
 
   public void joinTutor() {
-    this.authority = RoleType.ROLE_TUTOR.name();
+    this.role = RoleType.ROLE_TUTOR;
   }
 
   public void joinTutee() {
-    this.authority = RoleType.ROLE_TUTEE.name();
+    this.role = RoleType.ROLE_TUTEE;
   }
 }

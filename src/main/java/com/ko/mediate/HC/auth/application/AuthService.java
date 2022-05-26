@@ -63,7 +63,7 @@ public class AuthService implements UserDetailsService {
       throw new BadCredentialsException("활성화되지 않은 아이디입니다.");
     }
     Set<GrantedAuthority> grantedAuthorities =
-        Set.of(new SimpleGrantedAuthority(account.getAuthority()));
+        Set.of(new SimpleGrantedAuthority(account.getRole().toString()));
     return new CustomUserDetails(
         String.valueOf(account.getId()), account.getPassword(), grantedAuthorities);
   }
