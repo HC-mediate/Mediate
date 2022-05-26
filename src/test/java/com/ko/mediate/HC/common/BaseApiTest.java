@@ -5,11 +5,14 @@ import static com.ko.mediate.HC.auth.AccountFactory.createSignInDto;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ko.mediate.HC.CommunityTest.S3MockConfig;
 import com.ko.mediate.HC.auth.application.AuthService;
+import com.ko.mediate.HC.auth.application.response.TokenDto;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.config.LocalRedisConfig;
+import com.ko.mediate.HC.jwt.TokenStorage;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import java.io.File;
 import java.io.IOException;
@@ -36,11 +39,14 @@ public class BaseApiTest {
   @Autowired private AuthService authService;
   @Autowired private PasswordEncoder passwordEncoder;
   @Autowired private AmazonS3Client amazonS3Client;
+  @Autowired protected ObjectMapper objectMapper;
+  @Autowired private TokenStorage tokenStorage;
 
   private List<Account> accountResults;
 
   protected Account accountHasProfile, accountHasNoProfile;
-  protected Map<Long, String> tokenMap = new HashMap<>();
+  protected Map<Long, String> accessTokenMap = new HashMap<>();
+  protected Map<Long, String> refreshTokenMap = new HashMap<>();
   protected final String AUTHORIZATION = "Authorization";
   protected final String BEARER = "Bearer ";
 
@@ -49,6 +55,10 @@ public class BaseApiTest {
 
   protected final String profileImageKey = "profile/test.jpg";
   protected final String tempFilePath = "temp.jpg";
+
+  protected String saveEmail;
+  protected Long saveId;
+  protected String accessToken, refreshToken;
 
   private File createTempFile() throws IOException {
     File file = new File(tempFilePath);
@@ -64,6 +74,34 @@ public class BaseApiTest {
   @BeforeEach
   void beforeEach() throws IOException {
     File file = createTempFile();
+
+    saveAccounts();
+    authAccounts();
+    amazonS3Client.putObject(new PutObjectRequest(bucket, profileImageKey, file));
+
+    accountHasProfile = accountResults.get(0);
+    accountHasNoProfile = accountResults.get(1);
+
+    saveEmail = accountResults.get(0).getEmail();
+    saveId = accountResults.get(0).getId();
+
+    saveAccessAndRefreshToken();
+  }
+
+  private void authAccounts() {
+    for (Account account : accountResults) {
+      TokenDto dto = authService.signIn(createSignInDto(account.getEmail(), "1234"));
+      accessTokenMap.put(account.getId(), dto.getAccessToken());
+      refreshTokenMap.put(account.getId(), dto.getRefreshToken());
+    }
+  }
+
+  private void saveAccessAndRefreshToken() {
+    accessToken = accessTokenMap.get(saveId);
+    refreshToken = refreshTokenMap.get(saveId);
+  }
+
+  private void saveAccounts() {
     accountResults =
         accountRepository.saveAllAndFlush(
             List.of(
@@ -78,15 +116,6 @@ public class BaseApiTest {
                     passwordEncoder.encode("1234"),
                     "test1_google",
                     RoleType.ROLE_TUTOR.toString())));
-
-
-    amazonS3Client.putObject(new PutObjectRequest(bucket, profileImageKey, file));
-    for(Account account: accountResults){
-      String token = authService.signIn(createSignInDto(account.getEmail(), "1234")).getAccessToken();
-      tokenMap.put(account.getId(), token);
-    }
-    accountHasProfile = accountResults.get(0);
-    accountHasNoProfile = accountResults.get(1);
   }
 
   @AfterEach

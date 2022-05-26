@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.ko.mediate.HC.CommunityTest.S3MockConfig;
 import com.ko.mediate.HC.aws.infra.ProfileImageS3Storage;
+import com.ko.mediate.HC.common.BaseApiTest;
 import java.io.IOException;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
@@ -15,8 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
-@SpringBootTest(classes = {S3MockConfig.class, ProfileImageS3Storage.class})
-public class ProfileImageStorageTest {
+public class ProfileImageStorageTest extends BaseApiTest {
   @Autowired ProfileImageStorage profileImageStorage;
 
   @Autowired AmazonS3Client amazonS3Client;

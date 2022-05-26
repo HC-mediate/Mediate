@@ -36,7 +36,7 @@ public class ProfileApiTest extends BaseApiTest {
         mvc.perform(
             multipart("/api/profile-image")
                 .file(file)
-                .header(AUTHORIZATION, BEARER + tokenMap.get(accountHasNoProfile.getId())));
+                .header(AUTHORIZATION, BEARER + accessTokenMap.get(accountHasNoProfile.getId())));
 
     // then
     result
@@ -61,7 +61,7 @@ public class ProfileApiTest extends BaseApiTest {
         mvc.perform(
             multipart("/api/profile-image")
                 .file(file)
-                .header(AUTHORIZATION, BEARER + tokenMap.get(accountHasProfile.getId())));
+                .header(AUTHORIZATION, BEARER + accessTokenMap.get(accountHasProfile.getId())));
 
     // then
     result

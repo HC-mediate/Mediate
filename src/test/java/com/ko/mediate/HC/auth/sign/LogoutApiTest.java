@@ -10,6 +10,7 @@ import com.ko.mediate.HC.HcApplicationTests;
 import com.ko.mediate.HC.auth.application.AuthService;
 import com.ko.mediate.HC.auth.application.request.SignInDto;
 import com.ko.mediate.HC.auth.application.response.TokenDto;
+import com.ko.mediate.HC.common.BaseApiTest;
 import com.ko.mediate.HC.jwt.TokenStorage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
 @DisplayName("로그아웃 테스트")
-public class LogoutApiTest extends HcApplicationTests {
+public class LogoutApiTest extends BaseApiTest {
   @Autowired AuthService authService;
   @Autowired MockMvc mvc;
   @Autowired TokenStorage tokenStorage;

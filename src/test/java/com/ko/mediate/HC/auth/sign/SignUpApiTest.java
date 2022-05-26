@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.auth.sign;
 
+import static com.ko.mediate.HC.auth.AccountFactory.createSignUpDto;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -7,18 +8,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.hamcrest.Matchers.*;
 import static com.ko.mediate.HC.auth.AccountFactory.*;
 
-import com.ko.mediate.HC.HcApplicationTests;
+import com.ko.mediate.HC.auth.application.AccountService;
 import com.ko.mediate.HC.auth.application.request.SignUpDto;
 import com.ko.mediate.HC.auth.domain.Account;
+import com.ko.mediate.HC.common.BaseApiTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-public class SignUpApiTest extends HcApplicationTests {
-  @Autowired private MockMvc mvc;
-  final String existEmail = "test@google.com";
+public class SignUpApiTest extends BaseApiTest {
+  @Autowired MockMvc mvc;
+  @Autowired AccountService accountService;
+  final String existEmail = "test123@naver.com";
 
   @DisplayName("회원가입 성공 테스트")
   @Test
@@ -44,6 +47,7 @@ public class SignUpApiTest extends HcApplicationTests {
   void validateEmailTest() throws Exception {
     // given
     SignUpDto dto = createSignUpDto(existEmail);
+    accountService.saveAccount(dto);
 
     // when, then
     mvc.perform(

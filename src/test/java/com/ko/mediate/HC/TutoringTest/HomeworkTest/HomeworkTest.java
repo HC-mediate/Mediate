@@ -6,10 +6,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ko.mediate.HC.HcApplicationTests;
+import com.ko.mediate.HC.common.BaseApiTest;
 import com.ko.mediate.HC.homework.application.HomeworkContentDto;
 import com.ko.mediate.HC.homework.application.request.CreateHomeworkDto;
 import com.ko.mediate.HC.homework.application.request.UpdateHomeworkDto;
 import com.ko.mediate.HC.homework.domain.Homework;
+import com.ko.mediate.HC.homework.infra.JpaHomeworkRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,9 +27,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("숙제 CRUD 테스트")
-public class HomeworkTest extends HcApplicationTests {
+public class HomeworkTest extends BaseApiTest {
 
-  @Autowired private MockMvc mvc;
+  @Autowired MockMvc mvc;
+  @Autowired JpaHomeworkRepository homeworkRepository;
   private Long homeworkId;
 
   @BeforeEach

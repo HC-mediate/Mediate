@@ -5,8 +5,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static com.ko.mediate.HC.auth.AccountFactory.*;
 
-import com.ko.mediate.HC.HcApplicationTests;
 import com.ko.mediate.HC.auth.application.request.SignInDto;
+import com.ko.mediate.HC.common.BaseApiTest;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 @DisplayName("로그인 api 테스트")
-public class SignInApiTest extends HcApplicationTests {
+public class SignInApiTest extends BaseApiTest {
   @Autowired MockMvc mvc;
   @Autowired PasswordEncoder passwordEncoder;
   @Autowired TokenProvider tokenProvider;
@@ -25,7 +25,7 @@ public class SignInApiTest extends HcApplicationTests {
   @Test
   void loginTest() throws Exception {
     // given
-    SignInDto dto = createSignInDto("test@google.com", "1234");
+    SignInDto dto = createSignInDto(saveEmail, "1234");
 
     // when, then
     mvc.perform(
