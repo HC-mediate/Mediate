@@ -26,8 +26,8 @@ public class TutoringQueryController {
   @ApiOperation(value = "튜터링 정보 요약 조회")
   @GetMapping(value = "/tutorings")
   public ResponseEntity<List<GetTutoringDto>> getAllTutoringByAccountId(
-      @LoginUser UserInfo token) {
-    return ResponseEntity.ok(tutoringQueryProcessor.getAllTutoringByAccountId(token));
+      @LoginUser UserInfo userInfo) {
+    return ResponseEntity.ok(tutoringQueryProcessor.getAllTutoringByAccountId(userInfo));
   }
 
   @ApiOperation(value = "튜터링 진행도 조회")
