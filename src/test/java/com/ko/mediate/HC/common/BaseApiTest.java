@@ -39,7 +39,7 @@ public class BaseApiTest {
 
   private List<Account> accountResults;
 
-  protected Account profileHasAccount;
+  protected Account accountHasProfile, accountHasNoProfile;
   protected Map<Long, String> tokenMap = new HashMap<>();
   protected final String AUTHORIZATION = "Authorization";
   protected final String BEARER = "Bearer ";
@@ -72,16 +72,21 @@ public class BaseApiTest {
                     passwordEncoder.encode("1234"),
                     "test_naver",
                     profileImageKey,
+                    RoleType.ROLE_TUTOR.toString()),
+                createAccount(
+                    "test1@google.com",
+                    passwordEncoder.encode("1234"),
+                    "test1_google",
                     RoleType.ROLE_TUTOR.toString())));
 
-    for (Account account : accountResults) {
-      String token =
-          authService.signIn(createSignInDto(account.getEmail(), "1234")).getAccessToken();
-      amazonS3Client.putObject(new PutObjectRequest(bucket, profileImageKey, file));
+
+    amazonS3Client.putObject(new PutObjectRequest(bucket, profileImageKey, file));
+    for(Account account: accountResults){
+      String token = authService.signIn(createSignInDto(account.getEmail(), "1234")).getAccessToken();
       tokenMap.put(account.getId(), token);
     }
-
-    profileHasAccount = accountResults.get(0);
+    accountHasProfile = accountResults.get(0);
+    accountHasNoProfile = accountResults.get(1);
   }
 
   @AfterEach

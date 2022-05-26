@@ -36,7 +36,7 @@ public class ProfileApiTest extends BaseApiTest {
         mvc.perform(
             multipart("/api/profile-image")
                 .file(file)
-                .header(AUTHORIZATION, BEARER + tokenMap.get(profileHasAccount.getId())));
+                .header(AUTHORIZATION, BEARER + tokenMap.get(accountHasNoProfile.getId())));
 
     // then
     result
@@ -44,7 +44,32 @@ public class ProfileApiTest extends BaseApiTest {
         .andExpect(status().isCreated())
         .andDo(print());
 
-    Account account = accountRepository.findById(profileHasAccount.getId()).get();
+    Account account = accountRepository.findById(accountHasNoProfile.getId()).get();
+    assertThat(account.getProfileUrl()).contains(ext, bucket);
+  }
+
+  @DisplayName("프로필 사진 변경 테스트")
+  @Test
+  void profileImageChangeTest() throws Exception {
+    // given
+    String fileName = "test.png", ext = "png";
+    MockMultipartFile file =
+        new MockMultipartFile("file", fileName, MediaType.IMAGE_PNG_VALUE, new byte[] {1});
+
+    // when
+    ResultActions result =
+        mvc.perform(
+            multipart("/api/profile-image")
+                .file(file)
+                .header(AUTHORIZATION, BEARER + tokenMap.get(accountHasProfile.getId())));
+
+    // then
+    result
+        .andExpect(jsonPath("$.key").value(containsString(ext)))
+        .andExpect(jsonPath("$.url").value(containsString(ext)))
+        .andDo(print());
+
+    Account account = accountRepository.findById(accountHasProfile.getId()).get();
     assertThat(account.getProfileUrl()).contains(ext, bucket);
   }
 }

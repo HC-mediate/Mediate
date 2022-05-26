@@ -9,10 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @Table(name = "tb_account")
+@DynamicUpdate
 public class Account {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
