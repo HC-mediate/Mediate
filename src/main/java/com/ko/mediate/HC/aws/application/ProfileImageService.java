@@ -3,8 +3,8 @@ package com.ko.mediate.HC.aws.application;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
-import com.ko.mediate.HC.aws.application.request.ProfileRequestDto;
-import com.ko.mediate.HC.aws.application.response.ProfileResponseDto;
+import com.ko.mediate.HC.aws.application.request.ProfileImageRequestDto;
+import com.ko.mediate.HC.aws.application.response.ProfileImageResponseDto;
 import com.ko.mediate.HC.aws.domain.ProfileImageStorage;
 import com.ko.mediate.HC.aws.exception.MediateUnsupportImageType;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
@@ -30,7 +30,7 @@ public class ProfileImageService {
   }
 
   @Transactional
-  public ProfileResponseDto uploadProfileImage(UserInfo userInfo, ProfileRequestDto dto)
+  public ProfileImageResponseDto uploadProfileImage(UserInfo userInfo, ProfileImageRequestDto dto)
       throws IOException {
     validateImageFile(dto.getFile());
     Account account = findAccountById(userInfo.getAccountId());
@@ -40,7 +40,7 @@ public class ProfileImageService {
     String uploadKey = renameFileName(dto.getFile().getOriginalFilename());
     String uploadUrl = profileImageStorage.uploadFile(dto.getFile(), uploadKey);
     account.changeProfileImage(uploadUrl);
-    return new ProfileResponseDto(uploadKey, uploadUrl);
+    return new ProfileImageResponseDto(uploadKey, uploadUrl);
   }
 
   private void validateImageFile(MultipartFile file) {

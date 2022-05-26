@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class ProfileResponseDto {
+public class ProfileImageResponseDto {
 
   @ApiModelProperty(value = "S3 파일 업로드 경로")
   private String key;
