@@ -25,7 +25,7 @@ public class TokenProviderTest {
     UserInfo userInfo = tokenProvider.getUserInfoFromToken(token);
     assertThat(userInfo.getAccountId()).isEqualTo(1L);
     assertThat(userInfo.getAccountEmail()).isEqualTo("test@naver.com");
-    assertThat(userInfo.getAuthority()).isEqualTo(RoleType.ROLE_TUTEE);
+    assertThat(userInfo.getRole()).isEqualTo(RoleType.ROLE_TUTEE);
   }
 
   @DisplayName("토큰 만료 테스트")

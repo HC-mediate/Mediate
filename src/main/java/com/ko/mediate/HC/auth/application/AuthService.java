@@ -73,7 +73,7 @@ public class AuthService implements UserDetailsService {
     UserInfo userInfo = tokenProvider.getUserInfoFromToken(refreshToken);
     String accessToken =
         tokenProvider.createAccessToken(
-            userInfo.getAccountId(), userInfo.getAccountEmail(), userInfo.getAuthority());
+            userInfo.getAccountId(), userInfo.getAccountEmail(), userInfo.getRole());
     tokenStorage.saveAccessToken(accessToken, userInfo.getAccountId());
     return new TokenDto(null, accessToken);
   }

@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class UserInfo {
   private Long accountId;
   private String accountEmail;
-  private RoleType authority;
+  private RoleType role;
 }

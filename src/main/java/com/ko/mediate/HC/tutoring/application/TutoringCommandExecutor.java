@@ -34,12 +34,12 @@ public class TutoringCommandExecutor {
   @Transactional
   public CommonResponseDto responseTutoring(
       long tutoringId, UserInfo userInfo, TutoringResponseDto dto) {
-    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getAuthority());
+    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getRole());
 
     if (TutoringResponseType.REFUSE == dto.getResponseType()) {
-      tutoring.cancelTutoring(userInfo.getAuthority());
+      tutoring.cancelTutoring(userInfo.getRole());
     } else if (TutoringResponseType.ACCEPT == dto.getResponseType()) {
-      tutoring.acceptTutoring(userInfo.getAuthority());
+      tutoring.acceptTutoring(userInfo.getRole());
     }
     tutoringRepository.save(tutoring);
     return new CommonResponseDto("튜터링이 " + dto.getResponseType().getMessage() + " 되었습니다.");
@@ -53,21 +53,21 @@ public class TutoringCommandExecutor {
             .tutorEmail(dto.getTutorEmail())
             .tuteeEmail(dto.getTuteeEmail())
             .build();
-    tutoring.requestTutoring(userInfo.getAuthority());
+    tutoring.requestTutoring(userInfo.getRole());
     tutoringRepository.save(tutoring);
   }
 
   @Transactional
   public boolean cancelTutoring(long tutoringId, UserInfo userInfo) {
-    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getAuthority());
-    tutoring.cancelTutoring(userInfo.getAuthority());
+    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getRole());
+    tutoring.cancelTutoring(userInfo.getRole());
     tutoringRepository.save(tutoring);
     return true;
   }
 
   @Transactional
   public void updateTutoring(long tutoringId, UserInfo userInfo, RequestTutoringDto dto) {
-    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getAuthority());
+    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getRole());
     tutoring.changeTutoringName(dto.getTutoringName());
   }
 
