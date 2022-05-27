@@ -87,8 +87,8 @@ public class Account {
     this.profileImage = new ProfileImage(profileKey, profileUrl);
   }
 
-  public boolean isActivated() {
-    return this.isActivated;
+  public boolean isDeactivated(){
+    return !this.isActivated;
   }
 
   public void joinTutor() {

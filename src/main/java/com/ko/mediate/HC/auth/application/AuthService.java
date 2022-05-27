@@ -37,7 +37,7 @@ public class AuthService implements UserDetailsService {
     return accountRepository
         .findAccountByEmail(email)
         .map(user -> createUser(user))
-        .orElseThrow(() -> new BadCredentialsException("등록된 아이디가 없습니다."));
+        .orElseThrow(() -> new BadCredentialsException("등록된 이메일이 없습니다."));
   }
 
   public TokenDto signIn(SignInDto dto) {
@@ -59,7 +59,7 @@ public class AuthService implements UserDetailsService {
   }
 
   public CustomUserDetails createUser(Account account) {
-    if (!account.isActivated()) {
+    if (account.isDeactivated()) {
       throw new BadCredentialsException("활성화되지 않은 아이디입니다.");
     }
     Set<GrantedAuthority> grantedAuthorities =
