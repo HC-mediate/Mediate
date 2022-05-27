@@ -43,6 +43,11 @@ public class TokenRedisStorage implements TokenStorage {
   }
 
   @Override
+  public String getRefreshTokenById(Long id) {
+    return (String) redisTemplate.opsForValue().get(REFRESH_KEY + SEPERATOR + String.valueOf(id));
+  }
+
+  @Override
   public void deleteRefreshAndAccessTokenById(Long id) {
     redisTemplate.delete(ACCESS_KEY + SEPERATOR + String.valueOf(id));
     redisTemplate.delete(REFRESH_KEY + SEPERATOR + String.valueOf(id));

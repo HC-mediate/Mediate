@@ -107,14 +107,25 @@ public class TokenProvider {
     }
   }
 
+  public String createAccessTokenIfExpired(
+      String token, Long accountId, String accountEmail, RoleType roleType) {
+    try {
+      validateToken(token);
+      return token;
+    } catch (ExpiredJwtException e) {
+      return createAccessToken(accountId, accountEmail, roleType);
+    }
+  }
+
   public long getExpiredTime(String token) {
     return Jwts.parserBuilder()
-        .setSigningKey(key)
-        .build()
-        .parseClaimsJws(token)
-        .getBody()
-        .getExpiration()
-        .getTime() - new Date().getTime();
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .getExpiration()
+            .getTime()
+        - new Date().getTime();
   }
 
   public Claims decode(String token) {

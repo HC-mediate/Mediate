@@ -1,8 +1,10 @@
 package com.ko.mediate.HC.auth.application;
 
+import com.amazonaws.util.StringUtils;
 import com.ko.mediate.HC.auth.application.request.SignInDto;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.exception.AccountIncorrectPasswordException;
+import com.ko.mediate.HC.auth.exception.MediateInvalidTokenException;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
@@ -71,11 +73,24 @@ public class AuthService implements UserDetailsService {
   public TokenDto reissueAccessTokenByRefreshToken(String refreshToken) {
     tokenProvider.validateToken(refreshToken);
     UserInfo userInfo = tokenProvider.getUserInfoFromToken(refreshToken);
-    String accessToken =
-        tokenProvider.createAccessToken(
-            userInfo.getAccountId(), userInfo.getAccountEmail(), userInfo.getRole());
-    tokenStorage.saveAccessToken(accessToken, userInfo.getAccountId());
+    if (StringUtils.isNullOrEmpty(tokenStorage.getRefreshTokenById(userInfo.getAccountId()))) {
+      throw new MediateInvalidTokenException();
+    }
+    String accessToken = createAccessTokenIfExpired(userInfo);
     return new TokenDto(null, accessToken);
+  }
+
+  private String createAccessTokenIfExpired(UserInfo userInfo) {
+    String accessToken = tokenStorage.getAccessTokenById(userInfo.getAccountId());
+    String reissueToken =
+        tokenProvider.createAccessTokenIfExpired(
+            accessToken, userInfo.getAccountId(), userInfo.getAccountEmail(), userInfo.getRole());
+    if (accessToken.equals(reissueToken)) {
+      return accessToken;
+    } else {
+      tokenStorage.saveAccessToken(reissueToken, userInfo.getAccountId());
+      return reissueToken;
+    }
   }
 
   public void logout(UserInfo userInfo) {
