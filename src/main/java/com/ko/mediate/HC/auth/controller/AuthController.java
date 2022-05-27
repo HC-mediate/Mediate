@@ -2,6 +2,8 @@ package com.ko.mediate.HC.auth.controller;
 
 import com.amazonaws.util.StringUtils;
 import com.ko.mediate.HC.auth.annotation.LoginUser;
+import com.ko.mediate.HC.auth.annotation.LogoutSwgger;
+import com.ko.mediate.HC.auth.annotation.ReissueTokenSwagger;
 import com.ko.mediate.HC.auth.annotation.SignInSwagger;
 import com.ko.mediate.HC.auth.annotation.SignUpSwagger;
 import com.ko.mediate.HC.auth.application.AccountService;
@@ -14,6 +16,7 @@ import com.ko.mediate.HC.firebase.application.FirebaseCloudService;
 import com.ko.mediate.HC.jwt.JwtFilter;
 import com.ko.mediate.HC.auth.application.response.TokenDto;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,13 +58,15 @@ public class AuthController {
   }
 
   @DeleteMapping(value = "/logout")
-  public ResponseEntity logout(@LoginUser UserInfo userInfo) {
+  @LogoutSwgger
+  public ResponseEntity logout(@ApiIgnore @LoginUser UserInfo userInfo) {
     authService.logout(userInfo);
     return ResponseEntity.ok().build();
   }
 
   @PostMapping("/refresh")
-  public ResponseEntity reissueToken(@RequestHeader(value = "Refresh") String auth) {
+  @ReissueTokenSwagger
+  public ResponseEntity<TokenDto> reissueToken(@RequestHeader(value = "Refresh") String auth) {
     if (StringUtils.isNullOrEmpty(auth)) {
       throw new MediateIllegalStateException("헤더 값이 비어있거나 공백입니다.");
     }
