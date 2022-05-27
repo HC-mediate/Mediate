@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.aws.application;
 
+import com.amazonaws.util.StringUtils;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
@@ -16,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -42,13 +42,16 @@ public class ProfileImageService {
     if (Objects.nonNull(account.getProfileImage())) {
       profileImageStorage.deleteFile(account.getProfileImage().getProfileKey());
     }
-    String uploadKey = renameFileName(dto.getFile().getOriginalFilename());
-    profileImageStorage.uploadFile(dto.getFile(), uploadKey);
+    String uploadFileName = renameFileName(dto.getFile().getOriginalFilename());
+    String uploadKey = profileImageStorage.uploadFile(dto.getFile(), uploadFileName);
     account.changeProfileImage(uploadKey, CLOUD_FRONT + "/" + uploadKey);
     return new ProfileImageResponseDto(uploadKey, CLOUD_FRONT + "/" + uploadKey);
   }
 
   private void validateImageFile(MultipartFile file) {
+    if (StringUtils.isNullOrEmpty(file.getOriginalFilename())) {
+      throw new MediateNotFoundException("파일을 업로드하지 않았습니다.");
+    }
     String ext = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".") + 1);
     if (!imageTypes.contains(ext)) {
       throw new MediateUnsupportImageType();

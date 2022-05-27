@@ -33,9 +33,7 @@ public class ProfileImageS3Storage implements ProfileImageStorage {
   }
 
   private String uploadS3(File uploadFile, String key) {
-    amazonS3Client.putObject(
-        new PutObjectRequest(bucket, key, uploadFile)
-            .withCannedAcl(CannedAccessControlList.PublicRead));
+    amazonS3Client.putObject(new PutObjectRequest(bucket, key, uploadFile));
     return amazonS3Client.getUrl(bucket, key).toString();
   }
 
@@ -69,7 +67,7 @@ public class ProfileImageS3Storage implements ProfileImageStorage {
     String url = uploadS3(imageFile, uploadDirectory + key);
     log.info("Profile Image Upload Url: {}", url);
     removeNewFile(imageFile);
-    return url;
+    return uploadDirectory + key;
   }
 
   @Override

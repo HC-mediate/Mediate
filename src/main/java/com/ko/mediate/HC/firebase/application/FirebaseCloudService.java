@@ -16,7 +16,7 @@ public class FirebaseCloudService {
   @Transactional
   public void renewFcmToken(SignInDto dto) {
     Optional<FcmToken> fcmTokenOptional =
-        fcmTokenRepository.findFcmTokenByAccountEmail(dto.getAccountEmail());
+        fcmTokenRepository.findFcmTokenByAccountEmail(dto.getEmail());
     FcmToken fcmToken = null;
     if (fcmTokenOptional.isPresent()) {
       fcmToken = fcmTokenOptional.get();
@@ -24,7 +24,7 @@ public class FirebaseCloudService {
       fcmTokenRepository.save(fcmToken);
     } else {
       fcmToken =
-          FcmToken.builder().accountEmail(dto.getAccountEmail()).fcmToken(dto.getFcmToken()).build();
+          FcmToken.builder().accountEmail(dto.getEmail()).fcmToken(dto.getFcmToken()).build();
       fcmTokenRepository.save(fcmToken);
     }
   }

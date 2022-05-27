@@ -41,12 +41,12 @@ public class AuthService implements UserDetailsService {
   }
 
   public TokenDto signIn(SignInDto dto) {
-    Account account = findAccountByEmail(dto.getAccountEmail());
+    Account account = findAccountByEmail(dto.getEmail());
     authenticate(account.getPassword(), dto.getPassword());
     String refreshToken =
-        tokenProvider.createRefreshToken(account.getId(), dto.getAccountEmail(), dto.getRoleType());
+        tokenProvider.createRefreshToken(account.getId(), dto.getEmail(), dto.getRole());
     String accessToken =
-        tokenProvider.createAccessToken(account.getId(), dto.getAccountEmail(), dto.getRoleType());
+        tokenProvider.createAccessToken(account.getId(), dto.getEmail(), dto.getRole());
     tokenStorage.saveRefreshToken(refreshToken, account.getId());
     tokenStorage.saveAccessToken(accessToken, account.getId());
     return new TokenDto(refreshToken, accessToken);

@@ -14,14 +14,14 @@ import lombok.NoArgsConstructor;
 public class SignInDto {
   @ApiModelProperty(value = "계정 이메일")
   @NotBlank(message = "계정 이메일은 반드시 있어야 합니다.")
-  private String accountEmail;
+  private String email;
 
   @ApiModelProperty(value = "계정 비밀번호")
   @NotBlank(message = "비밀번호는 반드시 있어야 합니다.")
   private String password;
 
   @ApiModelProperty(value = "튜터/튜티 타입")
-  private RoleType roleType;
+  private RoleType role;
 
   @ApiModelProperty(value = "fcm token 값")
   @NotBlank(message = "fcm 토큰은 반드시 있어야 합니다.")
