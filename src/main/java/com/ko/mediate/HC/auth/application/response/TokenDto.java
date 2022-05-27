@@ -8,9 +8,14 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-@AllArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class TokenDto {
+  private static final String BEARER = "Bearer ";
   String refreshToken;
   String accessToken;
+
+  public TokenDto(String refreshToken, String accessToken) {
+    this.refreshToken = BEARER + refreshToken;
+    this.accessToken = BEARER + accessToken;
+  }
 }

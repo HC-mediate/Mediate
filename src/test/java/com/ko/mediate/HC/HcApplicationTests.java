@@ -1,10 +1,10 @@
 package com.ko.mediate.HC;
 
+import com.ko.mediate.HC.common.BaseApiTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-public class HcApplicationTests {
+
+public class HcApplicationTests extends BaseApiTest {
   @Test
   void contextLoads() {}
 }

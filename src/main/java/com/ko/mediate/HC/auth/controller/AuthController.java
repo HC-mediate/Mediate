@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.auth.controller;
 
+import com.amazonaws.util.StringUtils;
 import com.ko.mediate.HC.auth.annotation.LoginUser;
 import com.ko.mediate.HC.auth.application.AccountService;
 import com.ko.mediate.HC.auth.application.AuthService;
@@ -18,7 +19,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,18 +60,17 @@ public class AuthController {
   }
 
   @DeleteMapping(value = "/logout")
-  public ResponseEntity logout(@LoginUser UserInfo userInfo){
+  public ResponseEntity logout(@LoginUser UserInfo userInfo) {
     authService.logout(userInfo);
     return ResponseEntity.ok().build();
   }
 
   @PostMapping("/refresh")
-  public ResponseEntity reissueToken(
-      @RequestHeader(value = "Refresh") String refreshToken) {
-    if(!StringUtils.hasText(refreshToken)){
-      throw new MediateIllegalStateException("리프레쉬 토큰 값이 비어있습니다.");
+  public ResponseEntity reissueToken(@RequestHeader(value = "Refresh") String auth) {
+    if (StringUtils.isNullOrEmpty(auth)) {
+      throw new MediateIllegalStateException("헤더 값이 비어있거나 공백입니다.");
     }
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(authService.reissueAccessTokenByRefreshToken(refreshToken));
+        .body(authService.reissueAccessTokenByRefreshToken(auth.substring(7)));
   }
 }

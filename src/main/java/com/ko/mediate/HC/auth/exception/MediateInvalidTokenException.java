@@ -15,6 +15,6 @@ public class MediateInvalidTokenException extends MediateException {
 
   @Override
   public HttpStatus status() {
-    return null;
+    return HttpStatus.FORBIDDEN;
   }
 }

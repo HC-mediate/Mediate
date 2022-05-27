@@ -48,7 +48,6 @@ public class BaseApiTest {
   protected Map<Long, String> accessTokenMap = new HashMap<>();
   protected Map<Long, String> refreshTokenMap = new HashMap<>();
   protected final String AUTHORIZATION = "Authorization";
-  protected final String BEARER = "Bearer ";
 
   @Value("${cloud.aws.s3.bucket}")
   protected String bucket;

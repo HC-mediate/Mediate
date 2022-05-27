@@ -50,7 +50,7 @@ public class ArticleTest extends BaseApiTest {
                 .part(new MockPart("imgFile", mockMultipartFile.getBytes()))
                 .file(dtoMutlipartFile)
                 .part(new MockPart("dto", dtoMutlipartFile.getBytes()))
-                .header("Authorization", BEARER + accessToken)
+                .header("Authorization", accessToken)
                 .contentType(MediaType.MULTIPART_FORM_DATA)))
         .andDo(print())
         .andExpect(status().isOk());
