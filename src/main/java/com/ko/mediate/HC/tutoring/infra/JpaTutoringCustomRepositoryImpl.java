@@ -20,25 +20,18 @@ public class JpaTutoringCustomRepositoryImpl extends QuerydslRepositorySupport i
     super(Tutoring.class);
     this.queryFactory = jpaQueryFactory;
   }
-
-  @Override
-  public Optional<Tutoring> findTutoringByAccountIdAndRole(
-      Long tutoringId, String accountId, RoleType roleType) {
-    BooleanBuilder builder = nullSafeBuilder(() -> tutoring.id.eq(tutoringId));
-    if (RoleType.ROLE_TUTOR == roleType) {
-      builder.and(nullSafeBuilder(() -> tutoring.tutorId.accountId.eq(accountId)));
-    } else {
-      builder.and(nullSafeBuilder(() -> tutoring.tuteeId.accountId.eq(accountId)));
-    }
-
-    return Optional.ofNullable(queryFactory.selectFrom(tutoring).where(builder).fetchOne());
+  public Optional<Tutoring> findTutoringByAccountIdAndRole(Long tutoringId, String accountEmail, RoleType roleType){
+    return Optional.ofNullable(queryFactory.selectFrom(tutoring)
+      .where(tutoring.id.eq(tutoringId), eqEmailWithRoleType(accountEmail, roleType))
+      .fetchOne());
   }
 
-  BooleanBuilder nullSafeBuilder(Supplier<BooleanExpression> f) {
-    try {
-      return new BooleanBuilder(f.get());
-    } catch (Exception e) {
-      return new BooleanBuilder();
+  private BooleanExpression eqEmailWithRoleType(String accountEmail, RoleType roleType){
+    if(roleType == RoleType.ROLE_TUTOR){
+      return tutoring.tutorEmail.eq(accountEmail);
+    }
+    else{
+      return tutoring.tuteeEmail.eq(accountEmail);
     }
   }
 }

@@ -1,6 +1,0 @@
-spring:
-  config:
-    activate:
-      on-profile: prod
-  jpa:
-    database-platform: com.ko.mediate.HC.common.infra.CustomMysqlDialect

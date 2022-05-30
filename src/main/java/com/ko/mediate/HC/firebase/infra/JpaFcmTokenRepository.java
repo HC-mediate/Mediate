@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JpaFcmTokenRepository extends JpaRepository<FcmToken, Long> {
-  Optional<FcmToken> findFcmTokenByAccountId(String accountId);
+  Optional<FcmToken> findFcmTokenByAccountEmail(String accountEmail);
 }

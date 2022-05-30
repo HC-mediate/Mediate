@@ -32,7 +32,7 @@ public class CommunityCommandExecutor {
 
   @Transactional
   public void createArticle(
-      UserInfo token, RequestArticleDto dto, MultipartFile[] multipartFiles) {
+      UserInfo userInfo, RequestArticleDto dto, MultipartFile[] multipartFiles) {
     if (multipartFiles != null && multipartFiles.length > 5) {
       throw new MediateFileExceedLimitException("이미지는 최대 5개까지 첨부 가능합니다.");
     }
@@ -40,7 +40,7 @@ public class CommunityCommandExecutor {
         Article.builder()
             .title(dto.getTitle())
             .content(dto.getContent())
-            .writeBy(token.getAccountId())
+            .writeBy(userInfo.getAccountEmail())
             .category(dto.getCategory())
             .build();
     Optional.ofNullable(multipartFiles)
@@ -64,8 +64,8 @@ public class CommunityCommandExecutor {
 
   @Transactional
   @CacheEvict(value = "articleDetail", key = "#id")
-  public void deleteArticle(UserInfo token, Long id) {
-    Article article = findByIdAndWriteBy(id, token.getAccountId());
+  public void deleteArticle(UserInfo userInfo, Long id) {
+    Article article = findByIdAndWriteBy(id, userInfo.getAccountEmail());
     articleRepository.delete(article);
   }
 }

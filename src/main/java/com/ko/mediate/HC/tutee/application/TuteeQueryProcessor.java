@@ -25,44 +25,45 @@ public class TuteeQueryProcessor {
 
   public GetTuteeListDto getAllTuteeByDistance(
       PageRequest pageRequest, DistanceCondition distanceCondition) {
-    List<GetTuteeDto> contents =
-        tuteeRepository.findTutorOrderByDistance(pageRequest, distanceCondition).stream()
-            .map(
-                t -> {
-                  AcademicInfo info = t.getAcademicInfo();
-                  GetTuteeDto dto =
-                      new GetTuteeDto(
-                          t.getName(), info.getSchool(), info.getGrade(), t.getAddress());
-                  return dto;
-                })
-            .collect(Collectors.toList());
-    return new GetTuteeListDto(contents, contents.size() > 0);
+    //    List<GetTuteeDto> contents =
+    //        tuteeRepository.findTutorOrderByDistance(pageRequest, distanceCondition).stream()
+    //            .map(
+    //                t -> {
+    //                  AcademicInfo info = t.getAcademicInfo();
+    //                  GetTuteeDto dto =
+    //                      new GetTuteeDto(
+    //                          t.getName(), info.getSchool(), info.getGrade(), t.getAddress());
+    //                  return dto;
+    //                })
+    //            .collect(Collectors.toList());
+    return new GetTuteeListDto(null, false);
   }
 
   public GetTuteeDto getTuteeDetail(String accountId) {
-    Tutee tutee =
-        tuteeRepository
-            .findByAccountId(accountId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 ID를 찾을 수 없습니다."));
-    AcademicInfo info = tutee.getAcademicInfo();
-    return new GetTuteeDto(tutee.getName(), info.getSchool(), info.getGrade(), tutee.getAddress());
+    //    Tutee tutee =
+    //        tuteeRepository
+    //            .findByAccountId(accountId)
+    //            .orElseThrow(() -> new IllegalArgumentException("해당 ID를 찾을 수 없습니다."));
+    //    AcademicInfo info = tutee.getAcademicInfo();
+    return new GetTuteeDto(null, null, null, null);
   }
 
-  public GetTuteeAccountDto getTuteeAccount(UserInfo token) {
-    return tuteeRepository.findTuteeAccountInfoById(token.getAccountId()).stream()
-        .map(
-            o -> {
-              Tutee t = (Tutee) o[0];
-              Account a = (Account) o[1];
-              return new GetTuteeAccountDto(
-                  a.getStringAccountId(),
-                  a.getPhoneNum(),
-                  t.getName(),
-                  t.getAcademicInfo().getSchool(),
-                  t.getAcademicInfo().getGrade(),
-                  t.getAddress());
-            })
-        .findAny()
-        .orElseThrow(() -> new MediateNotFoundException(String.format("해당 ID를 찾을 수 없습니다.")));
+  public GetTuteeAccountDto getTuteeAccount(UserInfo userInfo) {
+    return new GetTuteeAccountDto(null, null, null, null, null, null);
+    //    return tuteeRepository.findTuteeAccountInfoById(token.getAccountId()).stream()
+    //        .map(
+    //            o -> {
+    //              Tutee t = (Tutee) o[0];
+    //              Account a = (Account) o[1];
+    //              return new GetTuteeAccountDto(
+    //                  a.getEmail(),
+    //                  a.getPhoneNum(),
+    //                  t.getName(),
+    //                  t.getAcademicInfo().getSchool(),
+    //                  t.getAcademicInfo().getGrade(),
+    //                  t.getAddress());
+    //            })
+    //        .findAny()
+    //        .orElseThrow(() -> new MediateNotFoundException(String.format("해당 ID를 찾을 수 없습니다.")));
   }
 }

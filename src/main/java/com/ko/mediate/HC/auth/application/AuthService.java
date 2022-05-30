@@ -1,39 +1,99 @@
 package com.ko.mediate.HC.auth.application;
 
+import com.amazonaws.util.StringUtils;
+import com.ko.mediate.HC.auth.application.request.SignInDto;
 import com.ko.mediate.HC.auth.domain.Account;
-import com.ko.mediate.HC.auth.domain.AccountId;
+import com.ko.mediate.HC.auth.exception.AccountIncorrectPasswordException;
+import com.ko.mediate.HC.auth.exception.MediateInvalidTokenException;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
-import java.util.Arrays;
-import java.util.List;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
+import com.ko.mediate.HC.common.exception.MediateNotFoundException;
+import com.ko.mediate.HC.jwt.CustomUserDetails;
+import com.ko.mediate.HC.jwt.TokenProvider;
+import com.ko.mediate.HC.auth.application.response.TokenDto;
+import com.ko.mediate.HC.jwt.TokenStorage;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-@Component("userDetailsService")
+@Component
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
   private final JpaAccountRepository accountRepository;
+  private final TokenProvider tokenProvider;
+  private final TokenStorage tokenStorage;
+  private final PasswordEncoder passwordEncoder;
 
-  @Override
-  public UserDetails loadUserByUsername(String accountId) throws AuthenticationException {
-    return accountRepository
-        .findByAccountId(accountId)
-        .map(user -> createUser(user))
-        .orElseThrow(() -> new BadCredentialsException("등록된 아이디가 없습니다."));
+  private Account findAccountByEmail(String email) {
+    return accountRepository.findAccountByEmail(email).orElseThrow(MediateNotFoundException::new);
   }
 
-  public User createUser(Account account) {
-    if (!account.isActivated()) {
+  @Override
+  public CustomUserDetails loadUserByUsername(String email) throws AuthenticationException {
+    return accountRepository
+        .findAccountByEmail(email)
+        .map(user -> createUser(user))
+        .orElseThrow(() -> new BadCredentialsException("등록된 이메일이 없습니다."));
+  }
+
+  public TokenDto signIn(SignInDto dto) {
+    Account account = findAccountByEmail(dto.getEmail());
+    authenticate(account.getPassword(), dto.getPassword());
+    String refreshToken =
+        tokenProvider.createRefreshToken(account.getId(), dto.getEmail(), dto.getRole());
+    String accessToken =
+        tokenProvider.createAccessToken(account.getId(), dto.getEmail(), dto.getRole());
+    tokenStorage.saveRefreshToken(refreshToken, account.getId());
+    tokenStorage.saveAccessToken(accessToken, account.getId());
+    return new TokenDto(refreshToken, accessToken);
+  }
+
+  private void authenticate(String encodePassword, String rawPassword) {
+    if (!passwordEncoder.matches(rawPassword, encodePassword)) {
+      throw new AccountIncorrectPasswordException();
+    }
+  }
+
+  public CustomUserDetails createUser(Account account) {
+    if (account.isDeactivated()) {
       throw new BadCredentialsException("활성화되지 않은 아이디입니다.");
     }
-    List<GrantedAuthority> grantedAuthorities =
-        Arrays.asList(new SimpleGrantedAuthority(account.getAuthority()));
-    return new User(account.getStringAccountId(), account.getPassword(), grantedAuthorities);
+    Set<GrantedAuthority> grantedAuthorities =
+        Set.of(new SimpleGrantedAuthority(account.getRole().toString()));
+    return new CustomUserDetails(
+        String.valueOf(account.getId()), account.getPassword(), grantedAuthorities);
+  }
+
+  public TokenDto reissueAccessTokenByRefreshToken(String refreshToken) {
+    tokenProvider.validateToken(refreshToken);
+    UserInfo userInfo = tokenProvider.getUserInfoFromToken(refreshToken);
+    if (StringUtils.isNullOrEmpty(tokenStorage.getRefreshTokenById(userInfo.getAccountId()))) {
+      throw new MediateInvalidTokenException();
+    }
+    String accessToken = createAccessTokenIfExpired(userInfo);
+    return new TokenDto(null, accessToken);
+  }
+
+  private String createAccessTokenIfExpired(UserInfo userInfo) {
+    String accessToken = tokenStorage.getAccessTokenById(userInfo.getAccountId());
+    String reissueToken =
+        tokenProvider.createAccessTokenIfExpired(
+            accessToken, userInfo.getAccountId(), userInfo.getAccountEmail(), userInfo.getRole());
+    if (accessToken.equals(reissueToken)) {
+      return accessToken;
+    } else {
+      tokenStorage.saveAccessToken(reissueToken, userInfo.getAccountId());
+      return reissueToken;
+    }
+  }
+
+  public void logout(UserInfo userInfo) {
+    tokenStorage.deleteRefreshAndAccessTokenById(userInfo.getAccountId());
   }
 }

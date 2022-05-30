@@ -32,39 +32,39 @@ public class DataInitializerH2 implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments args) {
-    String tutorId = "tutor", tuteeId = "tutee";
-    accountRepository.save(
-        new Account(
-            tutorId,
-            passwordEncoder.encode(tutorId),
-            "튜터 아무개",
-            "010-1234-5678",
-            RoleType.ROLE_TUTOR.name()));
-    accountRepository.save(
-        new Account(
-            tuteeId,
-            passwordEncoder.encode(tuteeId),
-            "튜티 아무개",
-            "010-1234-5678",
-            RoleType.ROLE_TUTEE.name()));
-
-    tutorRepository.save(
-        new Tutor(
-            tutorId,
-            "튜터 아무개",
-            "서울시 용산구",
-            Curriculum.HIGH,
-            new AcademicInfo("아무대학교", "아무학과", "3학년"),
-            geometryConverter.convertCoordinateToPoint(123.123, 58.123)));
-    tuteeRepository.save(
-        new Tutee(
-            tuteeId,
-            "튜티 아무개",
-            "서울시 용산구",
-            new AcademicInfo("아무고등학교", "인문계", "3학년"),
-            geometryConverter.convertCoordinateToPoint(123.123, 58.123)));
-
-    tutoringRepository.save(
-        Tutoring.builder().tutorId(tutorId).tuteeId(tuteeId).tutoringName("수학을 정복하자!").build());
+//    String tutorId = "tutor", tuteeId = "tutee";
+//    accountRepository.save(
+//        new Account(
+//            tutorId,
+//            passwordEncoder.encode(tutorId),
+//            "튜터 아무개",
+//            "010-1234-5678",
+//            RoleType.ROLE_TUTOR.name()));
+//    accountRepository.save(
+//        new Account(
+//            tuteeId,
+//            passwordEncoder.encode(tuteeId),
+//            "튜티 아무개",
+//            "010-1234-5678",
+//            RoleType.ROLE_TUTEE.name()));
+//
+//    tutorRepository.save(
+//        new Tutor(
+//            tutorId,
+//            "튜터 아무개",
+//            "서울시 용산구",
+//            Curriculum.HIGH,
+//            new AcademicInfo("아무대학교", "아무학과", "3학년"),
+//            geometryConverter.convertCoordinateToPoint(123.123, 58.123)));
+//    tuteeRepository.save(
+//        new Tutee(
+//            tuteeId,
+//            "튜티 아무개",
+//            "서울시 용산구",
+//            new AcademicInfo("아무고등학교", "인문계", "3학년"),
+//            geometryConverter.convertCoordinateToPoint(123.123, 58.123)));
+//
+//    tutoringRepository.save(
+//        Tutoring.builder().tutorId(tutorId).tuteeId(tuteeId).tutoringName("수학을 정복하자!").build());
   }
 }

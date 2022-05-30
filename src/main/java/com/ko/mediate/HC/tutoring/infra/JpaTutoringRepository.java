@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 public interface JpaTutoringRepository
     extends JpaRepository<Tutoring, Long>, JpaTutoringCustomRepository {
   @Query(
-      "SELECT t FROM Tutoring t WHERE t.tutorId.accountId = :accountId OR t.tuteeId.accountId = :accountId")
-  List<Tutoring> findAllTutoringByAccountId(@Param("accountId") String accountId);
+      "SELECT t FROM Tutoring t WHERE t.tutorEmail = :accountEmail OR t.tuteeEmail = :accountEmail")
+  List<Tutoring> findAllTutoringByAccountEmail(@Param("accountEmail") String accountEmail);
 
   @Query("SELECT t FROM Tutoring t LEFT JOIN FETCH t.progresses WHERE t.id = :tutoringId")
   Optional<Tutoring> findByTutoringIdWithDetail(@Param("tutoringId") Long tutoringId);

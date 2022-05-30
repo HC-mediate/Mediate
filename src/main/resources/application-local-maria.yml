@@ -18,4 +18,4 @@ spring:
     database-platform: com.ko.mediate.HC.common.Infra.CustomMysqlDialect
   decorator:
     datasource:
-      p6spy.enable-logging: false
+      p6spy.enable-logging: true

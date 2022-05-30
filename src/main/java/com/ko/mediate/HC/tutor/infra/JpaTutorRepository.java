@@ -10,10 +10,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JpaTutorRepository extends JpaRepository<Tutor, Long>, JpaTutorCustomRepository {
-  @Query("SELECT t FROM Tutor t WHERE t.accountId.accountId = :accountId")
-  Optional<Tutor> findByAccountId(@Param("accountId") String accountId);
+  @Query("SELECT t FROM Tutor t JOIN FETCH t.account WHERE t.account.email = :accountEmail")
+  Optional<Tutor> findTutorByAccountEmail(@Param("accountEmail") String email);
 
-  @Query(
-      "SELECT t, a FROM Tutor t, Account a WHERE t.accountId.accountId = :accountId and a.accountId.accountId = :accountId")
-  List<Object[]> findTutorAccountInfoById(@Param("accountId") String accountId);
+  @Query("SELECT t FROM Tutor t JOIN FETCH t.account a WHERE t.id = :tutorId")
+  Optional<Tutor> findByIdFetchAccount(@Param("tutorId") Long tutorId);
 }

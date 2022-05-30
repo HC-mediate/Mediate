@@ -1,5 +1,8 @@
 package com.ko.mediate.HC.auth.resolver;
 
+import com.ko.mediate.HC.tutoring.application.RoleType;
+import io.jsonwebtoken.Claims;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class UserInfo {
-  private String accountId;
-  private String authority;
+  private Long accountId;
+  private String accountEmail;
+  private RoleType role;
 }

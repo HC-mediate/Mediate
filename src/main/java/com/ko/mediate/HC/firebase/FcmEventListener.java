@@ -22,18 +22,18 @@ public class FcmEventListener {
 
   @EventListener
   public void onApplicationEvent(TutoringPublishedEvent event) throws IOException {
-    String sendToAccountId = event.getSendToAccountId();
-    if(sendToAccountId == null || sendToAccountId.isEmpty()){
+    String sendToAccountEmail = event.getSendToAccountEmail();
+    if(sendToAccountEmail == null || sendToAccountEmail.isEmpty()){
       logger.info("[FcmEventListener] sendToAccountId is Null or Empty");
       return;
     }
     String sendToToken =
         fcmTokenRepository
-            .findFcmTokenByAccountId(sendToAccountId)
+            .findFcmTokenByAccountEmail(sendToAccountEmail)
             .orElseThrow(
                 () ->
                     new MediateNotFoundException(
-                        String.format("[%s] 푸시 메시지를 받을 ID가 없습니다.", sendToAccountId)))
+                        String.format("[%s] 푸시 메시지를 받을 ID가 없습니다.", sendToAccountEmail)))
             .getFcmToken();
     firebaseCloudMessenger.sendMessageTo(sendToToken, event.getTitle(), event.getBody());
     logger.info(

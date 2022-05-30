@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GetAccountInfoDto {
-  @ApiModelProperty(value = "계정 ID")
-  private String accountId;
+  @ApiModelProperty(value = "계정 이메일")
+  private String email;
 
   @ApiModelProperty(value = "이름")
   private String name;
@@ -34,54 +34,62 @@ public class GetAccountInfoDto {
   @ApiModelProperty(value = "튜터/튜티 타입")
   private RoleType type;
 
+  @ApiModelProperty(value = "프로필 사진 경로")
+  private String profileUrl;
+
   @Builder
   private GetAccountInfoDto(
-      String accountId,
+      String email,
       String name,
       String phoneNum,
       String schoolName,
       String grade,
       String major,
+      String profileUrl,
       RoleType type) {
-    this.accountId = accountId;
+    this.email = email;
     this.name = name;
     this.phoneNum = phoneNum;
     this.schoolName = schoolName;
     this.grade = grade;
     this.major = major;
+    this.profileUrl = profileUrl;
     this.type = type;
   }
 
   public static GetAccountInfoDto fromEntity(Account account) {
     return GetAccountInfoDto.builder()
-        .accountId(account.getStringAccountId())
+        .email(account.getEmail())
         .name(account.getName())
         .phoneNum(account.getPhoneNum())
         .type(RoleType.ROLE_USER)
+        .profileUrl(account.getProfileImage().getProfileUrl())
         .build();
   }
 
-  public static GetAccountInfoDto fromEntity(Account account, Tutor tutor) {
+  public static GetAccountInfoDto fromEntity(Tutor tutor) {
     return GetAccountInfoDto.builder()
-        .accountId(tutor.getAccountId().getAccountId())
-        .name(tutor.getName())
+        .email(tutor.getAccount().getEmail())
+        .name(tutor.getAccount().getName())
         .schoolName(tutor.getAcademicInfo().getSchool())
         .major(tutor.getAcademicInfo().getMajor())
         .grade(tutor.getAcademicInfo().getGrade())
         .type(RoleType.ROLE_TUTOR)
-        .phoneNum(account.getPhoneNum())
+        .phoneNum(tutor.getAccount().getPhoneNum())
+        .profileUrl(tutor.getAccount().getProfileImage().getProfileUrl())
         .build();
   }
 
-  public static GetAccountInfoDto fromEntity(Account account, Tutee tutee) {
+  public static GetAccountInfoDto fromEntity(Tutee tutee) {
     return GetAccountInfoDto.builder()
-        .accountId(tutee.getAccountId().getAccountId())
-        .name(tutee.getName())
+        .email(tutee.getAccount().getEmail())
+        .name(tutee.getAccount().getName())
         .schoolName(tutee.getAcademicInfo().getSchool())
         .major(tutee.getAcademicInfo().getMajor())
         .grade(tutee.getAcademicInfo().getGrade())
         .type(RoleType.ROLE_TUTEE)
-        .phoneNum(account.getPhoneNum())
+        .phoneNum(tutee.getAccount().getPhoneNum())
+        .profileUrl(tutee.getAccount().getProfileImage().getProfileUrl())
         .build();
   }
 }

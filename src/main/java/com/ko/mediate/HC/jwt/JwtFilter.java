@@ -1,47 +1,62 @@
 package com.ko.mediate.HC.jwt;
 
+import com.ko.mediate.HC.auth.application.AuthService;
+import com.ko.mediate.HC.auth.resolver.UserInfo;
+import io.jsonwebtoken.Claims;
 import java.io.IOException;
+import java.util.Optional;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.Option;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
+@RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
 
   private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
   public static final String AUTHORIZATION_HEADER = "Authorization";
-  private TokenProvider tokenProvider;
-
-  public JwtFilter(TokenProvider tokenProvider){
-    this.tokenProvider = tokenProvider;
-  }
+  public static final String REFRESH_HEADER = "Refresh";
+  private final TokenProvider tokenProvider;
+  private final TokenStorage tokenStorage;
+  private final AuthService authService;
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
     HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-    String jwt = resolveToken(httpServletRequest);
-    String requestURI = httpServletRequest.getRequestURI();
+    String accessToken = resolveToken(httpServletRequest);
 
-    if(StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)){
-      Authentication authentication = tokenProvider.getAuthentication(jwt);
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-      logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
-    }else{
-      logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+    if (StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
+      UserInfo userInfo = tokenProvider.getUserInfoFromToken(accessToken);
+      if (Optional.ofNullable(tokenStorage.getAccessTokenById(userInfo.getAccountId()))
+          .filter(extractToken -> extractToken.equals(accessToken))
+          .isPresent()) {
+        CustomUserDetails userDetails = authService.loadUserByUsername(userInfo.getAccountEmail());
+        setUserAuthenticationToken(userDetails);
+      }
     }
     chain.doFilter(request, response);
   }
-  private String resolveToken(HttpServletRequest request){
+
+  private void setUserAuthenticationToken(CustomUserDetails userDetails) {
+    SecurityContextHolder.getContext()
+        .setAuthentication(
+            new CustomAuthenticationToken(userDetails, userDetails.getAuthorities()));
+  }
+
+  private String resolveToken(HttpServletRequest request) {
     String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-    if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")){
+    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
       return bearerToken.substring(7);
     }
     return null;

@@ -6,10 +6,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ko.mediate.HC.HcApplicationTests;
+import com.ko.mediate.HC.common.BaseApiTest;
 import com.ko.mediate.HC.homework.application.HomeworkContentDto;
 import com.ko.mediate.HC.homework.application.request.CreateHomeworkDto;
 import com.ko.mediate.HC.homework.application.request.UpdateHomeworkDto;
 import com.ko.mediate.HC.homework.domain.Homework;
+import com.ko.mediate.HC.homework.infra.JpaHomeworkRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,10 +26,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HomeworkTest extends HcApplicationTests {
+@DisplayName("숙제 CRUD 테스트")
+public class HomeworkTest extends BaseApiTest {
 
-  @Autowired
-  private MockMvc mvc;
+  @Autowired MockMvc mvc;
+  @Autowired JpaHomeworkRepository homeworkRepository;
   private Long homeworkId;
 
   @BeforeEach
@@ -54,7 +57,7 @@ public class HomeworkTest extends HcApplicationTests {
     mvc.perform(
             post("/api/homework")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", BEARER + token)
+                .header("Authorization", accessToken)
                 .content(objectMapper.writeValueAsString(homework)))
         .andExpect(status().isOk())
         .andDo(print());
@@ -69,7 +72,7 @@ public class HomeworkTest extends HcApplicationTests {
       value = {"/api/homework/tutee/:tutee1", "/api/homework/tutor/:tutor1"},
       delimiter = ':')
   public void getAllHomeworkTest(String url, String tuteeId) throws Exception {
-    mvc.perform(get(url + tuteeId).header("Authorization", BEARER + token))
+    mvc.perform(get(url + tuteeId).header("Authorization", accessToken))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[0].title").value("1주차 숙제"))
         .andExpect(jsonPath("$[0].homeworkId").value(homeworkId))
@@ -88,7 +91,7 @@ public class HomeworkTest extends HcApplicationTests {
     mvc.perform(
             put(url + String.valueOf(homeworkId))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", BEARER + token)
+                .header("Authorization", accessToken)
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isOk())
         .andDo(print());

@@ -2,9 +2,9 @@ package com.ko.mediate.HC.tutoring.application;
 
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetProgressDto;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetTutoringDetailDto;
-import com.ko.mediate.HC.tutoring.application.dto.response.GetTutoringDto;
+import com.ko.mediate.HC.tutoring.application.response.GetProgressDto;
+import com.ko.mediate.HC.tutoring.application.response.GetTutoringDetailDto;
+import com.ko.mediate.HC.tutoring.application.response.GetTutoringDto;
 import com.ko.mediate.HC.tutoring.domain.Tutoring;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
 import java.util.List;
@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class TutoringQueryProcessor {
   private final JpaTutoringRepository tutoringRepository;
 
-  public List<GetTutoringDto> getAllTutoringByAccountId(UserInfo token) {
-    return tutoringRepository.findAllTutoringByAccountId(token.getAccountId()).stream()
+  public List<GetTutoringDto> getAllTutoringByAccountId(UserInfo userInfo) {
+    return tutoringRepository.findAllTutoringByAccountEmail(userInfo.getAccountEmail()).stream()
         .map(
             t ->
                 new GetTutoringDto(

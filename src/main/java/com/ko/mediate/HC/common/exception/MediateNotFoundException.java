@@ -9,7 +9,9 @@ public class MediateNotFoundException extends MediateException {
     return HttpStatus.NOT_FOUND;
   }
 
-  public MediateNotFoundException() {}
+  public MediateNotFoundException() {
+    super("해당 ID의 엔티티를 찾을 수 없습니다.");
+  }
 
   public MediateNotFoundException(String message) {
     super(message);
