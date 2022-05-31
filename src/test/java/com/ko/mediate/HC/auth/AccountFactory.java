@@ -41,7 +41,7 @@ public class AccountFactory {
   }
 
   public static SignInDto createSignInDto(String email, String password) {
-    return new SignInDto(email, password, RoleType.ROLE_USER, "token");
+    return new SignInDto(email, password, "token");
   }
 
   public static SignUpDto createSignUpDto(String email) {

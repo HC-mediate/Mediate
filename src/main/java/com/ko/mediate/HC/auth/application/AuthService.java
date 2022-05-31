@@ -12,7 +12,9 @@ import com.ko.mediate.HC.jwt.CustomUserDetails;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.auth.application.response.TokenDto;
 import com.ko.mediate.HC.jwt.TokenStorage;
+import com.ko.mediate.HC.tutoring.application.RoleType;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
@@ -46,9 +48,9 @@ public class AuthService implements UserDetailsService {
     Account account = findAccountByEmail(dto.getEmail());
     authenticate(account.getPassword(), dto.getPassword());
     String refreshToken =
-        tokenProvider.createRefreshToken(account.getId(), dto.getEmail(), dto.getRole());
+        tokenProvider.createRefreshToken(account.getId(), dto.getEmail(), account.getRoles());
     String accessToken =
-        tokenProvider.createAccessToken(account.getId(), dto.getEmail(), dto.getRole());
+        tokenProvider.createAccessToken(account.getId(), dto.getEmail(), account.getRoles());
     tokenStorage.saveRefreshToken(refreshToken, account.getId());
     tokenStorage.saveAccessToken(accessToken, account.getId());
     return new TokenDto(refreshToken, accessToken);
@@ -65,7 +67,10 @@ public class AuthService implements UserDetailsService {
       throw new BadCredentialsException("활성화되지 않은 아이디입니다.");
     }
     Set<GrantedAuthority> grantedAuthorities =
-        Set.of(new SimpleGrantedAuthority(account.getRole().toString()));
+        account.getRoles().stream()
+            .map(RoleType::toString)
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toSet());
     return new CustomUserDetails(
         String.valueOf(account.getId()), account.getPassword(), grantedAuthorities);
   }
@@ -84,7 +89,7 @@ public class AuthService implements UserDetailsService {
     String accessToken = tokenStorage.getAccessTokenById(userInfo.getAccountId());
     String reissueToken =
         tokenProvider.createAccessTokenIfExpired(
-            accessToken, userInfo.getAccountId(), userInfo.getAccountEmail(), userInfo.getRole());
+            accessToken, userInfo.getAccountId(), userInfo.getAccountEmail(), userInfo.getRoles());
     if (accessToken.equals(reissueToken)) {
       return accessToken;
     } else {
