@@ -16,19 +16,19 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TuteeCommandExecutor {
   private final JpaTuteeRepository tuteeRepository;
-  private final GeometryConverter geometryConverter;
   private final JpaAccountRepository accountRepository;
+  private final GeometryConverter geometryConverter;
 
   private Account findAccountByEmail(UserInfo userInfo) {
     return accountRepository
-        .findById(userInfo.getAccountId())
+        .findAccountByEmail(userInfo.getAccountEmail())
         .orElseThrow(MediateNotFoundException::new);
   }
 
   @Transactional
   public void tuteeJoin(UserInfo userInfo, TuteeSignupDto dto) {
     Account account = findAccountByEmail(userInfo);
-    account.joinTutee();
+    account.joinTutee(geometryConverter.convertCoordinateToPoint(dto.getLocation()));
 
     Tutee tutee =
         Tutee.builder()
@@ -37,9 +37,6 @@ public class TuteeCommandExecutor {
             .major(dto.getMajor())
             .grade(dto.getGrade())
             .address(dto.getAddress())
-            .location(
-                geometryConverter.convertCoordinateToPoint(
-                    dto.getLocation().getLatitude(), dto.getLocation().getLongitude()))
             .build();
     tuteeRepository.save(tutee);
   }

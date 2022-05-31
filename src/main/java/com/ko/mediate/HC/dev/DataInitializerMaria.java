@@ -1,27 +1,14 @@
 package com.ko.mediate.HC.dev;
 
-import com.ko.mediate.HC.auth.domain.Account;
-import com.ko.mediate.HC.common.domain.DistanceCondition;
 import com.ko.mediate.HC.common.domain.GeometryConverter;
 import com.ko.mediate.HC.tutee.infra.JpaTuteeRepository;
-import com.ko.mediate.HC.tutee.domain.Tutee;
 import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
-import com.ko.mediate.HC.tutor.domain.Tutor;
-import com.ko.mediate.HC.tutoring.application.RoleType;
-import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
-import com.ko.mediate.HC.tutoring.domain.Curriculum;
-import com.ko.mediate.HC.tutoring.domain.Tutoring;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
-import java.util.HashMap;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Point;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

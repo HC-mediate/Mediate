@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.common.infra;
 
 import com.ko.mediate.HC.common.domain.GeometryConverter;
+import com.ko.mediate.HC.common.domain.Location;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -15,7 +16,13 @@ public class GeometryCoordinateConverter implements GeometryConverter {
   }
 
   @Override
-  public Point convertCoordinateToPoint(double latitude, double longitude){
+  public Point convertCoordinateToPoint(double latitude, double longitude) {
     return this.geometryFactory.createPoint(new Coordinate(latitude, longitude));
+  }
+
+  @Override
+  public Point convertCoordinateToPoint(Location location) {
+    return this.geometryFactory.createPoint(
+        new Coordinate(location.getLatitude(), location.getLongitude()));
   }
 }

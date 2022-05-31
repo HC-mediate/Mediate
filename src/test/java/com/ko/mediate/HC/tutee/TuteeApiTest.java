@@ -34,6 +34,5 @@ public class TuteeApiTest extends BaseApiTest {
 
     Tutee tutee = tuteeRepository.findByAccountEmail("test_normal@naver.com").get();
     assertThat(tutee.getAddress()).isEqualTo(dto.getAddress());
-    System.out.println(tutee.getLocation().getX());
   }
 }

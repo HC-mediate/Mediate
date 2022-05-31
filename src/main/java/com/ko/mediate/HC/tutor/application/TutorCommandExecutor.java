@@ -22,14 +22,14 @@ public class TutorCommandExecutor {
 
   private Account findAccountByEmail(UserInfo userInfo) {
     return accountRepository
-        .findById(userInfo.getAccountId())
+        .findAccountByEmail(userInfo.getAccountEmail())
         .orElseThrow(MediateNotFoundException::new);
   }
 
   @Transactional
   public void tutorJoin(UserInfo userInfo, TutorSignupDto dto) {
     Account account = findAccountByEmail(userInfo);
-    account.joinTutor();
+    account.joinTutor(geometryConverter.convertCoordinateToPoint(dto.getLocation()));
 
     Tutor tutor =
         Tutor.builder()
@@ -39,9 +39,6 @@ public class TutorCommandExecutor {
             .grade(dto.getGrade())
             .address(dto.getAddress())
             .curriculums(dto.getCurriculums())
-            .location(
-                geometryConverter.convertCoordinateToPoint(
-                    dto.getLocation().getLatitude(), dto.getLocation().getLongitude()))
             .build();
     tutorRepository.save(tutor);
   }

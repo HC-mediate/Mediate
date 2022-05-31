@@ -20,6 +20,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.DynamicUpdate;
+import org.locationtech.jts.geom.Point;
 
 @Entity
 @Getter
@@ -50,6 +51,9 @@ public class Account {
   private String phoneNum;
 
   @Embedded private ProfileImage profileImage;
+
+  @Column(name = "tutoring_location", length = 1200)
+  private Point tutoringLocation;
 
   @Transient List<RoleType> roles = new ArrayList<>();
 
@@ -116,11 +120,13 @@ public class Account {
     return roles.contains(role);
   }
 
-  public void joinTutor() {
+  public void joinTutor(Point location) {
+    this.tutoringLocation = location;
     join(RoleType.ROLE_TUTOR);
   }
 
-  public void joinTutee() {
+  public void joinTutee(Point location) {
+    this.tutoringLocation = location;
     join(RoleType.ROLE_TUTEE);
   }
 

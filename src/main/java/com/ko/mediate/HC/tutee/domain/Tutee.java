@@ -14,7 +14,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
-import org.locationtech.jts.geom.Point;
 
 @Entity
 @Getter
@@ -33,18 +32,13 @@ public class Tutee {
   @Column(name = "address")
   private String address;
 
-  @Column(name = "location", length = 1200)
-  private Point location;
-
   protected Tutee() {}
   ;
 
   @Builder
-  public Tutee(
-      Account account, String address, String school, String major, String grade, Point location) {
+  public Tutee(Account account, String address, String school, String major, String grade) {
     this.account = account;
     this.academicInfo = new AcademicInfo(school, major, grade);
     this.address = address;
-    this.location = location;
   }
 }

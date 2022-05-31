@@ -23,7 +23,6 @@ import javax.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import org.locationtech.jts.geom.Point;
 
 @Entity
 @Getter
@@ -48,9 +47,6 @@ public class Tutor {
 
   @Embedded private AcademicInfo academicInfo; // 튜터의 학생 정보
 
-  @Column(name = "location", length = 1200)
-  private Point location;
-
   protected Tutor() {}
   ;
 
@@ -61,12 +57,10 @@ public class Tutor {
       List<Curriculum> curriculums,
       String school,
       String major,
-      String grade,
-      Point location) {
+      String grade) {
     this.account = account;
     this.address = address;
     this.curriculums = curriculums;
-    this.location = location;
     this.academicInfo = new AcademicInfo(school, major, grade);
   }
 

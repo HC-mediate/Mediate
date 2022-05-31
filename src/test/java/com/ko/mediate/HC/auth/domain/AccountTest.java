@@ -18,8 +18,8 @@ public class AccountTest {
     Account tutee = createAccount("test", "1234", RoleType.ROLE_USER.toString());
 
     // when
-    tutor.joinTutor();
-    tutee.joinTutee();
+    tutor.joinTutor(null);
+    tutee.joinTutee(null);
 
     // then
     assertThat(tutor.hasRole(RoleType.ROLE_TUTOR)).isTrue();

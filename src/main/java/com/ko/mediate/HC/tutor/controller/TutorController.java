@@ -2,8 +2,7 @@ package com.ko.mediate.HC.tutor.controller;
 
 import com.ko.mediate.HC.auth.annotation.LoginUser;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
-import com.ko.mediate.HC.common.CommonResponseDto;
-import com.ko.mediate.HC.common.domain.DistanceCondition;
+import com.ko.mediate.HC.facade.query.DistanceQueryFacade;
 import com.ko.mediate.HC.tutor.application.TutorCommandExecutor;
 import com.ko.mediate.HC.tutor.application.TutorQueryProcessor;
 import com.ko.mediate.HC.tutor.application.request.TutorSignupDto;
@@ -34,6 +33,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class TutorController {
   private final TutorQueryProcessor tutorQueryProcessor;
   private final TutorCommandExecutor tutorCommandExecutor;
+  private final DistanceQueryFacade distanceQueryFacade;
 
   @PostMapping(value = "/tutors", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity Signup(
@@ -50,7 +50,7 @@ public class TutorController {
       @RequestParam(value = "size", defaultValue = "5") int size,
       @RequestParam(value = "radius", defaultValue = "5") int radius) {
     return ResponseEntity.ok(
-        tutorQueryProcessor.getAllTutorByDistance(userInfo, PageRequest.of(page, size), radius));
+        distanceQueryFacade.getAllTutorByDistance(userInfo, PageRequest.of(page, size), radius));
   }
 
   @ApiOperation(value = "튜터 정보 상세 조회")

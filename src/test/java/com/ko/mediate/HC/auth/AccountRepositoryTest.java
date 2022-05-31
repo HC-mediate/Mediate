@@ -27,8 +27,8 @@ public class AccountRepositoryTest {
     Account account = createAccount("test@naver.com", "test", RoleType.ROLE_USER.toString());
 
     // when
-    account.joinTutor();
-    account.joinTutee();
+    account.joinTutor(null);
+    account.joinTutee(null);
     Long accountId = accountRepository.saveAndFlush(account).getId();
 
     // then
