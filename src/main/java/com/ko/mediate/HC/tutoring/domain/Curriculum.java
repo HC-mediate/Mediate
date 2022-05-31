@@ -13,8 +13,8 @@ public enum Curriculum {
   }
 
   public static Curriculum fromString(String s) {
-    return Arrays.stream(Curriculum.values())
-        .filter(curriculum -> curriculum.equals(s))
+    return Arrays.stream(values())
+        .filter(curriculum -> curriculum.name().equals(s))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException("Unknown Value: " + s));
   }

@@ -45,7 +45,7 @@ public class Tutor {
 
   @Embedded private AcademicInfo academicInfo; // 튜터의 학생 정보
 
-  @Column(name = "location")
+  @Column(name = "location", length = 1200)
   private Point location;
 
   protected Tutor() {}

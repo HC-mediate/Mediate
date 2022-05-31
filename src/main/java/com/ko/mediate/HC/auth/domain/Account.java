@@ -39,7 +39,7 @@ public class Account {
   @Column(name = "name")
   private String name;
 
-  @Column(name = "is_activated")
+  @Column(name = "is_activated", columnDefinition = "tinyint(1)")
   private Boolean isActivated;
 
   @Column(name = "role")

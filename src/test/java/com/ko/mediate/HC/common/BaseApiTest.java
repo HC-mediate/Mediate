@@ -13,6 +13,8 @@ import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.config.LocalRedisConfig;
 import com.ko.mediate.HC.jwt.TokenStorage;
+import com.ko.mediate.HC.tutee.infra.JpaTuteeRepository;
+import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +38,8 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 public class BaseApiTest {
   @Autowired protected JpaAccountRepository accountRepository;
+  @Autowired protected JpaTutorRepository tutorRepository;
+  @Autowired protected JpaTuteeRepository tuteeRepository;
   @Autowired private AuthService authService;
   @Autowired private PasswordEncoder passwordEncoder;
   @Autowired private AmazonS3Client amazonS3Client;
@@ -56,8 +60,9 @@ public class BaseApiTest {
   protected final String tempFilePath = "temp.jpg";
 
   protected String saveEmail;
-  protected Long saveId;
+  protected Long saveId, normalUserId;
   protected String accessToken, refreshToken;
+  protected String normalAccessToken;
 
   private File createTempFile() throws IOException {
     File file = new File(tempFilePath);
@@ -83,6 +88,7 @@ public class BaseApiTest {
 
     saveEmail = accountResults.get(0).getEmail();
     saveId = accountResults.get(0).getId();
+    normalUserId = accountResults.get(1).getId();
 
     saveAccessAndRefreshToken();
   }
@@ -98,6 +104,8 @@ public class BaseApiTest {
   private void saveAccessAndRefreshToken() {
     accessToken = accessTokenMap.get(saveId);
     refreshToken = refreshTokenMap.get(saveId);
+
+    normalAccessToken = accessTokenMap.get(normalUserId);
   }
 
   private void saveAccounts() {
@@ -111,6 +119,12 @@ public class BaseApiTest {
                     profileImageKey,
                     RoleType.ROLE_TUTOR.toString()),
                 createAccount(
+                    "test_normal@naver.com",
+                    passwordEncoder.encode("1234"),
+                    "test_normal",
+                    profileImageKey,
+                    RoleType.ROLE_USER.toString()),
+                createAccount(
                     "test1@google.com",
                     passwordEncoder.encode("1234"),
                     "test1_google",
@@ -120,6 +134,8 @@ public class BaseApiTest {
   @AfterEach
   void afterEach() {
     clearFile();
+    tutorRepository.deleteAllInBatch();
+    tuteeRepository.deleteAllInBatch();
     accountRepository.deleteAllInBatch();
   }
 }

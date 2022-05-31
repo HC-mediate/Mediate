@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,10 +35,10 @@ public class TutorController {
   private final TutorCommandExecutor tutorCommandExecutor;
 
   @PostMapping(value = "/tutors", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<CommonResponseDto> Signup(
+  public ResponseEntity Signup(
       @LoginUser UserInfo userInfo, @Valid @RequestBody TutorSignupDto dto) {
     tutorCommandExecutor.tutorJoin(userInfo, dto);
-    return ResponseEntity.ok(new CommonResponseDto("튜터 정보 등록을 완료했습니다."));
+    return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
   @ApiOperation(value = "튜터 정보 목록 조회")
