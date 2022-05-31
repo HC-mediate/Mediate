@@ -38,7 +38,7 @@ public class TutorCommandExecutor {
             .major(dto.getMajor())
             .grade(dto.getGrade())
             .address(dto.getAddress())
-            .curriculum(dto.getCurriculum())
+            .curriculums(dto.getCurriculums())
             .location(
                 geometryConverter.convertCoordinateToPoint(dto.getLatitude(), dto.getLongitude()))
             .build();

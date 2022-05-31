@@ -57,13 +57,13 @@ public class Account {
   ;
 
   @PrePersist
-  void enumToString() {
+  void enumListToString() {
     this.role =
-        String.join(",", roles.stream().map(r -> r.toString()).collect(Collectors.toList()));
+        String.join(",", roles.stream().map(RoleType::toString).collect(Collectors.toList()));
   }
 
   @PostLoad
-  void stringToEnum() {
+  void stringToEnumList() {
     this.roles =
         Arrays.stream(role.split(",")).map(RoleType::fromString).collect(Collectors.toList());
   }

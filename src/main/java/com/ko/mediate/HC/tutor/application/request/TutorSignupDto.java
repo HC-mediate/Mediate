@@ -2,6 +2,7 @@ package com.ko.mediate.HC.tutor.application.request;
 
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class TutorSignupDto {
   private String address;
 
   @ApiModelProperty(value = "교육가능한 교과 과정", required = true)
-  private Curriculum curriculum;
+  private List<Curriculum> curriculums;
 
   @ApiModelProperty(value = "위도 좌표(Y)", required = true)
   @NotNull(message = "좌표값은 반드시 넣어야 합니다.")
