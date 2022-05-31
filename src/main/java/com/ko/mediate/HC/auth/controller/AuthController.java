@@ -40,7 +40,7 @@ public class AuthController {
   private final AccountService accountService;
   private final AuthService authService;
 
-  @PostMapping("/sign-in")
+  @PostMapping("/signin")
   @SignInSwagger
   public ResponseEntity<TokenDto> signIn(@Valid @RequestBody SignInDto dto) {
     TokenDto tokenDto = authService.signIn(dto);
@@ -50,7 +50,7 @@ public class AuthController {
     return new ResponseEntity<>(tokenDto, httpHeaders, HttpStatus.OK);
   }
 
-  @PostMapping(value = "/sign-up", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
   @SignUpSwagger
   public ResponseEntity signUp(@Valid @RequestBody SignUpDto dto) {
     accountService.saveAccount(dto);
