@@ -20,9 +20,6 @@ public class SignInDto {
   @NotBlank(message = "비밀번호는 반드시 있어야 합니다.")
   private String password;
 
-  @ApiModelProperty(value = "튜터/튜티 타입", required = true)
-  private RoleType role;
-
   @ApiModelProperty(value = "fcm token 값", required = true)
   @NotBlank(message = "fcm 토큰은 반드시 있어야 합니다.")
   private String fcmToken;

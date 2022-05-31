@@ -25,7 +25,7 @@ public class Tutor {
   @Id @GeneratedValue private Long id;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "account_email")
+  @JoinColumn(name = "account_id")
   private Account account;
 
   @Column(name = "address")

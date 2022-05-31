@@ -19,27 +19,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class TutoringCommandExecutor {
   private final JpaTutoringRepository tutoringRepository;
 
-  public Tutoring findByTutoringIdWithAuth(long tutoringId, UserInfo userInfo, RoleType roleType) {
-    return tutoringRepository
-        .findTutoringByAccountIdAndRole(tutoringId, userInfo.getAccountEmail(), roleType)
-        .orElseThrow(() -> new MediateNotFoundException("튜터링에 속한 계정이 없습니다."));
-  }
-
-  private Tutoring findByTutoringIdWithDetail(long tutoringId) {
-    return tutoringRepository
-        .findByTutoringIdWithDetail(tutoringId)
-        .orElseThrow(() -> new MediateNotFoundException("ID가 없습니다."));
+  private Tutoring findByTutoringId(Long tutoringId) {
+    return tutoringRepository.findById(tutoringId).orElseThrow(MediateNotFoundException::new);
   }
 
   @Transactional
   public CommonResponseDto responseTutoring(
       long tutoringId, UserInfo userInfo, TutoringResponseDto dto) {
-    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getCurrentRole());
+    Tutoring tutoring = findByTutoringId(tutoringId);
+    tutoring.isTutoringMember(userInfo.getAccountEmail());
 
     if (TutoringResponseType.REFUSE == dto.getResponseType()) {
-      tutoring.cancelTutoring(userInfo.getCurrentRole());
+      tutoring.cancelTutoring();
     } else if (TutoringResponseType.ACCEPT == dto.getResponseType()) {
-      tutoring.acceptTutoring(userInfo.getCurrentRole());
+      tutoring.acceptTutoring();
     }
     tutoringRepository.save(tutoring);
     return new CommonResponseDto("튜터링이 " + dto.getResponseType().getMessage() + " 되었습니다.");
@@ -53,40 +46,46 @@ public class TutoringCommandExecutor {
             .tutorEmail(dto.getTutorEmail())
             .tuteeEmail(dto.getTuteeEmail())
             .build();
-    tutoring.requestTutoring(userInfo.getCurrentRole());
+    tutoring.requestTutoring();
     tutoringRepository.save(tutoring);
   }
 
   @Transactional
-  public boolean cancelTutoring(long tutoringId, UserInfo userInfo) {
-    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getCurrentRole());
-    tutoring.cancelTutoring(userInfo.getCurrentRole());
+  public boolean cancelTutoring(Long tutoringId, UserInfo userInfo) {
+    Tutoring tutoring = findByTutoringId(tutoringId);
+    tutoring.isTutoringMember(userInfo.getAccountEmail());
+    tutoring.cancelTutoring();
     tutoringRepository.save(tutoring);
     return true;
   }
 
   @Transactional
   public void updateTutoring(long tutoringId, UserInfo userInfo, RequestTutoringDto dto) {
-    Tutoring tutoring = findByTutoringIdWithAuth(tutoringId, userInfo, userInfo.getCurrentRole());
+    Tutoring tutoring = findByTutoringId(tutoringId);
+    tutoring.isTutoringMember(userInfo.getAccountEmail());
     tutoring.changeTutoringName(dto.getTutoringName());
   }
 
   @Transactional
-  public void addProgressInTutoring(long tutoringId, RequestProgressDto dto) {
-    Tutoring tutoring = findByTutoringIdWithDetail(tutoringId);
+  public void addProgressInTutoring(long tutoringId, RequestProgressDto dto, UserInfo userInfo) {
+    Tutoring tutoring = findByTutoringId(tutoringId);
+    tutoring.isTutoringMember(userInfo.getAccountEmail());
     tutoring.addProgress(new Progress(dto.getWeek(), dto.getContent(), dto.getIsCompleted()));
     tutoringRepository.save(tutoring);
   }
 
   @Transactional
-  public void modifyProgressInTutoring(long tutoringId, long progressId, RequestProgressDto dto) {
-    Tutoring tutoring = findByTutoringIdWithDetail(tutoringId);
+  public void modifyProgressInTutoring(
+      long tutoringId, long progressId, RequestProgressDto dto, UserInfo userInfo) {
+    Tutoring tutoring = findByTutoringId(tutoringId);
+    tutoring.isTutoringMember(userInfo.getAccountEmail());
     tutoring.modifyProgress(progressId, dto.getWeek(), dto.getContent(), dto.getIsCompleted());
   }
 
   @Transactional
-  public void removeProgressInTutoring(long tutoringId, long progressId) {
-    Tutoring tutoring = findByTutoringIdWithDetail(tutoringId);
+  public void removeProgressInTutoring(long tutoringId, long progressId, UserInfo userInfo) {
+    Tutoring tutoring = findByTutoringId(tutoringId);
+    tutoring.isTutoringMember(userInfo.getAccountEmail());
     tutoring.removeProgress(progressId);
   }
 }

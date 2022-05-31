@@ -70,8 +70,10 @@ public class TutoringCommandController {
       value = "/tutorings/{tutoringId}/progress",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CommonResponseDto> createProgressInTutoring(
-      @PathVariable Long tutoringId, @Valid @RequestBody RequestProgressDto dto) {
-    commandExecutor.addProgressInTutoring(tutoringId, dto);
+      @LoginUser UserInfo userInfo,
+      @PathVariable Long tutoringId,
+      @Valid @RequestBody RequestProgressDto dto) {
+    commandExecutor.addProgressInTutoring(tutoringId, dto, userInfo);
     return ResponseEntity.ok(new CommonResponseDto("튜터링 진행도를 추가했습니다."));
   }
 
@@ -80,10 +82,11 @@ public class TutoringCommandController {
       value = "/tutorings/{tutoringId}/progress/{progressId}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity modifyProgressInTutoring(
+      @LoginUser UserInfo userInfo,
       @PathVariable Long tutoringId,
       @PathVariable Long progressId,
       @Valid @RequestBody RequestProgressDto dto) {
-    commandExecutor.modifyProgressInTutoring(tutoringId, progressId, dto);
+    commandExecutor.modifyProgressInTutoring(tutoringId, progressId, dto, userInfo);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
@@ -92,8 +95,8 @@ public class TutoringCommandController {
       value = "/tutorings/{tutoringId}/progress/{progressId}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity removeProgressInTutoring(
-      @PathVariable Long tutoringId, @PathVariable Long progressId) {
-    commandExecutor.removeProgressInTutoring(tutoringId, progressId);
+      @LoginUser UserInfo userInfo, @PathVariable Long tutoringId, @PathVariable Long progressId) {
+    commandExecutor.removeProgressInTutoring(tutoringId, progressId, userInfo);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }

@@ -48,11 +48,9 @@ public class AuthService implements UserDetailsService {
     Account account = findAccountByEmail(dto.getEmail());
     authenticate(account.getPassword(), dto.getPassword());
     String refreshToken =
-        tokenProvider.createRefreshToken(
-            account.getId(), dto.getEmail(), dto.getRole(), account.getRoles());
+        tokenProvider.createRefreshToken(account.getId(), dto.getEmail(), account.getRoles());
     String accessToken =
-        tokenProvider.createAccessToken(
-            account.getId(), dto.getEmail(), dto.getRole(), account.getRoles());
+        tokenProvider.createAccessToken(account.getId(), dto.getEmail(), account.getRoles());
     tokenStorage.saveRefreshToken(refreshToken, account.getId());
     tokenStorage.saveAccessToken(accessToken, account.getId());
     return new TokenDto(refreshToken, accessToken);
@@ -91,11 +89,7 @@ public class AuthService implements UserDetailsService {
     String accessToken = tokenStorage.getAccessTokenById(userInfo.getAccountId());
     String reissueToken =
         tokenProvider.createAccessTokenIfExpired(
-            accessToken,
-            userInfo.getAccountId(),
-            userInfo.getAccountEmail(),
-            userInfo.getCurrentRole(),
-            userInfo.getRoles());
+            accessToken, userInfo.getAccountId(), userInfo.getAccountEmail(), userInfo.getRoles());
     if (accessToken.equals(reissueToken)) {
       return accessToken;
     } else {

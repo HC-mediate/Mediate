@@ -63,8 +63,6 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
   @Column(name = "total_week")
   private Long totalWeek;
 
-  @Transient private RoleType currentUserRole;
-
   protected Tutoring() {}
   ;
 
@@ -78,31 +76,34 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
     this.doneWeek = 0L;
   }
 
-  public void requestTutoring(RoleType roleType) {
+  public void isTutoringMember(String email) {
+    if (this.tutorEmail != email && this.tuteeEmail != email) {
+      throw new MediateIllegalStateException("튜터링 멤버가 아닙니다.");
+    }
+  }
+
+  public void requestTutoring() {
     if (this.stat != TutoringStat.WAITING_ACCEPT) {
       throw new MediateIllegalStateException("수락 대기 중 상태가 아닙니다.");
     }
-    this.currentUserRole = roleType;
     publish();
   }
 
-  public void acceptTutoring(RoleType roleType) {
+  public void acceptTutoring() {
     if (this.stat != TutoringStat.WAITING_ACCEPT) {
       throw new MediateIllegalStateException("수락 대기 중 상태가 아닙니다.");
     }
     this.stat = TutoringStat.LEARNING;
     this.startedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-    this.currentUserRole = roleType;
     publish();
   }
 
-  public void cancelTutoring(RoleType roleType) {
+  public void cancelTutoring() {
     if (this.stat == TutoringStat.COMPLETE_TUTORING || this.stat == TutoringStat.CANCEL) {
       throw new MediateIllegalStateException("학습 중이거나 대기 중이여야 합니다.");
     }
     this.stat = TutoringStat.CANCEL;
     this.finishedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-    this.currentUserRole = roleType;
     publish();
   }
 

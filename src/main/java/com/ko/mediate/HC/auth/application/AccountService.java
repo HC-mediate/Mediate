@@ -44,13 +44,13 @@ public class AccountService {
   }
 
   public GetAccountInfoDto getAccountInfo(UserInfo userInfo) {
-    if (userInfo.getCurrentRole() == RoleType.ROLE_TUTOR) {
+    if (userInfo.hasRole(RoleType.ROLE_TUTOR)) {
       Tutor tutor =
           tutorRepository
               .findTutorByAccountEmail(userInfo.getAccountEmail())
               .orElseThrow(AccountNotFountException::new);
       return GetAccountInfoDto.fromEntity(tutor);
-    } else if (userInfo.getCurrentRole() == RoleType.ROLE_TUTEE) {
+    } else if (userInfo.hasRole(RoleType.ROLE_TUTEE)) {
       Tutee tutee =
           tuteeRepository
               .findByAccountEmail(userInfo.getAccountEmail())

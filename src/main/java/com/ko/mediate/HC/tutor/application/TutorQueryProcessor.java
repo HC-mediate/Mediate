@@ -30,13 +30,13 @@ public class TutorQueryProcessor {
   private final JpaTuteeRepository tuteeRepository;
 
   public DistanceCondition initSearchCondition(UserInfo userInfo, int radius) {
-    if (userInfo.getCurrentRole() == RoleType.ROLE_TUTOR) {
+    if (userInfo.hasRole(RoleType.ROLE_TUTOR)) {
       Tutor tutor =
           tutorRepository
               .findTutorByAccountEmail(userInfo.getAccountEmail())
               .orElseThrow(MediateNotFoundException::new);
       return new DistanceCondition(tutor.getLocation().getX(), tutor.getLocation().getY(), radius);
-    } else if (userInfo.getCurrentRole() == RoleType.ROLE_TUTEE) {
+    } else if (userInfo.hasRole(RoleType.ROLE_TUTEE)) {
       Tutee tutee =
           tuteeRepository
               .findByAccountEmail(userInfo.getAccountEmail())

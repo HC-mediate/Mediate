@@ -50,17 +50,12 @@ public class TokenProvider {
   }
 
   private String createToken(
-      Long accountId,
-      String accountEmail,
-      String authority,
-      List<RoleType> roles,
-      long tokenValidityInMilliseconds) {
+      Long accountId, String accountEmail, List<RoleType> roles, long tokenValidityInMilliseconds) {
 
     long now = (new Date()).getTime();
     Date validity = new Date(now + tokenValidityInMilliseconds);
 
     return Jwts.builder()
-        .claim(AUTHORITIES_KEY, authority)
         .claim(ACCOUNT_ID_KEY, String.valueOf(accountId))
         .claim(ACCOUNT_EMAIL_KEY, accountEmail)
         .claim(
@@ -71,24 +66,12 @@ public class TokenProvider {
         .compact();
   }
 
-  public String createAccessToken(
-      Long accountId, String accountEmail, RoleType currentRole, List<RoleType> roles) {
-    return createToken(
-        accountId,
-        accountEmail,
-        currentRole.toString(),
-        roles,
-        this.accessTokenValidityInMilliseconds);
+  public String createAccessToken(Long accountId, String accountEmail, List<RoleType> roles) {
+    return createToken(accountId, accountEmail, roles, this.accessTokenValidityInMilliseconds);
   }
 
-  public String createRefreshToken(
-      Long accountId, String accountEmail, RoleType roleType, List<RoleType> roles) {
-    return createToken(
-        accountId,
-        accountEmail,
-        roleType.toString(),
-        roles,
-        this.refreshTokenValidityInMilliseconds);
+  public String createRefreshToken(Long accountId, String accountEmail, List<RoleType> roles) {
+    return createToken(accountId, accountEmail, roles, this.refreshTokenValidityInMilliseconds);
   }
 
   public UserInfo getUserInfoFromToken(String token) {
@@ -96,7 +79,6 @@ public class TokenProvider {
     return new UserInfo(
         Long.valueOf((String) claims.get(ACCOUNT_ID_KEY)),
         (String) claims.get(ACCOUNT_EMAIL_KEY),
-        RoleType.fromString((String) claims.get(AUTHORITIES_KEY)),
         (String) claims.get(ROLE_KEY));
   }
 
@@ -128,16 +110,12 @@ public class TokenProvider {
   }
 
   public String createAccessTokenIfExpired(
-      String token,
-      Long accountId,
-      String accountEmail,
-      RoleType currentRole,
-      List<RoleType> roles) {
+      String token, Long accountId, String accountEmail, List<RoleType> roles) {
     try {
       validateToken(token);
       return token;
     } catch (ExpiredJwtException e) {
-      return createAccessToken(accountId, accountEmail, currentRole, roles);
+      return createAccessToken(accountId, accountEmail, roles);
     }
   }
 
