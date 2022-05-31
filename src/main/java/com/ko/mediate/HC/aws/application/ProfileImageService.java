@@ -30,15 +30,15 @@ public class ProfileImageService {
   @Value("${cloud.aws.cloud_front.domain_name}")
   private String CLOUD_FRONT;
 
-  private Account findAccountById(Long accountId) {
-    return accountRepository.findById(accountId).orElseThrow(MediateNotFoundException::new);
+  private Account findAccountByEmail(String email) {
+    return accountRepository.findAccountByEmail(email).orElseThrow(MediateNotFoundException::new);
   }
 
   @Transactional
   public ProfileImageResponseDto uploadProfileImage(UserInfo userInfo, ProfileImageRequestDto dto)
       throws IOException {
     validateImageFile(dto.getFile());
-    Account account = findAccountById(userInfo.getAccountId());
+    Account account = findAccountByEmail(userInfo.getAccountEmail());
     if (Objects.nonNull(account.getProfileImage())) {
       profileImageStorage.deleteFile(account.getProfileImage().getProfileKey());
     }
