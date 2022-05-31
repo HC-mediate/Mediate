@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.auth.facade;
+package com.ko.mediate.HC.facade.query;
 
 import com.ko.mediate.HC.auth.application.AccountService;
 import com.ko.mediate.HC.auth.application.response.GetAccountFacadeInfoDto;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AccountFacade {
+public class AccountQueryFacade {
   private final AccountService accountService;
   private final TutorQueryProcessor tutorQueryProcessor;
   private final TuteeQueryProcessor tuteeQueryProcessor;
