@@ -48,6 +48,10 @@ public class TuteeQueryProcessor {
     return new GetTuteeDto(null, null, null, null);
   }
 
+  public Tutee getTuteeByAccountEmail(String email) {
+    return tuteeRepository.findByAccountEmail(email).orElseGet(null);
+  }
+
   public GetTuteeAccountDto getTuteeAccount(UserInfo userInfo) {
     return new GetTuteeAccountDto(null, null, null, null, null, null);
     //    return tuteeRepository.findTuteeAccountInfoById(token.getAccountId()).stream()

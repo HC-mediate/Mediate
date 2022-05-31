@@ -1,13 +1,9 @@
 package com.ko.mediate.HC.auth.application;
 
 import com.ko.mediate.HC.auth.application.request.SignUpDto;
-import com.ko.mediate.HC.auth.application.response.GetAccountInfoDto;
-import com.ko.mediate.HC.auth.exception.AccountNotFountException;
-import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
-import com.ko.mediate.HC.tutee.domain.Tutee;
+import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutee.infra.JpaTuteeRepository;
-import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import com.ko.mediate.HC.auth.domain.Account;
@@ -20,8 +16,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountService {
   private final JpaAccountRepository accountRepository;
-  private final JpaTutorRepository tutorRepository;
-  private final JpaTuteeRepository tuteeRepository;
   private final PasswordEncoder passwordEncoder;
 
   public void checkExistEmail(String email) {
@@ -43,25 +37,7 @@ public class AccountService {
     accountRepository.save(account);
   }
 
-  public GetAccountInfoDto getAccountInfo(UserInfo userInfo) {
-    if (userInfo.hasRole(RoleType.ROLE_TUTOR)) {
-      Tutor tutor =
-          tutorRepository
-              .findTutorByAccountEmail(userInfo.getAccountEmail())
-              .orElseThrow(AccountNotFountException::new);
-      return GetAccountInfoDto.fromEntity(tutor);
-    } else if (userInfo.hasRole(RoleType.ROLE_TUTEE)) {
-      Tutee tutee =
-          tuteeRepository
-              .findByAccountEmail(userInfo.getAccountEmail())
-              .orElseThrow(AccountNotFountException::new);
-      return GetAccountInfoDto.fromEntity(tutee);
-    } else {
-      Account account =
-          accountRepository
-              .findById(userInfo.getAccountId())
-              .orElseThrow(AccountNotFountException::new);
-      return GetAccountInfoDto.fromEntity(account);
-    }
+  public Account getAccountByEmail(String email) {
+    return accountRepository.findAccountByEmail(email).orElseThrow(MediateNotFoundException::new);
   }
 }

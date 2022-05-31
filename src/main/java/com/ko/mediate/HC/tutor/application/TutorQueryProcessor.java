@@ -58,4 +58,8 @@ public class TutorQueryProcessor {
     return GetTutorDto.fromEntity(
         tutorRepository.findByIdFetchAccount(tutorId).orElseThrow(MediateNotFoundException::new));
   }
+
+  public Tutor getTutorByAccountEmail(String email) {
+    return tutorRepository.findTutorByAccountEmail(email).orElseGet(null);
+  }
 }
