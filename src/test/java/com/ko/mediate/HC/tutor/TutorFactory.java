@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutor;
 
+import com.ko.mediate.HC.common.domain.Location;
 import com.ko.mediate.HC.tutor.application.request.TutorSignupDto;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import java.util.List;
@@ -12,7 +13,6 @@ public class TutorFactory {
         "3-grade",
         "seoul",
         List.of(Curriculum.ELEMENT, Curriculum.MIDDLE, Curriculum.HIGH),
-        120.73,
-        32.22);
+        new Location(120.73, 32.22));
   }
 }

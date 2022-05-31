@@ -40,7 +40,8 @@ public class TutorCommandExecutor {
             .address(dto.getAddress())
             .curriculums(dto.getCurriculums())
             .location(
-                geometryConverter.convertCoordinateToPoint(dto.getLatitude(), dto.getLongitude()))
+                geometryConverter.convertCoordinateToPoint(
+                    dto.getLocation().getLatitude(), dto.getLocation().getLongitude()))
             .build();
     tutorRepository.save(tutor);
   }

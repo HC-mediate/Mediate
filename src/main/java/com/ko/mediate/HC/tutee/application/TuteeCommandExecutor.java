@@ -38,7 +38,8 @@ public class TuteeCommandExecutor {
             .grade(dto.getGrade())
             .address(dto.getAddress())
             .location(
-                geometryConverter.convertCoordinateToPoint(dto.getLatitude(), dto.getLongitude()))
+                geometryConverter.convertCoordinateToPoint(
+                    dto.getLocation().getLatitude(), dto.getLocation().getLongitude()))
             .build();
     tuteeRepository.save(tutee);
   }

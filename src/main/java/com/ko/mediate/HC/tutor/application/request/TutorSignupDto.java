@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutor.application.request;
 
+import com.ko.mediate.HC.common.domain.Location;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
@@ -30,13 +31,10 @@ public class TutorSignupDto {
   private String address;
 
   @ApiModelProperty(value = "교육가능한 교과 과정", required = true)
+  @NotNull(message = "교과 과정은 반드시 입력해야 합니다.")
   private List<Curriculum> curriculums;
 
-  @ApiModelProperty(value = "위도 좌표(Y)", required = true)
-  @NotNull(message = "좌표값은 반드시 넣어야 합니다.")
-  private Double latitude;
-
-  @ApiModelProperty(value = "경도 좌표(X)", required = true)
-  @NotNull(message = "좌표값은 반드시 넣어야 합니다.")
-  private Double longitude;
+  @ApiModelProperty(value = "튜터의 교육가능 지역 GPS", required = true)
+  @NotNull(message = "튜터의 GPS 값을 입력해주세요")
+  private Location location;
 }
