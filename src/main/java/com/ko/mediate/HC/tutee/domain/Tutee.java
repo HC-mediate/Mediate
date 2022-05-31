@@ -33,7 +33,7 @@ public class Tutee {
   @Column(name = "address")
   private String address;
 
-  @Column(name = "location")
+  @Column(name = "location", length = 1200)
   private Point location;
 
   protected Tutee() {}

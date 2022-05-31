@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,16 +36,16 @@ public class TuteeController {
   private final TuteeQueryProcessor tuteeQueryProcessor;
   private final TuteeCommandExecutor tuteeCommandExecutor;
 
-  @PostMapping(value = "/tutees/signup", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<CommonResponseDto> Signup(
-      @LoginUser UserInfo userInfo, @Valid @RequestBody TuteeSignupDto dto) {
+  @PostMapping(value = "/tutees", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity Signup(
+      @ApiIgnore @LoginUser UserInfo userInfo, @Valid @RequestBody TuteeSignupDto dto) {
     tuteeCommandExecutor.tuteeJoin(userInfo, dto);
-    return ResponseEntity.ok(new CommonResponseDto("회원가입 완료"));
+    return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
   @ApiOperation(value = "튜티 마이페이지 정보 조회")
   @GetMapping(value = "/tutees/mypage")
-  public ResponseEntity<GetTuteeAccountDto> getTuteeAccount(@LoginUser UserInfo token) {
+  public ResponseEntity<GetTuteeAccountDto> getTuteeAccount(@ApiIgnore @LoginUser UserInfo token) {
     return ResponseEntity.ok(tuteeQueryProcessor.getTuteeAccount(token));
   }
 

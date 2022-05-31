@@ -6,7 +6,6 @@ import com.ko.mediate.HC.common.domain.GeometryConverter;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import com.ko.mediate.HC.tutee.application.request.TuteeSignupDto;
-import com.ko.mediate.HC.tutoring.domain.AcademicInfo;
 import com.ko.mediate.HC.tutee.infra.JpaTuteeRepository;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +19,15 @@ public class TuteeCommandExecutor {
   private final GeometryConverter geometryConverter;
   private final JpaAccountRepository accountRepository;
 
+  private Account findAccountByEmail(UserInfo userInfo) {
+    return accountRepository
+        .findById(userInfo.getAccountId())
+        .orElseThrow(MediateNotFoundException::new);
+  }
+
   @Transactional
   public void tuteeJoin(UserInfo userInfo, TuteeSignupDto dto) {
-    Account account =
-        accountRepository
-            .findAccountByEmail(userInfo.getAccountEmail())
-            .orElseThrow(MediateNotFoundException::new);
+    Account account = findAccountByEmail(userInfo);
     account.joinTutee();
 
     Tutee tutee =
@@ -34,6 +36,7 @@ public class TuteeCommandExecutor {
             .school(dto.getSchool())
             .major(dto.getMajor())
             .grade(dto.getGrade())
+            .address(dto.getAddress())
             .location(
                 geometryConverter.convertCoordinateToPoint(dto.getLatitude(), dto.getLongitude()))
             .build();
