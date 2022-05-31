@@ -29,7 +29,7 @@ public class SignInApiTest extends BaseApiTest {
 
     // when, then
     mvc.perform(
-            post("/api/sign-in")
+            post("/api/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isOk())
@@ -53,7 +53,7 @@ public class SignInApiTest extends BaseApiTest {
 
     // when, then
     mvc.perform(
-            post("/api/sign-in")
+            post("/api/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(jsonPath("$.message").value("비밀번호가 일치하지 않습니다."))
@@ -68,7 +68,7 @@ public class SignInApiTest extends BaseApiTest {
 
     // when, then
     mvc.perform(
-            post("/api/sign-in")
+            post("/api/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(jsonPath("$.message").exists())

@@ -31,7 +31,7 @@ public class SignUpApiTest extends BaseApiTest {
 
     // when, then
     mvc.perform(
-            post("/api/sign-up")
+            post("/api/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isCreated());
@@ -51,7 +51,7 @@ public class SignUpApiTest extends BaseApiTest {
 
     // when, then
     mvc.perform(
-            post("/api/sign-up")
+            post("/api/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isBadRequest())
