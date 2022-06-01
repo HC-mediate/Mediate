@@ -24,6 +24,9 @@ public class ProfileImageS3Storage implements ProfileImageStorage {
   @Value("${cloud.aws.s3.bucket}")
   private String bucket;
 
+  @Value("${image.convert-path}")
+  private String convertPath;
+
   private String uploadDirectory;
   private final AmazonS3Client amazonS3Client;
 
@@ -49,7 +52,7 @@ public class ProfileImageS3Storage implements ProfileImageStorage {
   // 로컬에 파일 업로드 하기
   private Optional<File> convert(MultipartFile file) throws IOException {
     File convertFile =
-        new File(System.getProperty("user.dir") + File.separator + file.getOriginalFilename());
+        new File(convertPath + File.separator + file.getOriginalFilename());
     if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
       try (FileOutputStream fos =
           new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
