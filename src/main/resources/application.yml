@@ -34,3 +34,6 @@ cloud:
       domain_name: https://dummy.cloudfront.net
     stack:
       auto: false
+
+image:
+  convert-path: '${user.dir}'
