@@ -4,6 +4,7 @@ import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import com.ko.mediate.HC.tutee.application.response.GetTuteeDto;
 import com.ko.mediate.HC.tutee.infra.JpaTuteeRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,5 +22,9 @@ public class TuteeQueryProcessor {
 
   public Tutee getTuteeByAccountEmail(String email) {
     return tuteeRepository.findByAccountEmail(email).orElseGet(null);
+  }
+
+  public List<Tutee> getAllTuteesByAccountEmails(List<String> emails) {
+    return tuteeRepository.findAllByAccountEmails(emails);
   }
 }

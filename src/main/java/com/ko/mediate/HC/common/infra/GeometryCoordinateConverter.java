@@ -17,12 +17,12 @@ public class GeometryCoordinateConverter implements GeometryConverter {
 
   @Override
   public Point convertCoordinateToPoint(double latitude, double longitude) {
-    return this.geometryFactory.createPoint(new Coordinate(latitude, longitude));
+    return this.geometryFactory.createPoint(new Coordinate(longitude, latitude));
   }
 
   @Override
   public Point convertCoordinateToPoint(Location location) {
     return this.geometryFactory.createPoint(
-        new Coordinate(location.getLatitude(), location.getLongitude()));
+        new Coordinate(location.getLongitude(), location.getLatitude()));
   }
 }

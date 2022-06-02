@@ -4,6 +4,7 @@ import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.ko.mediate.HC.tutor.application.response.GetTutorDto;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,5 +22,9 @@ public class TutorQueryProcessor {
 
   public Tutor getTutorByAccountEmail(String email) {
     return tutorRepository.findTutorByAccountEmail(email).orElseGet(null);
+  }
+
+  public List<Tutor> getAllTutorsByAccountEmail(List<String> emails){
+    return tutorRepository.findAllByAccountEmails(emails);
   }
 }

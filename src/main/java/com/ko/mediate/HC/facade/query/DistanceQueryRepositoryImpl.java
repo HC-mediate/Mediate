@@ -24,7 +24,6 @@ public class DistanceQueryRepositoryImpl implements DistanceQueryRepository {
     List<Account> contents =
         queryFactory
             .selectFrom(account)
-            .leftJoin(account)
             .where(
                 account.isActivated.isTrue(),
                 nearByAccount(condition).loe(condition.getRadius() * 1000))
@@ -45,7 +44,7 @@ public class DistanceQueryRepositoryImpl implements DistanceQueryRepository {
         Double.class,
         "function('ST_Distance_Sphere', {0}, POINT({1}, {2}))",
         account.tutoringLocation,
-        condition.getLocation().getLongitude(),
-        condition.getLocation().getLatitude());
+        condition.getLocation().getLatitude(),
+        condition.getLocation().getLongitude());
   }
 }
