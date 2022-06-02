@@ -1,8 +1,10 @@
 package com.ko.mediate.HC.tutor.application.response;
 
 import com.ko.mediate.HC.tutor.domain.Tutor;
+import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +32,9 @@ public class GetTutorDto {
   @ApiModelProperty(value = "주소")
   private String address;
 
+  @ApiModelProperty(value = "튜터링할 수 있는 학습 과목")
+  private List<Curriculum> curriculums;
+
   public static GetTutorDto fromEntity(Tutor tutor) {
     return GetTutorDto.builder()
         .name(tutor.getAccount().getName())
@@ -37,6 +42,7 @@ public class GetTutorDto {
         .major(tutor.getAcademicInfo().getMajor())
         .grade(tutor.getAcademicInfo().getGrade())
         .address(tutor.getAddress())
+        .curriculums(tutor.getCurriculums())
         .build();
   }
 }

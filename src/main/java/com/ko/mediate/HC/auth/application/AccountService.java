@@ -3,8 +3,6 @@ package com.ko.mediate.HC.auth.application;
 import com.ko.mediate.HC.auth.application.request.SignUpDto;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
-import com.ko.mediate.HC.tutee.infra.JpaTuteeRepository;
-import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
@@ -32,7 +30,7 @@ public class AccountService {
             .password(passwordEncoder.encode(dto.getPassword()))
             .name(dto.getName())
             .phoneNum(dto.getPhoneNum())
-            .authority(RoleType.ROLE_USER.name())
+            .role(RoleType.ROLE_USER)
             .build();
     accountRepository.save(account);
   }

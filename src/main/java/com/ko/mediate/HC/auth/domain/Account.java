@@ -78,24 +78,6 @@ public class Account {
       String password,
       String name,
       String phoneNum,
-      String authority,
-      String profileKey,
-      String profileUrl) {
-    this.email = email;
-    this.password = password;
-    this.name = name;
-    this.isActivated = true;
-    this.phoneNum = phoneNum;
-    this.profileImage = new ProfileImage(profileKey, profileUrl);
-    join(authority);
-  }
-
-  @Builder
-  public Account(
-      String email,
-      String password,
-      String name,
-      String phoneNum,
       RoleType role,
       String profileKey,
       String profileUrl) {
