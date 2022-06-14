@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.tutor.application.request;
 
 import com.ko.mediate.HC.common.domain.Location;
+import com.ko.mediate.HC.common.domain.LocationValid;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
@@ -36,5 +37,6 @@ public class TutorSignupDto {
 
   @ApiModelProperty(value = "튜터의 교육가능 지역 GPS", required = true)
   @NotNull(message = "튜터의 GPS 값을 입력해주세요")
+  @LocationValid
   private Location location;
 }

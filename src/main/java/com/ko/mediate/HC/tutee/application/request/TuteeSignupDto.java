@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.tutee.application.request;
 
 import com.ko.mediate.HC.common.domain.Location;
+import com.ko.mediate.HC.common.domain.LocationValid;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -29,5 +30,6 @@ public class TuteeSignupDto {
 
   @ApiModelProperty(value = "튜티의 교육가능 지역 GPS", required = true)
   @NotNull(message = "튜티의 GPS 값을 입력해주세요")
+  @LocationValid
   private Location location;
 }
