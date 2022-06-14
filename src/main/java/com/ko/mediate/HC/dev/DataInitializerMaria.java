@@ -78,7 +78,7 @@ public class DataInitializerMaria implements ApplicationRunner {
                 createAccount("Incheon", "인천", 126.761627, 37.544577)));
 
     for(Account account: accounts){
-      tutorRepository.save(createTutor(account, account.getName(), List.of(Curriculum.ELEMENT, Curriculum.MIDDLE)));
+      tutorRepository.save(createTutor(account, account.getName(), List.of(Curriculum.ELEMENT_SCIENCE, Curriculum.ELEMENT_ENGLISH)));
     }
 
     GetTutorListDto results = distanceQueryFacade.getAllTutorByDistance(

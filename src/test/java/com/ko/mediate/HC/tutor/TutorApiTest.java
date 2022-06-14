@@ -36,6 +36,6 @@ public class TutorApiTest extends BaseApiTest {
 
     Tutor tutor = tutorRepository.findTutorByAccountEmail("test_normal@naver.com").get();
     assertThat(tutor.getAddress()).isEqualTo(dto.getAddress());
-    assertThat(tutor.getCurriculums()).contains(Curriculum.ELEMENT, Curriculum.MIDDLE, Curriculum.HIGH);
+    assertThat(tutor.getCurriculums()).contains(Curriculum.HIGH_MATHEMATICS, Curriculum.HIGH_KOREAN, Curriculum.HIGH_ENGLISH);
   }
 }

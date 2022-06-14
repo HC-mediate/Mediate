@@ -12,7 +12,7 @@ public class TutorFactory {
         "test-major",
         "3-grade",
         "seoul",
-        List.of(Curriculum.ELEMENT, Curriculum.MIDDLE, Curriculum.HIGH),
+        List.of(Curriculum.HIGH_MATHEMATICS, Curriculum.HIGH_KOREAN, Curriculum.HIGH_ENGLISH),
         new Location(120.73, 32.22));
   }
 }
