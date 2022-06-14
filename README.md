@@ -46,7 +46,7 @@
 ## CI/CD
 ![image](https://user-images.githubusercontent.com/25299428/155916629-b5f74932-3cfd-44ad-ace2-2347c7aaf000.png)
 
-## 협업을 위한 문서 정리
+## 기술 선택의 이유와 구현 방법
 [JWT를 사용한 이유](https://github.com/arsgsg1/Mediate/wiki/JWT%EB%A5%BC-%EC%99%9C-%EC%82%AC%EC%9A%A9%ED%96%88%EB%8A%94%EA%B0%80)
 
 [Mediate의 토큰 관리 전략](https://github.com/arsgsg1/Mediate/wiki/Mediate%EC%9D%98-%ED%86%A0%ED%81%B0-%EA%B4%80%EB%A6%AC-%EC%A0%84%EB%9E%B5)
