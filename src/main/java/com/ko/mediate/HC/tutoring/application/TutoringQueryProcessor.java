@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.tutoring.application;
 
 import com.ko.mediate.HC.auth.resolver.UserInfo;
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutoring.application.response.GetProgressDto;
 import com.ko.mediate.HC.tutoring.application.response.GetTutoringDetailDto;
@@ -36,7 +37,7 @@ public class TutoringQueryProcessor {
     Tutoring tutoring =
         tutoringRepository
             .findByTutoringIdWithDetail(tutoringId)
-            .orElseThrow(() -> new MediateNotFoundException("ID가 없습니다."));
+            .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 
     return new GetTutoringDetailDto(
         tutoring.getTutoringName(),

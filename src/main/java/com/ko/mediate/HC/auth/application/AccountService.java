@@ -1,6 +1,8 @@
 package com.ko.mediate.HC.auth.application;
 
 import com.ko.mediate.HC.auth.application.request.SignUpDto;
+import com.ko.mediate.HC.common.ErrorCode;
+import com.ko.mediate.HC.common.exception.MediateAlreadyExistException;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutoring.application.RoleType;
@@ -18,7 +20,7 @@ public class AccountService {
 
   public void checkExistEmail(String email) {
     if (accountRepository.existsByEmail(email)) {
-      throw new MediateIllegalStateException(String.format("이미 존재하는 email입니다. [%s]", email));
+      throw new MediateIllegalStateException(ErrorCode.EMAIL_ALREADY_EXIST);
     }
   }
 
@@ -36,6 +38,8 @@ public class AccountService {
   }
 
   public Account getAccountByEmail(String email) {
-    return accountRepository.findAccountByEmail(email).orElseThrow(MediateNotFoundException::new);
+    return accountRepository
+        .findAccountByEmail(email)
+        .orElseThrow(() -> new MediateAlreadyExistException(ErrorCode.EMAIL_ALREADY_EXIST));
   }
 }

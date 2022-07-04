@@ -7,6 +7,7 @@ import static com.ko.mediate.HC.auth.AccountFactory.*;
 
 import com.ko.mediate.HC.auth.application.request.SignInDto;
 import com.ko.mediate.HC.common.BaseApiTest;
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,7 @@ public class SignInApiTest extends BaseApiTest {
             post("/api/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
-        .andExpect(jsonPath("$.message").value("비밀번호가 일치하지 않습니다."))
+        .andExpect(jsonPath("$.code").value(ErrorCode.INCORRECT_PASSWORD.getCode()))
         .andDo(print());
   }
 
@@ -71,7 +72,7 @@ public class SignInApiTest extends BaseApiTest {
             post("/api/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
-        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.code").exists())
         .andDo(print());
   }
 }

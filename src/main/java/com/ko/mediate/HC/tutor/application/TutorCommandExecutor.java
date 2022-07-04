@@ -2,6 +2,7 @@ package com.ko.mediate.HC.tutor.application;
 
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.domain.GeometryConverter;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
@@ -23,7 +24,7 @@ public class TutorCommandExecutor {
   private Account findAccountByEmail(UserInfo userInfo) {
     return accountRepository
         .findAccountByEmail(userInfo.getAccountEmail())
-        .orElseThrow(MediateNotFoundException::new);
+        .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
   }
 
   @Transactional

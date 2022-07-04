@@ -11,6 +11,7 @@ import com.ko.mediate.HC.auth.application.AuthService;
 import com.ko.mediate.HC.auth.application.request.SignInDto;
 import com.ko.mediate.HC.auth.application.request.SignUpDto;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import com.ko.mediate.HC.firebase.application.FirebaseCloudService;
 import com.ko.mediate.HC.jwt.JwtFilter;
@@ -50,6 +51,7 @@ public class AuthController {
     return new ResponseEntity<>(tokenDto, httpHeaders, HttpStatus.OK);
   }
 
+  //todo: 이메일 중복 시 http 상태코드랑 body에 이유를 같이 포함시켜서 전달
   @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
   @SignUpSwagger
   public ResponseEntity signUp(@Valid @RequestBody SignUpDto dto) {
@@ -68,7 +70,7 @@ public class AuthController {
   @ReissueTokenSwagger
   public ResponseEntity<TokenDto> reissueToken(@RequestHeader(value = "Refresh") String auth) {
     if (StringUtils.isNullOrEmpty(auth)) {
-      throw new MediateIllegalStateException("헤더 값이 비어있거나 공백입니다.");
+      throw new MediateIllegalStateException(ErrorCode.NO_REFRESH_TOKEN);
     }
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(authService.reissueAccessTokenByRefreshToken(auth.substring(7)));

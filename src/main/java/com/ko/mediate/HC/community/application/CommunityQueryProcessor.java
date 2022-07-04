@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.community.application;
 
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.community.application.dto.response.GetArticleDetailDto;
 import com.ko.mediate.HC.community.application.dto.response.GetArticleDto;
@@ -38,12 +39,12 @@ public class CommunityQueryProcessor {
     return new GetArticleDetailDto(
         articleRepository
             .findByIdWithImages(id)
-            .orElseThrow(() -> new MediateNotFoundException("ID를 찾을 수 없습니다.")));
+            .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND)));
   }
 
   public GetPopularArticleDto getPopularArticle() {
     return articleRepository
         .findPopularArticleByCategory()
-        .orElseThrow(() -> new MediateNotFoundException("결과가 없습니다."));
+        .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
   }
 }

@@ -64,7 +64,7 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
       final MediateException ex, final ServletWebRequest request) {
     log(ex, request);
     final ErrorResponseDto errorResponseDto =
-        build(ex.getClass().getSimpleName(), ex.getMessage(), ex.status());
+        build(ex.getErrorCode().getCode(), ex.getMessage(), ex.status());
     return ResponseEntity.status(ex.status()).body(errorResponseDto);
   }
 

@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.common.exception;
 
+import com.ko.mediate.HC.common.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public class MediateNotFoundException extends MediateException {
@@ -9,11 +10,7 @@ public class MediateNotFoundException extends MediateException {
     return HttpStatus.NOT_FOUND;
   }
 
-  public MediateNotFoundException() {
-    super("해당 ID의 엔티티를 찾을 수 없습니다.");
-  }
-
-  public MediateNotFoundException(String message) {
-    super(message);
+  public MediateNotFoundException(ErrorCode errorCode) {
+    super(errorCode);
   }
 }

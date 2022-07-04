@@ -2,6 +2,7 @@ package com.ko.mediate.HC.tutoring.application;
 
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.CommonResponseDto;
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutoring.application.request.RequestProgressDto;
 import com.ko.mediate.HC.tutoring.application.request.TutoringResponseDto;
@@ -20,7 +21,9 @@ public class TutoringCommandExecutor {
   private final JpaTutoringRepository tutoringRepository;
 
   private Tutoring findByTutoringId(Long tutoringId) {
-    return tutoringRepository.findById(tutoringId).orElseThrow(MediateNotFoundException::new);
+    return tutoringRepository
+        .findById(tutoringId)
+        .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
   }
 
   @Transactional

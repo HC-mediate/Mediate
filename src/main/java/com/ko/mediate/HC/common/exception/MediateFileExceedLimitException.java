@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.common.exception;
 
+import com.ko.mediate.HC.common.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public class MediateFileExceedLimitException extends MediateException {
@@ -8,9 +9,7 @@ public class MediateFileExceedLimitException extends MediateException {
     return HttpStatus.BAD_REQUEST;
   }
 
-  public MediateFileExceedLimitException() {}
-
-  public MediateFileExceedLimitException(String message) {
-    super(message);
+  public MediateFileExceedLimitException(ErrorCode errorCode) {
+    super(errorCode);
   }
 }

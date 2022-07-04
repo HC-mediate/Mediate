@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.auth.resolver;
 
 import com.ko.mediate.HC.auth.annotation.LoginUser;
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateNotFoundToken;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class LoginMethodArgumentResolver implements HandlerMethodArgumentResolve
       throws RuntimeException {
     String authorization = webRequest.getHeader("Authorization");
     if (authorization == null) {
-      throw new MediateNotFoundToken("인증 토큰 값이 없습니다.");
+      throw new MediateNotFoundToken(ErrorCode.NO_ACCESS_TOKEN);
     }
 
     return tokenProvider.getUserInfoFromToken(authorization.substring(7));

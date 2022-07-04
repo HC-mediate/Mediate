@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.homework.application;
 
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.homework.application.request.CreateHomeworkDto;
 import com.ko.mediate.HC.homework.application.request.UpdateHomeworkDto;
@@ -28,7 +29,7 @@ public class HomeworkCommandExecutor {
     Homework homework =
         homeworkRepository
             .findById(homeworkId)
-            .orElseThrow(() -> new MediateNotFoundException("ID가 없습니다."));
+            .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
     homework.changeHomework(
         dto.getTitle(),
         dto.getContents().stream()

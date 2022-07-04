@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutoring.domain;
 
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutoring.application.RoleType;
@@ -77,21 +78,21 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
   }
 
   public void isTutoringMember(String email) {
-    if (this.tutorEmail != email && this.tuteeEmail != email) {
-      throw new MediateIllegalStateException("튜터링 멤버가 아닙니다.");
+    if (!this.tutorEmail.equals(email) && !this.tuteeEmail.equals(email)) {
+      throw new MediateIllegalStateException(ErrorCode.NO_TUTORING_MEMBER);
     }
   }
 
   public void requestTutoring() {
     if (this.stat != TutoringStat.WAITING_ACCEPT) {
-      throw new MediateIllegalStateException("수락 대기 중 상태가 아닙니다.");
+      throw new MediateIllegalStateException(ErrorCode.TUTORING_NO_WAIT_STATE);
     }
     publish();
   }
 
   public void acceptTutoring() {
     if (this.stat != TutoringStat.WAITING_ACCEPT) {
-      throw new MediateIllegalStateException("수락 대기 중 상태가 아닙니다.");
+      throw new MediateIllegalStateException(ErrorCode.TUTORING_NO_WAIT_STATE);
     }
     this.stat = TutoringStat.LEARNING;
     this.startedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
@@ -100,7 +101,7 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
 
   public void cancelTutoring() {
     if (this.stat == TutoringStat.COMPLETE_TUTORING || this.stat == TutoringStat.CANCEL) {
-      throw new MediateIllegalStateException("학습 중이거나 대기 중이여야 합니다.");
+      throw new MediateIllegalStateException(ErrorCode.TUTORING_CANCEL_STATE);
     }
     this.stat = TutoringStat.CANCEL;
     this.finishedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
@@ -132,7 +133,7 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
         this.progresses.stream()
             .filter(p -> p.getId() == progressId)
             .findFirst()
-            .orElseThrow(() -> new MediateNotFoundException("Progress ID를 찾을 수 없습니다."));
+            .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
     progress.modifyProgress(week, content, isCompleted);
     if (progress.getIsCompleted()) {
       doneWeek++;
@@ -144,7 +145,7 @@ public class Tutoring extends AbstractAggregateRoot<Tutoring> {
         this.progresses.stream()
             .filter(p -> p.getId() == progressId)
             .findFirst()
-            .orElseThrow(() -> new MediateNotFoundException("Progress ID가 없습니다."));
+            .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
     if (progress.isComplete()) {
       this.doneWeek--;
     }

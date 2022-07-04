@@ -8,6 +8,8 @@ import com.ko.mediate.HC.aws.application.request.ProfileImageRequestDto;
 import com.ko.mediate.HC.aws.application.response.ProfileImageResponseDto;
 import com.ko.mediate.HC.aws.domain.ProfileImageStorage;
 import com.ko.mediate.HC.aws.exception.MediateUnsupportImageType;
+import com.ko.mediate.HC.common.ErrorCode;
+import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +33,9 @@ public class ProfileImageService {
   private String CLOUD_FRONT;
 
   private Account findAccountByEmail(String email) {
-    return accountRepository.findAccountByEmail(email).orElseThrow(MediateNotFoundException::new);
+    return accountRepository
+        .findAccountByEmail(email)
+        .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
   }
 
   @Transactional
@@ -50,7 +54,7 @@ public class ProfileImageService {
 
   private void validateImageFile(MultipartFile file) {
     if (StringUtils.isNullOrEmpty(file.getOriginalFilename())) {
-      throw new MediateNotFoundException("파일을 업로드하지 않았습니다.");
+      throw new MediateIllegalStateException(ErrorCode.IMAGE_CONVERT_FAILED);
     }
     String ext = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".") + 1);
     if (!imageTypes.contains(ext)) {

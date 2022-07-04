@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.community.application;
 
 import com.ko.mediate.HC.auth.resolver.UserInfo;
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateFileExceedLimitException;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.common.infra.S3Uploader;
@@ -27,14 +28,14 @@ public class CommunityCommandExecutor {
   private Article findByIdAndWriteBy(Long id, String accountId) {
     return articleRepository
         .findByIdAndWriteBy(id, accountId)
-        .orElseThrow(() -> new MediateNotFoundException("ID가 없습니다."));
+        .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
   }
 
   @Transactional
   public void createArticle(
       UserInfo userInfo, RequestArticleDto dto, MultipartFile[] multipartFiles) {
     if (multipartFiles != null && multipartFiles.length > 5) {
-      throw new MediateFileExceedLimitException("이미지는 최대 5개까지 첨부 가능합니다.");
+      throw new MediateFileExceedLimitException(ErrorCode.IMAGE_EXCEED);
     }
     Article article =
         Article.builder()

@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutee.application;
 
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import com.ko.mediate.HC.tutee.application.response.GetTuteeDto;
@@ -17,7 +18,9 @@ public class TuteeQueryProcessor {
 
   public GetTuteeDto getTuteeDetail(Long tuteeId) {
     return GetTuteeDto.fromEntity(
-        tuteeRepository.findById(tuteeId).orElseThrow(MediateNotFoundException::new));
+        tuteeRepository
+            .findById(tuteeId)
+            .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND)));
   }
 
   public Tutee getTuteeByAccountEmail(String email) {

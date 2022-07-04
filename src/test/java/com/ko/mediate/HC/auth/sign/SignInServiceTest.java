@@ -4,9 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static com.ko.mediate.HC.auth.AccountFactory.*;
 
-import com.ko.mediate.HC.HcApplicationTests;
 import com.ko.mediate.HC.auth.application.AuthService;
-import com.ko.mediate.HC.auth.exception.AccountIncorrectPasswordException;
+import com.ko.mediate.HC.common.exception.AccountIncorrectPasswordException;
 import com.ko.mediate.HC.common.BaseApiTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

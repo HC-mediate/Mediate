@@ -3,10 +3,11 @@ package com.ko.mediate.HC.auth.application;
 import com.amazonaws.util.StringUtils;
 import com.ko.mediate.HC.auth.application.request.SignInDto;
 import com.ko.mediate.HC.auth.domain.Account;
-import com.ko.mediate.HC.auth.exception.AccountIncorrectPasswordException;
-import com.ko.mediate.HC.auth.exception.MediateInvalidTokenException;
+import com.ko.mediate.HC.common.exception.AccountIncorrectPasswordException;
+import com.ko.mediate.HC.common.exception.MediateInvalidTokenException;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.jwt.CustomUserDetails;
 import com.ko.mediate.HC.jwt.TokenProvider;
@@ -33,7 +34,9 @@ public class AuthService implements UserDetailsService {
   private final PasswordEncoder passwordEncoder;
 
   private Account findAccountByEmail(String email) {
-    return accountRepository.findAccountByEmail(email).orElseThrow(MediateNotFoundException::new);
+    return accountRepository
+        .findAccountByEmail(email)
+        .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
   }
 
   @Override
@@ -58,7 +61,7 @@ public class AuthService implements UserDetailsService {
 
   private void authenticate(String encodePassword, String rawPassword) {
     if (!passwordEncoder.matches(rawPassword, encodePassword)) {
-      throw new AccountIncorrectPasswordException();
+      throw new AccountIncorrectPasswordException(ErrorCode.INCORRECT_PASSWORD);
     }
   }
 

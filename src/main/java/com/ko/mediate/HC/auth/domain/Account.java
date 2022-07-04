@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.auth.domain;
 
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import java.util.ArrayList;
@@ -114,7 +115,7 @@ public class Account {
 
   private boolean join(String roleType) {
     if (roles.contains(RoleType.fromString(roleType))) {
-      throw new MediateIllegalStateException(String.format("이미 %s로 가입된 회원입니다.", roleType));
+      throw new MediateIllegalStateException(ErrorCode.ALREADY_TUTOR_OR_TUTEE);
     }
     roles.add(RoleType.fromString(roleType));
     return true;
@@ -122,8 +123,7 @@ public class Account {
 
   private boolean join(RoleType roleType) {
     if (roles.contains(roleType)) {
-      throw new MediateIllegalStateException(
-          String.format("이미 %s로 가입된 회원입니다.", roleType.toString()));
+      throw new MediateIllegalStateException(ErrorCode.ALREADY_TUTOR_OR_TUTEE);
     }
     roles.add(roleType);
     return true;

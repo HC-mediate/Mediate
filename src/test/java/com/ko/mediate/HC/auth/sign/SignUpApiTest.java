@@ -12,6 +12,7 @@ import com.ko.mediate.HC.auth.application.AccountService;
 import com.ko.mediate.HC.auth.application.request.SignUpDto;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.common.BaseApiTest;
+import com.ko.mediate.HC.common.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,6 @@ public class SignUpApiTest extends BaseApiTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
         .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.message").value(containsString(existEmail)));
+        .andExpect(jsonPath("$.code").value(containsString(ErrorCode.EMAIL_ALREADY_EXIST.getCode())));
   }
 }

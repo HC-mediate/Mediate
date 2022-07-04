@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.common.exception;
 
+import com.ko.mediate.HC.common.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public class MediateIllegalStateException extends MediateException{
@@ -8,10 +9,8 @@ public class MediateIllegalStateException extends MediateException{
     return HttpStatus.BAD_REQUEST;
   }
 
-  public MediateIllegalStateException() {
+  public MediateIllegalStateException(ErrorCode errorCode) {
+    super(errorCode);
   }
 
-  public MediateIllegalStateException(String message) {
-    super(message);
-  }
 }

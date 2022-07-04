@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.tutor.application;
 
+import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutor.domain.Tutor;
@@ -17,14 +18,16 @@ public class TutorQueryProcessor {
 
   public GetTutorDto getTutorDetail(Long tutorId) {
     return GetTutorDto.fromEntity(
-        tutorRepository.findByIdFetchAccount(tutorId).orElseThrow(MediateNotFoundException::new));
+        tutorRepository
+            .findByIdFetchAccount(tutorId)
+            .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND)));
   }
 
   public Tutor getTutorByAccountEmail(String email) {
     return tutorRepository.findTutorByAccountEmail(email).orElseGet(null);
   }
 
-  public List<Tutor> getAllTutorsByAccountEmail(List<String> emails){
+  public List<Tutor> getAllTutorsByAccountEmail(List<String> emails) {
     return tutorRepository.findAllByAccountEmails(emails);
   }
 }
