@@ -18,6 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -35,7 +36,12 @@ import static com.ko.mediate.HC.common.ErrorResponseBuilder.*;
 @RestControllerAdvice
 @Slf4j
 public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
-  @ExceptionHandler(value = {AuthenticationException.class, BadCredentialsException.class})
+  @ExceptionHandler(
+      value = {
+        AuthenticationException.class,
+        BadCredentialsException.class,
+        AccessDeniedException.class
+      })
   public ResponseEntity<Object> handleAuthenticationException(
       final AuthenticationException ex, final ServletWebRequest request) {
     log(ex, request);

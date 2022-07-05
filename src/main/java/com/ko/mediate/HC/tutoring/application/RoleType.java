@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public enum RoleType {
+  ROLE_ADMIN("ROLE_ADMIN"),
   ROLE_TUTOR("ROLE_TUTOR"),
   ROLE_TUTEE("ROLE_TUTEE"),
   ROLE_USER("ROLE_USER");
