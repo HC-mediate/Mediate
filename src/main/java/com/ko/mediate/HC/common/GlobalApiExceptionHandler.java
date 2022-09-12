@@ -65,13 +65,10 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponseDto);
   }
 
-  @ExceptionHandler({MediateException.class})
-  public ResponseEntity<Object> handleCustomUncaughtDomainLayerException(
-      final MediateException ex, final ServletWebRequest request) {
+  @ExceptionHandler(value = {MediateException.class})
+  public ResponseEntity<Object> handleMediateException(final MediateException ex, final ServletWebRequest request){
     log(ex, request);
-    final ErrorResponseDto errorResponseDto =
-        build(ex.getErrorCode().getCode(), ex.getMessage(), ex.status());
-    return ResponseEntity.status(ex.status()).body(errorResponseDto);
+    return ResponseEntity.status(ex.getErrorCode().getStatus()).body(ex.getErrorCode().getDescription());
   }
 
   @ExceptionHandler(value = {ConstraintViolationException.class})

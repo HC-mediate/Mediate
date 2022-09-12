@@ -11,11 +11,4 @@ public abstract class MediateException extends RuntimeException {
   public MediateException(ErrorCode errorCode) {
     this.errorCode = errorCode;
   }
-
-  public MediateException(final String message, ErrorCode errorCode) {
-    super(message);
-    this.errorCode = errorCode;
-  }
-
-  public abstract HttpStatus status();
 }
