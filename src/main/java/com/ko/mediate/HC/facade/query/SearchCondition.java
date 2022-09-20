@@ -6,11 +6,11 @@ import org.locationtech.jts.geom.Point;
 
 @Getter
 public class SearchCondition {
-  private Location location;
-  private int radius;
+    private Location location;
+    private int radius;
 
-  public SearchCondition(Point location, int radius) {
-    this.location = new Location(location.getX(), location.getY());
-    this.radius = radius;
-  }
+    public SearchCondition(Point location, int radius) {
+        this.location = new Location(location.getX(), location.getY());
+        this.radius = radius;
+    }
 }

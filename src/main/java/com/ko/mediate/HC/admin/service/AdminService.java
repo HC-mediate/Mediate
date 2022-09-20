@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class AdminService {
-  private final JpaAccountRepository accountRepository;
+    private final JpaAccountRepository accountRepository;
 
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @Transactional(readOnly = true)
-  public AdminAccountListDto getAllAccounts(PageRequest pageRequest) {
-    return AdminAccountListDto.fromEntities(accountRepository.findAll(pageRequest));
-  }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional(readOnly = true)
+    public AdminAccountListDto getAllAccounts(PageRequest pageRequest) {
+        return AdminAccountListDto.fromEntities(accountRepository.findAll(pageRequest));
+    }
 }

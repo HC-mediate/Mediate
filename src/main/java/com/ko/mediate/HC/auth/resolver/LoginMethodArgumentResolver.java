@@ -4,7 +4,6 @@ import com.ko.mediate.HC.auth.annotation.LoginUser;
 import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateNotFoundToken;
 import com.ko.mediate.HC.jwt.TokenProvider;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -17,26 +16,26 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class LoginMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
-  private final TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
-  @Override
-  public boolean supportsParameter(MethodParameter parameter) {
-    return parameter.getParameterAnnotation(LoginUser.class) != null
-        && parameter.getParameterType().equals(UserInfo.class);
-  }
-
-  @Override
-  public Object resolveArgument(
-      MethodParameter parameter,
-      ModelAndViewContainer mavContainer,
-      NativeWebRequest webRequest,
-      WebDataBinderFactory binderFactory)
-      throws RuntimeException {
-    String authorization = webRequest.getHeader("Authorization");
-    if (authorization == null) {
-      throw new MediateNotFoundToken(ErrorCode.NO_ACCESS_TOKEN);
+    @Override
+    public boolean supportsParameter(MethodParameter parameter) {
+        return parameter.getParameterAnnotation(LoginUser.class) != null
+                && parameter.getParameterType().equals(UserInfo.class);
     }
 
-    return tokenProvider.getUserInfoFromToken(authorization.substring(7));
-  }
+    @Override
+    public Object resolveArgument(
+            MethodParameter parameter,
+            ModelAndViewContainer mavContainer,
+            NativeWebRequest webRequest,
+            WebDataBinderFactory binderFactory)
+            throws RuntimeException {
+        String authorization = webRequest.getHeader("Authorization");
+        if (authorization == null) {
+            throw new MediateNotFoundToken(ErrorCode.NO_ACCESS_TOKEN);
+        }
+
+        return tokenProvider.getUserInfoFromToken(authorization.substring(7));
+    }
 }

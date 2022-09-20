@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class TutoringResponseDto {
-  @ApiModelProperty(value = "응답 유형 (수락/거절)")
-  private TutoringResponseType responseType;
+    @ApiModelProperty(value = "응답 유형 (수락/거절)")
+    private TutoringResponseType responseType;
 
-  @ApiModelProperty(value = "튜터/튜티 타입")
-  private RoleType role;
+    @ApiModelProperty(value = "튜터/튜티 타입")
+    private RoleType role;
 }

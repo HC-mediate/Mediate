@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class ImageConvertFailureException extends MediateException {
 
-  public ImageConvertFailureException() {
-    super(ErrorCode.IMAGE_CONVERT_FAILED);
-  }
+    public ImageConvertFailureException() {
+        super(ErrorCode.IMAGE_CONVERT_FAILED);
+    }
 }
