@@ -22,18 +22,24 @@ public class Article extends BaseEntity {
 
     private String title;
 
-    @Column(name = "content", columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    private String writeBy;
+    private String authorEmail;
+
+    private String authorName;
 
     @ColumnDefault("0")
     @Column(name = "view_count")
-    private Long view;
+    private Long viewCount;
 
     @ColumnDefault("0")
     @Column(name = "like_count")
-    private Long like;
+    private Long likeCount;
+
+    @ColumnDefault("0")
+    @Column(name = "reply_count")
+    private Long replyCount;
 
     @OneToMany(
             mappedBy = "article",
@@ -46,10 +52,11 @@ public class Article extends BaseEntity {
     private Category category;
 
     @Builder
-    public Article(String title, String content, String writeBy, Category category) {
+    public Article(String title, String content, String authorEmail, String authorName, Category category) {
         this.title = title;
         this.content = content;
-        this.writeBy = writeBy;
+        this.authorEmail = authorEmail;
+        this.authorName = authorName;
         this.category = category;
     }
 
