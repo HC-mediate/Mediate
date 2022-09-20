@@ -42,7 +42,7 @@ public class LogoutApiTest extends BaseApiTest {
         .andExpect(status().isUnauthorized())
         .andDo(print());
     mvc.perform(post("/api/refresh").header("Refresh", dto.getRefreshToken()))
-        .andExpect(status().isForbidden())
+        .andExpect(status().isUnauthorized())
         .andDo(print());
   }
 }

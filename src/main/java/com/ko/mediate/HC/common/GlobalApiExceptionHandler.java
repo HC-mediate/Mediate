@@ -2,14 +2,16 @@ package com.ko.mediate.HC.common;
 
 import static java.util.stream.Collectors.toList;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ko.mediate.HC.common.exception.MediateException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Path;
 import javax.validation.Path.Node;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
@@ -34,189 +36,200 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import static com.ko.mediate.HC.common.ErrorResponseBuilder.*;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 @Slf4j
 public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
-  @ExceptionHandler(
-      value = {
-        AuthenticationException.class,
-        BadCredentialsException.class,
-        AccessDeniedException.class
-      })
-  public ResponseEntity<Object> handleAuthenticationException(
-      final AuthenticationException ex, final ServletWebRequest request) {
-    log(ex, request);
-    final ErrorResponseDto errorResponseDto =
-        build(
-            AuthenticationException.class.getSimpleName(),
-            ex.getMessage(),
-            HttpStatus.UNAUTHORIZED);
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponseDto);
-  }
 
-  @ExceptionHandler(value = {Exception.class})
-  public ResponseEntity<Object> handleUncaughtException(
-      final Exception ex, final ServletWebRequest request) {
-    log(ex, request);
-    final ErrorResponseDto errorResponseDto =
-        build(
-            Exception.class.getSimpleName(),
-            "서버의 문제로 응답에 문제가 발생했습니다.",
-            HttpStatus.INTERNAL_SERVER_ERROR);
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponseDto);
-  }
+    private final ObjectMapper objectMapper;
 
-  @ExceptionHandler(value = {MediateException.class})
-  public ResponseEntity<Object> handleMediateException(final MediateException ex, final ServletWebRequest request){
-    log(ex, request);
-    return ResponseEntity.status(ex.getErrorCode().getStatus()).body(ex.getErrorCode().getDescription());
-  }
-
-  @ExceptionHandler(value = {ConstraintViolationException.class})
-  public ResponseEntity<Object> handleConstraintViolationException(
-      final ConstraintViolationException ex, final ServletWebRequest request) {
-    log(ex, request);
-
-    final List<InvalidParameterDto> invalidParameters = new ArrayList<>();
-    ex.getConstraintViolations()
-        .forEach(
-            constraintViolation -> {
-              final Iterator<Node> it = constraintViolation.getPropertyPath().iterator();
-              if (it.hasNext()) {
-                try {
-                  it.next();
-                  final Path.Node n = it.next();
-                  final InvalidParameterDto invalidParameter = new InvalidParameterDto();
-                  invalidParameter.setParameter(n.getName());
-                  invalidParameter.setMessage(constraintViolation.getMessage());
-                  invalidParameters.add(invalidParameter);
-                } catch (final Exception e) {
-                  log.warn("Can't extract the information about constraint violation");
-                }
-              }
-            });
-
-    final ErrorResponseDto errorResponseDto =
-        build(
-            ConstraintViolationException.class.getSimpleName(),
-            HttpStatus.BAD_REQUEST.getReasonPhrase(),
-            HttpStatus.BAD_REQUEST,
-            invalidParameters);
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
-  }
-
-  // 업로드 파일의 크기가 제한을 넘어서는 경우
-  @ExceptionHandler({MaxUploadSizeExceededException.class})
-  public ResponseEntity<Object> handleMaxUploadSizeExceeded(
-      final MaxUploadSizeExceededException ex, final ServletWebRequest request) {
-    final ErrorResponseDto errorResponseDto =
-        build(
-            ex.getClass().getSimpleName(),
-            HttpStatus.PAYLOAD_TOO_LARGE.getReasonPhrase(),
-            HttpStatus.PAYLOAD_TOO_LARGE);
-    log(ex, request);
-    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(errorResponseDto);
-  }
-
-  // 메시지 컨버터에서 변환할 수 없는 경우
-  @Override
-  protected ResponseEntity<Object> handleHttpMessageNotReadable(
-      final HttpMessageNotReadableException ex,
-      final HttpHeaders headers,
-      final HttpStatus status,
-      final WebRequest request) {
-    log(ex, (ServletWebRequest) request);
-    final ErrorResponseDto errorResponseDto =
-        build(
-            HttpMessageNotReadableException.class.getSimpleName(),
-            ex.getMessage(),
-            HttpStatus.BAD_REQUEST);
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
-  }
-
-  @Override
-  protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
-      final HttpRequestMethodNotSupportedException ex,
-      final HttpHeaders headers,
-      final HttpStatus status,
-      final WebRequest request) {
-    log(ex, (ServletWebRequest) request);
-    final ErrorResponseDto errorResponseDto =
-        build(
-            HttpRequestMethodNotSupportedException.class.getSimpleName(),
-            ex.getMessage(),
-            HttpStatus.METHOD_NOT_ALLOWED);
-    return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponseDto);
-  }
-
-  @Override
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(
-      final MethodArgumentNotValidException ex,
-      final HttpHeaders headers,
-      final HttpStatus status,
-      final WebRequest request) {
-    log(ex, (ServletWebRequest) request);
-    final List<InvalidParameterDto> invalidParameters =
-        ex.getBindingResult().getFieldErrors().stream()
-            .map(
-                fieldError ->
-                    InvalidParameterDto.builder()
-                        .parameter(fieldError.getField())
-                        .message(fieldError.getDefaultMessage())
-                        .build())
-            .collect(toList());
-
-    final ErrorResponseDto errorResponseDto =
-        build(
-            MethodArgumentNotValidException.class.getSimpleName(),
-            HttpStatus.BAD_REQUEST.getReasonPhrase(),
-            HttpStatus.BAD_REQUEST,
-            invalidParameters);
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
-  }
-
-  @Override
-  protected ResponseEntity<Object> handleMissingServletRequestParameter(
-      final MissingServletRequestParameterException ex,
-      final HttpHeaders headers,
-      final HttpStatus status,
-      final WebRequest request) {
-    log(ex, (ServletWebRequest) request);
-
-    final ErrorResponseDto errorResponseDto =
-        build(
-            MissingServletRequestParameterException.class.getSimpleName(),
-            String.format("%s: %s", HttpStatus.BAD_REQUEST.getReasonPhrase(), ex.getMessage()),
-            HttpStatus.BAD_REQUEST);
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
-  }
-
-  private void log(final Exception ex, final ServletWebRequest request) {
-    final Optional<HttpMethod> httpMethod;
-    final Optional<String> requestUrl;
-
-    final Optional<ServletWebRequest> possibleIncomingNullRequest = Optional.ofNullable(request);
-    if (possibleIncomingNullRequest.isPresent()) {
-      // get the HTTP Method
-      httpMethod = Optional.ofNullable(possibleIncomingNullRequest.get().getHttpMethod());
-      if (Optional.ofNullable(possibleIncomingNullRequest.get().getRequest()).isPresent()) {
-        // get the Request URL
-        requestUrl =
-            Optional.of(possibleIncomingNullRequest.get().getRequest().getRequestURL().toString());
-      } else {
-        requestUrl = Optional.empty();
-      }
-    } else {
-      httpMethod = Optional.empty();
-      requestUrl = Optional.empty();
+    @ExceptionHandler(
+            value = {
+                    AuthenticationException.class,
+                    BadCredentialsException.class,
+                    AccessDeniedException.class
+            })
+    public ResponseEntity<Object> handleAuthenticationException(
+            final AuthenticationException ex, final ServletWebRequest request) {
+        log(ex, request);
+        final ErrorResponseDto errorResponseDto =
+                build(
+                        AuthenticationException.class.getSimpleName(),
+                        ex.getMessage(),
+                        HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponseDto);
     }
 
-    log.error(
-        "Request {} {} failed with exception reason: {}",
-        (httpMethod.isPresent() ? httpMethod.get() : "'null'"),
-        (requestUrl.orElse("'null'")),
-        ex.getMessage(),
-        ex);
-  }
+    @ExceptionHandler(value = {Exception.class})
+    public ResponseEntity<Object> handleUncaughtException(
+            final Exception ex, final ServletWebRequest request) {
+        log(ex, request);
+        final ErrorResponseDto errorResponseDto =
+                build(
+                        Exception.class.getSimpleName(),
+                        "서버의 문제로 응답에 문제가 발생했습니다.",
+                        HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponseDto);
+    }
+
+    @ExceptionHandler(value = {MediateException.class})
+    public ResponseEntity<Object> handleMediateException(final MediateException ex, final ServletWebRequest request) throws JsonProcessingException {
+        log(ex, request);
+        return respondBusinessException(ex.getErrorCode());
+    }
+
+    @ExceptionHandler(value = {ConstraintViolationException.class})
+    public ResponseEntity<Object> handleConstraintViolationException(
+            final ConstraintViolationException ex, final ServletWebRequest request) {
+        log(ex, request);
+
+        final List<InvalidParameterDto> invalidParameters = new ArrayList<>();
+        ex.getConstraintViolations()
+                .forEach(
+                        constraintViolation -> {
+                            final Iterator<Node> it = constraintViolation.getPropertyPath().iterator();
+                            if (it.hasNext()) {
+                                try {
+                                    it.next();
+                                    final Path.Node n = it.next();
+                                    final InvalidParameterDto invalidParameter = new InvalidParameterDto();
+                                    invalidParameter.setParameter(n.getName());
+                                    invalidParameter.setMessage(constraintViolation.getMessage());
+                                    invalidParameters.add(invalidParameter);
+                                } catch (final Exception e) {
+                                    log.warn("Can't extract the information about constraint violation");
+                                }
+                            }
+                        });
+
+        final ErrorResponseDto errorResponseDto =
+                build(
+                        ConstraintViolationException.class.getSimpleName(),
+                        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                        HttpStatus.BAD_REQUEST,
+                        invalidParameters);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
+    }
+
+    // 업로드 파일의 크기가 제한을 넘어서는 경우
+    @ExceptionHandler({MaxUploadSizeExceededException.class})
+    public ResponseEntity<Object> handleMaxUploadSizeExceeded(
+            final MaxUploadSizeExceededException ex, final ServletWebRequest request) {
+        final ErrorResponseDto errorResponseDto =
+                build(
+                        ex.getClass().getSimpleName(),
+                        HttpStatus.PAYLOAD_TOO_LARGE.getReasonPhrase(),
+                        HttpStatus.PAYLOAD_TOO_LARGE);
+        log(ex, request);
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(errorResponseDto);
+    }
+
+    // 메시지 컨버터에서 변환할 수 없는 경우
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            final HttpMessageNotReadableException ex,
+            final HttpHeaders headers,
+            final HttpStatus status,
+            final WebRequest request) {
+        log(ex, (ServletWebRequest) request);
+        final ErrorResponseDto errorResponseDto =
+                build(
+                        HttpMessageNotReadableException.class.getSimpleName(),
+                        ex.getMessage(),
+                        HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
+            final HttpRequestMethodNotSupportedException ex,
+            final HttpHeaders headers,
+            final HttpStatus status,
+            final WebRequest request) {
+        log(ex, (ServletWebRequest) request);
+        final ErrorResponseDto errorResponseDto =
+                build(
+                        HttpRequestMethodNotSupportedException.class.getSimpleName(),
+                        ex.getMessage(),
+                        HttpStatus.METHOD_NOT_ALLOWED);
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponseDto);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            final MethodArgumentNotValidException ex,
+            final HttpHeaders headers,
+            final HttpStatus status,
+            final WebRequest request) {
+        log(ex, (ServletWebRequest) request);
+        final List<InvalidParameterDto> invalidParameters =
+                ex.getBindingResult().getFieldErrors().stream()
+                        .map(
+                                fieldError ->
+                                        InvalidParameterDto.builder()
+                                                .parameter(fieldError.getField())
+                                                .message(fieldError.getDefaultMessage())
+                                                .build())
+                        .collect(toList());
+
+        final ErrorResponseDto errorResponseDto =
+                build(
+                        MethodArgumentNotValidException.class.getSimpleName(),
+                        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                        HttpStatus.BAD_REQUEST,
+                        invalidParameters);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(
+            final MissingServletRequestParameterException ex,
+            final HttpHeaders headers,
+            final HttpStatus status,
+            final WebRequest request) {
+        log(ex, (ServletWebRequest) request);
+
+        final ErrorResponseDto errorResponseDto =
+                build(
+                        MissingServletRequestParameterException.class.getSimpleName(),
+                        String.format("%s: %s", HttpStatus.BAD_REQUEST.getReasonPhrase(), ex.getMessage()),
+                        HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
+    }
+
+    private void log(final Exception ex, final ServletWebRequest request) {
+        final Optional<HttpMethod> httpMethod;
+        final Optional<String> requestUrl;
+
+        final Optional<ServletWebRequest> possibleIncomingNullRequest = Optional.ofNullable(request);
+        if (possibleIncomingNullRequest.isPresent()) {
+            // get the HTTP Method
+            httpMethod = Optional.ofNullable(possibleIncomingNullRequest.get().getHttpMethod());
+            if (Optional.ofNullable(possibleIncomingNullRequest.get().getRequest()).isPresent()) {
+                // get the Request URL
+                requestUrl =
+                        Optional.of(possibleIncomingNullRequest.get().getRequest().getRequestURL().toString());
+            } else {
+                requestUrl = Optional.empty();
+            }
+        } else {
+            httpMethod = Optional.empty();
+            requestUrl = Optional.empty();
+        }
+
+        log.error(
+                "Request {} {} failed with exception reason: {}",
+                (httpMethod.isPresent() ? httpMethod.get() : "'null'"),
+                (requestUrl.orElse("'null'")),
+                ex.getMessage(),
+                ex);
+    }
+
+    private ResponseEntity respondBusinessException(ErrorCode errorCode) throws JsonProcessingException {
+        Map<String, String> response = new HashMap<>();
+        response.put("code", errorCode.getCode());
+        response.put("description", errorCode.getDescription());
+        return ResponseEntity.status(errorCode.getStatus()).body(objectMapper.writeValueAsString(response));
+    }
 }
