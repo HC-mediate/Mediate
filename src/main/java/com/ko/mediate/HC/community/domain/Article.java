@@ -1,76 +1,62 @@
 package com.ko.mediate.HC.community.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_article")
-@DynamicInsert
 public class Article extends BaseEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private String title;
-  private String content;
-  private String writeBy;
+    private String title;
 
-  @ColumnDefault("0")
-  @Column(name = "view_count")
-  private Long view;
+    @Column(name = "content", columnDefinition = "TEXT")
+    private String content;
 
-  @ColumnDefault("0")
-  @Column(name = "like_count")
-  private Long like;
+    private String writeBy;
 
-  @OneToMany(
-      mappedBy = "article",
-      fetch = FetchType.LAZY,
-      cascade = CascadeType.ALL,
-      orphanRemoval = true)
-  private List<ArticleImage> articleImageList = new ArrayList<>();
+    @ColumnDefault("0")
+    @Column(name = "view_count")
+    private Long view;
 
-  @Enumerated(EnumType.STRING)
-  private Category category;
+    @ColumnDefault("0")
+    @Column(name = "like_count")
+    private Long like;
 
-  protected Article() {}
+    @OneToMany(
+            mappedBy = "article",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<ArticleImage> articleImageList = new ArrayList<>();
 
-  @Builder
-  public Article(String title, String content, String writeBy, Category category) {
-    this.title = title;
-    this.content = content;
-    this.writeBy = writeBy;
-    this.category = category;
-  }
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
-  public void addArticleImage(ArticleImage articleImage) {
-    if (articleImage != null) {
-      articleImage.changeArticle(this);
-      this.articleImageList.add(articleImage);
+    @Builder
+    public Article(String title, String content, String writeBy, Category category) {
+        this.title = title;
+        this.content = content;
+        this.writeBy = writeBy;
+        this.category = category;
     }
-  }
 
-  public void visitArticle() {
-    this.view++;
-  }
-
-  public void pushLike() {
-    this.like++;
-  }
+    public void addArticleImage(ArticleImage articleImage) {
+        if (Objects.nonNull(articleImage)) {
+            articleImage.changeArticleImage(this);
+            this.articleImageList.add(articleImage);
+        }
+    }
 }
