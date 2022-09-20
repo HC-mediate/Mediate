@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProfileImageResponseDto {
 
-  @ApiModelProperty(value = "S3 파일 업로드 경로")
-  private String key;
+    @ApiModelProperty(value = "S3 파일 업로드 경로")
+    private String key;
 
-  @ApiModelProperty(value = "이미지 접근 경로")
-  private String url;
+    @ApiModelProperty(value = "이미지 접근 경로")
+    private String url;
 }

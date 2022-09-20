@@ -9,13 +9,13 @@ import org.springframework.security.web.firewall.HttpFirewall;
 
 @Configuration
 public class SecurityBeanConfig {
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-  @Bean
-  public HttpFirewall defaultHttpFirewall() {
-    return new DefaultHttpFirewall();
-  }
+    @Bean
+    public HttpFirewall defaultHttpFirewall() {
+        return new DefaultHttpFirewall();
+    }
 }

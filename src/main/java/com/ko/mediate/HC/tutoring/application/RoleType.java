@@ -4,21 +4,21 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public enum RoleType {
-  ROLE_ADMIN("ROLE_ADMIN"),
-  ROLE_TUTOR("ROLE_TUTOR"),
-  ROLE_TUTEE("ROLE_TUTEE"),
-  ROLE_USER("ROLE_USER");
+    ROLE_ADMIN("ROLE_ADMIN"),
+    ROLE_TUTOR("ROLE_TUTOR"),
+    ROLE_TUTEE("ROLE_TUTEE"),
+    ROLE_USER("ROLE_USER");
 
-  private final String roleString;
+    private final String roleString;
 
-  RoleType(String roleString) {
-    this.roleString = roleString.toUpperCase(Locale.ROOT);
-  }
+    RoleType(String roleString) {
+        this.roleString = roleString.toUpperCase(Locale.ROOT);
+    }
 
-  public static RoleType fromString(String s) {
-    return Arrays.stream(RoleType.values())
-        .filter(v -> v.roleString.equals(s))
-        .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("Unknown Value: " + s));
-  }
+    public static RoleType fromString(String s) {
+        return Arrays.stream(RoleType.values())
+                .filter(v -> v.roleString.equals(s))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown Value: " + s));
+    }
 }

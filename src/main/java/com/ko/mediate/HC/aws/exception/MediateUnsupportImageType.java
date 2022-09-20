@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
 public class MediateUnsupportImageType extends MediateException {
 
-  public MediateUnsupportImageType() {
-    super(ErrorCode.UNSUPPORT_IMAGE_TYPE);
-  }
+    public MediateUnsupportImageType() {
+        super(ErrorCode.UNSUPPORT_IMAGE_TYPE);
+    }
 }

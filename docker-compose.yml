@@ -9,4 +9,4 @@ services:
     environment:
       # 환경 설정에 필요한 설정들. server코드와 싱크를 맞추어야 한다.
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE : mediate
+      MYSQL_DATABASE: mediate

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 
 public class HcApplicationTests extends BaseApiTest {
-  @Test
-  void contextLoads() {}
+    @Test
+    void contextLoads() {
+    }
 }

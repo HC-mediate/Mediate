@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetArticleImageDto {
-  private Long imageId;
-  private String accessPath;
+    private Long imageId;
+    private String accessPath;
 
-  public GetArticleImageDto(ArticleImage articleImage) {
-    this.imageId = articleImage.getId();
-    this.accessPath = articleImage.getAccessPath();
-  }
+    public GetArticleImageDto(ArticleImage articleImage) {
+        this.imageId = articleImage.getId();
+        this.accessPath = articleImage.getAccessPath();
+    }
 }
