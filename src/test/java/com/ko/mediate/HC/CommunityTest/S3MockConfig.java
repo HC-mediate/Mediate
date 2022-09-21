@@ -31,17 +31,17 @@ public class S3MockConfig {
     //s3Mock.start를 이용하여 Mock S3 서버를 로컬에서 시작한다.
     @Bean
     @Primary
-    public AmazonS3Client amazonS3(S3Mock s3Mock){
+    public AmazonS3Client amazonS3(S3Mock s3Mock) {
         s3Mock.start();
         AwsClientBuilder.EndpointConfiguration endpoint = new AwsClientBuilder.EndpointConfiguration("http://localhost:8001", region);
         AmazonS3 client = AmazonS3ClientBuilder
-            .standard()
-            .withPathStyleAccessEnabled(true)
-            .withEndpointConfiguration(endpoint)
-            .withCredentials(new AWSStaticCredentialsProvider(new AnonymousAWSCredentials()))
-            .build();
+                .standard()
+                .withPathStyleAccessEnabled(true)
+                .withEndpointConfiguration(endpoint)
+                .withCredentials(new AWSStaticCredentialsProvider(new AnonymousAWSCredentials()))
+                .build();
         client.createBucket(bucket);
 
-        return (AmazonS3Client)client;
+        return (AmazonS3Client) client;
     }
 }

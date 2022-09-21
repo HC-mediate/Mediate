@@ -1,13 +1,5 @@
 package com.ko.mediate.HC.auth.sign;
 
-import static com.ko.mediate.HC.auth.AccountFactory.createSignUpDto;
-import static org.assertj.core.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.hamcrest.Matchers.*;
-import static com.ko.mediate.HC.auth.AccountFactory.*;
-
 import com.ko.mediate.HC.auth.application.AccountService;
 import com.ko.mediate.HC.auth.application.request.SignUpDto;
 import com.ko.mediate.HC.auth.domain.Account;
@@ -18,6 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static com.ko.mediate.HC.auth.AccountFactory.createSignUpDto;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class SignUpApiTest extends BaseApiTest {
     @Autowired
@@ -60,5 +59,6 @@ public class SignUpApiTest extends BaseApiTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(containsString(ErrorCode.EMAIL_ALREADY_EXIST.getCode())))
                 .andDo(print());
+                .andExpect(jsonPath("$.code").value(containsString(ErrorCode.EMAIL_ALREADY_EXIST.getCode())));
     }
 }

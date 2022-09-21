@@ -13,8 +13,6 @@ import javax.validation.Path.Node;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
-import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -33,7 +31,16 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import static com.ko.mediate.HC.common.ErrorResponseBuilder.*;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Path;
+import javax.validation.Path.Node;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+
+import static com.ko.mediate.HC.common.ErrorResponseBuilder.build;
+import static java.util.stream.Collectors.toList;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -123,7 +130,6 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
         log(ex, request);
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(errorResponseDto);
     }
-
     // 메시지 컨버터에서 변환할 수 없는 경우
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
@@ -225,7 +231,6 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
                 ex.getMessage(),
                 ex);
     }
-
     private ResponseEntity respondBusinessException(ErrorCode errorCode) throws JsonProcessingException {
         Map<String, String> response = new HashMap<>();
         response.put("code", errorCode.getCode());

@@ -1,12 +1,12 @@
 package com.ko.mediate.HC.common;
 
-import static org.assertj.core.api.Assertions.*;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ko.mediate.HC.tutor.application.request.TutorSignupDto;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EnumConvertTest {
 

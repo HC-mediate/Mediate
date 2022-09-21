@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HomeworkContentDto {
-  private String content;
-  private boolean isCompleted;
+    private String content;
+    private boolean isCompleted;
 }
