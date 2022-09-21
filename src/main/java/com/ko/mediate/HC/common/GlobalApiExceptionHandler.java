@@ -1,6 +1,17 @@
 package com.ko.mediate.HC.common;
 
+import static java.util.stream.Collectors.toList;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ko.mediate.HC.common.exception.MediateException;
+
+import java.util.*;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Path;
+import javax.validation.Path.Node;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,8 +43,12 @@ import static com.ko.mediate.HC.common.ErrorResponseBuilder.build;
 import static java.util.stream.Collectors.toList;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 @Slf4j
 public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private final ObjectMapper objectMapper;
+
     @ExceptionHandler(
             value = {
                     AuthenticationException.class,
@@ -64,9 +79,9 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = {MediateException.class})
-    public ResponseEntity<Object> handleMediateException(final MediateException ex, final ServletWebRequest request) {
+    public ResponseEntity<Object> handleMediateException(final MediateException ex, final ServletWebRequest request) throws JsonProcessingException {
         log(ex, request);
-        return ResponseEntity.status(ex.getErrorCode().getStatus()).body(ex.getErrorCode().getDescription());
+        return respondBusinessException(ex.getErrorCode());
     }
 
     @ExceptionHandler(value = {ConstraintViolationException.class})
@@ -115,7 +130,6 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
         log(ex, request);
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(errorResponseDto);
     }
-
     // 메시지 컨버터에서 변환할 수 없는 경우
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
@@ -216,5 +230,11 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
                 (requestUrl.orElse("'null'")),
                 ex.getMessage(),
                 ex);
+    }
+    private ResponseEntity respondBusinessException(ErrorCode errorCode) throws JsonProcessingException {
+        Map<String, String> response = new HashMap<>();
+        response.put("code", errorCode.getCode());
+        response.put("description", errorCode.getDescription());
+        return ResponseEntity.status(errorCode.getStatus()).body(objectMapper.writeValueAsString(response));
     }
 }
