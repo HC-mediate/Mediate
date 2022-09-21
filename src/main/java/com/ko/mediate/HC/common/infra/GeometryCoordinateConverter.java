@@ -9,20 +9,20 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GeometryCoordinateConverter implements GeometryConverter {
-  private final GeometryFactory geometryFactory;
+    private final GeometryFactory geometryFactory;
 
-  public GeometryCoordinateConverter() {
-    this.geometryFactory = new GeometryFactory();
-  }
+    public GeometryCoordinateConverter() {
+        this.geometryFactory = new GeometryFactory();
+    }
 
-  @Override
-  public Point convertCoordinateToPoint(double latitude, double longitude) {
-    return this.geometryFactory.createPoint(new Coordinate(longitude, latitude));
-  }
+    @Override
+    public Point convertCoordinateToPoint(double latitude, double longitude) {
+        return this.geometryFactory.createPoint(new Coordinate(longitude, latitude));
+    }
 
-  @Override
-  public Point convertCoordinateToPoint(Location location) {
-    return this.geometryFactory.createPoint(
-        new Coordinate(location.getLongitude(), location.getLatitude()));
-  }
+    @Override
+    public Point convertCoordinateToPoint(Location location) {
+        return this.geometryFactory.createPoint(
+                new Coordinate(location.getLongitude(), location.getLatitude()));
+    }
 }

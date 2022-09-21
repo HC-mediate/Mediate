@@ -16,14 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AccountQueryFacade {
-  private final AccountService accountService;
-  private final TutorQueryProcessor tutorQueryProcessor;
-  private final TuteeQueryProcessor tuteeQueryProcessor;
+    private final AccountService accountService;
+    private final TutorQueryProcessor tutorQueryProcessor;
+    private final TuteeQueryProcessor tuteeQueryProcessor;
 
-  public GetAccountFacadeInfoDto getAccountInfo(UserInfo userInfo) {
-    Account account = accountService.getAccountByEmail(userInfo.getAccountEmail());
-    Tutor tutor = tutorQueryProcessor.getTutorByAccountEmail(userInfo.getAccountEmail());
-    Tutee tutee = tuteeQueryProcessor.getTuteeByAccountEmail(userInfo.getAccountEmail());
-    return GetAccountFacadeInfoDto.fromEntities(account, tutor, tutee);
-  }
+    public GetAccountFacadeInfoDto getAccountInfo(UserInfo userInfo) {
+        Account account = accountService.getAccountByEmail(userInfo.getAccountEmail());
+        Tutor tutor = tutorQueryProcessor.getTutorByAccountEmail(userInfo.getAccountEmail());
+        Tutee tutee = tuteeQueryProcessor.getTuteeByAccountEmail(userInfo.getAccountEmail());
+        return GetAccountFacadeInfoDto.fromEntities(account, tutor, tutee);
+    }
 }

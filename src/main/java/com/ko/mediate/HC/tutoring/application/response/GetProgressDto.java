@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetProgressDto {
-  @ApiModelProperty(value = "Progress ID")
-  private long progressId;
+    @ApiModelProperty(value = "Progress ID")
+    private long progressId;
 
-  @ApiModelProperty(value = "진행 주차")
-  private long week;
+    @ApiModelProperty(value = "진행 주차")
+    private long week;
 
-  @ApiModelProperty(value = "진행 내용")
-  private String content;
+    @ApiModelProperty(value = "진행 내용")
+    private String content;
 
-  @ApiModelProperty(value = "완료 여부")
-  private Boolean isCompleted;
+    @ApiModelProperty(value = "완료 여부")
+    private Boolean isCompleted;
 }

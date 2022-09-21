@@ -14,24 +14,24 @@ import lombok.NoArgsConstructor;
 @ApiModel(value = "튜티 정보")
 @Builder
 public class GetTuteeDto {
-  @ApiModelProperty(value = "튜티 이름")
-  private String name;
+    @ApiModelProperty(value = "튜티 이름")
+    private String name;
 
-  @ApiModelProperty(value = "학교 이름")
-  private String school;
+    @ApiModelProperty(value = "학교 이름")
+    private String school;
 
-  @ApiModelProperty(value = "학년")
-  private String grade;
+    @ApiModelProperty(value = "학년")
+    private String grade;
 
-  @ApiModelProperty(value = "주소")
-  private String address;
+    @ApiModelProperty(value = "주소")
+    private String address;
 
-  public static GetTuteeDto fromEntity(Tutee tutee) {
-    return GetTuteeDto.builder()
-        .name(tutee.getAccount().getName())
-        .school(tutee.getAcademicInfo().getSchool())
-        .grade(tutee.getAcademicInfo().getGrade())
-        .address(tutee.getAddress())
-        .build();
-  }
+    public static GetTuteeDto fromEntity(Tutee tutee) {
+        return GetTuteeDto.builder()
+                .name(tutee.getAccount().getName())
+                .school(tutee.getAcademicInfo().getSchool())
+                .grade(tutee.getAcademicInfo().getGrade())
+                .address(tutee.getAddress())
+                .build();
+    }
 }

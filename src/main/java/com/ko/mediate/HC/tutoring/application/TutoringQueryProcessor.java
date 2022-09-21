@@ -8,43 +8,44 @@ import com.ko.mediate.HC.tutoring.application.response.GetTutoringDetailDto;
 import com.ko.mediate.HC.tutoring.application.response.GetTutoringDto;
 import com.ko.mediate.HC.tutoring.domain.Tutoring;
 import com.ko.mediate.HC.tutoring.infra.JpaTutoringRepository;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TutoringQueryProcessor {
-  private final JpaTutoringRepository tutoringRepository;
+    private final JpaTutoringRepository tutoringRepository;
 
-  public List<GetTutoringDto> getAllTutoringByAccountId(UserInfo userInfo) {
-    return tutoringRepository.findAllTutoringByAccountEmail(userInfo.getAccountEmail()).stream()
-        .map(
-            t ->
-                new GetTutoringDto(
-                    t.getId(),
-                    t.getTutoringName(),
-                    t.getStartedAt(),
-                    t.getDoneWeek(),
-                    t.getTotalWeek()))
-        .collect(Collectors.toList());
-  }
+    public List<GetTutoringDto> getAllTutoringByAccountId(UserInfo userInfo) {
+        return tutoringRepository.findAllTutoringByAccountEmail(userInfo.getAccountEmail()).stream()
+                .map(
+                        t ->
+                                new GetTutoringDto(
+                                        t.getId(),
+                                        t.getTutoringName(),
+                                        t.getStartedAt(),
+                                        t.getDoneWeek(),
+                                        t.getTotalWeek()))
+                .collect(Collectors.toList());
+    }
 
-  public GetTutoringDetailDto getTutoringDetailById(long tutoringId) {
-    Tutoring tutoring =
-        tutoringRepository
-            .findByTutoringIdWithDetail(tutoringId)
-            .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+    public GetTutoringDetailDto getTutoringDetailById(long tutoringId) {
+        Tutoring tutoring =
+                tutoringRepository
+                        .findByTutoringIdWithDetail(tutoringId)
+                        .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 
-    return new GetTutoringDetailDto(
-        tutoring.getTutoringName(),
-        tutoring.getStartedAt(),
-        tutoring.getProgresses().stream()
-            .map(
-                p -> new GetProgressDto(p.getId(), p.getWeek(), p.getContent(), p.getIsCompleted()))
-            .collect(Collectors.toList()));
-  }
+        return new GetTutoringDetailDto(
+                tutoring.getTutoringName(),
+                tutoring.getStartedAt(),
+                tutoring.getProgresses().stream()
+                        .map(
+                                p -> new GetProgressDto(p.getId(), p.getWeek(), p.getContent(), p.getIsCompleted()))
+                        .collect(Collectors.toList()));
+    }
 }
