@@ -12,6 +12,10 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
+import java.io.IOException;
+
+import static com.ko.mediate.HC.common.ProcessUtils.findAvailablePort;
+
 @TestConfiguration
 public class S3MockConfig {
     @Value("${cloud.aws.region.static}")
@@ -19,11 +23,13 @@ public class S3MockConfig {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    private int availablePort;
 
     //S3Mock을 빌드할때 포트나 메모리에 저장할 지 실제로 저장할 지 같은 것 등등을 설정 가능하다.
     @Bean
-    public S3Mock s3Mock() {
-        return new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
+    public S3Mock s3Mock() throws IOException {
+        availablePort = findAvailablePort();
+        return new S3Mock.Builder().withPort(availablePort).withInMemoryBackend().build();
     }
 
     //위에서 작성한 S3Mock을 주입받는 Bean을 작성하였다.
@@ -31,9 +37,9 @@ public class S3MockConfig {
     //s3Mock.start를 이용하여 Mock S3 서버를 로컬에서 시작한다.
     @Bean
     @Primary
-    public AmazonS3Client amazonS3(S3Mock s3Mock) {
+    public AmazonS3Client amazonS3(S3Mock s3Mock) throws IOException {
         s3Mock.start();
-        AwsClientBuilder.EndpointConfiguration endpoint = new AwsClientBuilder.EndpointConfiguration("http://localhost:8001", region);
+        AwsClientBuilder.EndpointConfiguration endpoint = new AwsClientBuilder.EndpointConfiguration("http://localhost:" + availablePort, region);
         AmazonS3 client = AmazonS3ClientBuilder
                 .standard()
                 .withPathStyleAccessEnabled(true)
