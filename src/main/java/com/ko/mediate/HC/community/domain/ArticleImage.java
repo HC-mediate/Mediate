@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.community.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,18 +18,15 @@ public class ArticleImage extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "image_key")
-    private String imageKey;
-
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Embedded
+    AttachedImage attachedImage;
 
     @ManyToOne
     private Article article;
 
-    public ArticleImage(String imageKey, String imageUrl, Article article) {
-        this.imageKey = imageKey;
-        this.imageUrl = imageUrl;
+    @Builder
+    public ArticleImage(AttachedImage attachedImage, Article article) {
+        this.attachedImage = attachedImage;
         this.article = article;
     }
 

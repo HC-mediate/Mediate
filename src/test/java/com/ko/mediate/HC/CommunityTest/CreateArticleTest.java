@@ -1,0 +1,68 @@
+package com.ko.mediate.HC.CommunityTest;
+
+import com.ko.mediate.HC.auth.resolver.UserInfo;
+import com.ko.mediate.HC.common.BaseApiTest;
+import com.ko.mediate.HC.community.application.CommunityService;
+import com.ko.mediate.HC.community.application.dto.request.RequestArticleDto;
+import com.ko.mediate.HC.community.domain.Category;
+import com.ko.mediate.HC.community.infra.JpaArticleRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+
+import static com.ko.mediate.HC.factory.dto.ArticleDtoFactory.createRequestArticleDto;
+import static com.ko.mediate.HC.factory.dto.UserInfoFactory.createUserInfo;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest
+public class CreateArticleTest extends BaseApiTest {
+    @Autowired
+    CommunityService communityService;
+
+    @Autowired
+    JpaArticleRepository articleRepository;
+
+    @Value("${cloud.aws.s3.bucket}")
+    String bucket;
+
+    @Value("${cloud.aws.cloud_front.domain_name}")
+    String cloudfront;
+
+    UserInfo userInfo;
+
+    @BeforeEach
+    void initUserInfo() {
+        userInfo = createUserInfo();
+    }
+
+    @DisplayName("글 생성 시 아이디를 반환한다")
+    @Test
+    void 글_생성_성공시_아이디를_반환한다() throws IOException {
+        //given
+        RequestArticleDto dto = createRequestArticleDto("title", "", Category.STUDY_QUESTION, null);
+        //when
+        Long id = communityService.createArticle(userInfo, dto);
+        //then
+        assertThat(articleRepository.findById(id).isPresent()).isTrue();
+    }
+
+    @DisplayName("글 이미지 첨부 시 아이디를 반환한다")
+    @Test
+    void 글_이미지_첨부시_아이디를_반환한다() throws IOException {
+        //given
+        RequestArticleDto dto = createRequestArticleDto("title", "", Category.TROUBLE_COUNSEL,
+                new MultipartFile[]{new MockMultipartFile("image1.jpg", new byte[]{1}),
+                new MockMultipartFile("image2.jpg", new byte[]{1})});
+        //when
+        Long id = communityService.createArticle(userInfo, dto);
+        //then
+        assertThat(articleRepository.findById(id).isPresent()).isTrue();
+    }
+}
