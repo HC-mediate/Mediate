@@ -22,10 +22,11 @@ public class TokenProviderTest {
     @Test
     void createTokenTest() {
         RoleType role = RoleType.ROLE_TUTEE;
-        String token = tokenProvider.createAccessToken(1L, "test@naver.com", List.of(role));
+        String token = tokenProvider.createAccessToken(1L, "test@naver.com", "test", List.of(role));
         UserInfo userInfo = tokenProvider.getUserInfoFromToken(token);
         assertThat(userInfo.getAccountId()).isEqualTo(1L);
         assertThat(userInfo.getAccountEmail()).isEqualTo("test@naver.com");
+        assertThat(userInfo.getAccountNickname()).isEqualTo("test");
         assertThat(userInfo.getRoles().contains(RoleType.ROLE_TUTEE)).isTrue();
     }
 
@@ -35,7 +36,7 @@ public class TokenProviderTest {
         RoleType role = RoleType.ROLE_USER;
         TokenProvider expiredTokenProvider = new TokenProvider(secret, 0L, 0L);
         String expiredToken =
-                expiredTokenProvider.createAccessToken(1L, "test@naver.com", List.of(role));
+                expiredTokenProvider.createAccessToken(1L, "test@naver.com", "test", List.of(role));
         assertThatThrownBy(() -> tokenProvider.validateToken(expiredToken))
                 .isInstanceOf(ExpiredJwtException.class);
     }
@@ -46,7 +47,7 @@ public class TokenProviderTest {
         RoleType role = RoleType.ROLE_USER;
         TokenProvider expiredTokenProvider = new TokenProvider(secret, 0L, 0L);
         String expiredToken =
-                expiredTokenProvider.createRefreshToken(1L, "test@naver.com", List.of(role));
+                expiredTokenProvider.createRefreshToken(1L, "test@naver.com", "test", List.of(role));
         assertThatThrownBy(() -> tokenProvider.validateToken(expiredToken))
                 .isInstanceOf(ExpiredJwtException.class);
     }
@@ -55,20 +56,21 @@ public class TokenProviderTest {
     @Test
     void createAccessTokenIfExpiredTest() {
         String email = "test@naver.com";
+        String nickname = "test";
         RoleType role = RoleType.ROLE_USER;
         TokenProvider expiredTokenProvider = new TokenProvider(secret, 0L, 0L);
         TokenProvider validTokenProvider = new TokenProvider(secret, 60000L, 60000L);
 
-        String expiredToken = expiredTokenProvider.createAccessToken(1L, email, List.of(role));
-        String validToken = validTokenProvider.createAccessToken(1L, email, List.of(role));
+        String expiredToken = expiredTokenProvider.createAccessToken(1L, email, nickname, List.of(role));
+        String validToken = validTokenProvider.createAccessToken(1L, email, nickname, List.of(role));
 
         assertThat(
                 validTokenProvider.createAccessTokenIfExpired(
-                        expiredToken, 1L, email, List.of(role)))
+                        expiredToken, 1L, email, nickname, List.of(role)))
                 .isNotEqualTo(expiredToken);
         assertThat(
                 validTokenProvider.createAccessTokenIfExpired(
-                        validToken, 1L, email, List.of(role)))
+                        validToken, 1L, email, nickname, List.of(role)))
                 .isEqualTo(validToken);
     }
 

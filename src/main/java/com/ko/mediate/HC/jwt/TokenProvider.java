@@ -27,6 +27,7 @@ public class TokenProvider {
     private static final String AUTHORITIES_KEY = "authority";
     private static final String ACCOUNT_ID_KEY = "accountId";
     private static final String ACCOUNT_EMAIL_KEY = "accountEmail";
+    private static final String ACCOUNT_NICKNAME_KEY = "accountNickname";
     private static final String ROLE_KEY = "role";
     private final String secret;
     private final long accessTokenValidityInMilliseconds;
@@ -46,7 +47,7 @@ public class TokenProvider {
     }
 
     private String createToken(
-            Long accountId, String accountEmail, List<RoleType> roles, long tokenValidityInMilliseconds) {
+            Long accountId, String accountEmail, String accountNickname, List<RoleType> roles, long tokenValidityInMilliseconds) {
 
         long now = (new Date()).getTime();
         Date validity = new Date(now + tokenValidityInMilliseconds);
@@ -54,6 +55,7 @@ public class TokenProvider {
         return Jwts.builder()
                 .claim(ACCOUNT_ID_KEY, String.valueOf(accountId))
                 .claim(ACCOUNT_EMAIL_KEY, accountEmail)
+                .claim(ACCOUNT_NICKNAME_KEY, accountNickname)
                 .claim(
                         ROLE_KEY,
                         String.join(",", roles.stream().map(RoleType::toString).collect(Collectors.toList())))
@@ -62,20 +64,22 @@ public class TokenProvider {
                 .compact();
     }
 
-    public String createAccessToken(Long accountId, String accountEmail, List<RoleType> roles) {
-        return createToken(accountId, accountEmail, roles, this.accessTokenValidityInMilliseconds);
+    public String createAccessToken(Long accountId, String accountEmail, String accountNickname, List<RoleType> roles) {
+        return createToken(accountId, accountEmail, accountNickname, roles, this.accessTokenValidityInMilliseconds);
     }
 
-    public String createRefreshToken(Long accountId, String accountEmail, List<RoleType> roles) {
-        return createToken(accountId, accountEmail, roles, this.refreshTokenValidityInMilliseconds);
+    public String createRefreshToken(Long accountId, String accountEmail, String accountNickname, List<RoleType> roles) {
+        return createToken(accountId, accountEmail, accountNickname, roles, this.refreshTokenValidityInMilliseconds);
     }
 
     public UserInfo getUserInfoFromToken(String token) {
         Claims claims = decode(token);
-        return new UserInfo(
-                Long.valueOf((String) claims.get(ACCOUNT_ID_KEY)),
-                (String) claims.get(ACCOUNT_EMAIL_KEY),
-                (String) claims.get(ROLE_KEY));
+        return UserInfo.builder()
+                .accountId(Long.valueOf((String) claims.get(ACCOUNT_ID_KEY)))
+                .accountEmail((String) claims.get(ACCOUNT_EMAIL_KEY))
+                .accountNickname((String) claims.get(ACCOUNT_NICKNAME_KEY))
+                .roles((String) claims.get(ROLE_KEY))
+                .build();
     }
 
     public Authentication getAuthentication(String token) {
@@ -106,12 +110,12 @@ public class TokenProvider {
     }
 
     public String createAccessTokenIfExpired(
-            String token, Long accountId, String accountEmail, List<RoleType> roles) {
+            String token, Long accountId, String accountEmail, String accountNickname, List<RoleType> roles) {
         try {
             validateToken(token);
             return token;
         } catch (ExpiredJwtException e) {
-            return createAccessToken(accountId, accountEmail, roles);
+            return createAccessToken(accountId, accountEmail, accountNickname, roles);
         }
     }
 
