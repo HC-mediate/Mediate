@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,12 +40,22 @@ public class CommunityService {
         return articleRepository.save(article).getId();
     }
 
+    private void removeIfAttachedImages(Article article) {
+        if (Objects.isNull(article.getArticleImageList()) || article.getArticleImageList().size() == 0) {
+            return;
+        }
+        articleImageStorage.deleteImages(article.getArticleImageList().stream()
+                .map(i -> i.getAttachedImage()).collect(Collectors.toList()));
+    }
+
     @Transactional
     public void deleteArticle(UserInfo userInfo, Long articleId) {
-        Article findArticle = articleRepository.findById(articleId).orElseThrow(() -> new MediateIllegalStateException(ErrorCode.ENTITY_NOT_FOUND));
-        if(!findArticle.isAuthorByEmail(userInfo.getAccountEmail())){
+        Article findArticle = articleRepository.findArticleByIdFetch(articleId)
+                .orElseThrow(() -> new MediateIllegalStateException(ErrorCode.ENTITY_NOT_FOUND));
+        if (!findArticle.isAuthorByEmail(userInfo.getAccountEmail())) {
             throw new MediateUnAuthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);
         }
+        removeIfAttachedImages(findArticle);
         articleRepository.delete(findArticle);
     }
 

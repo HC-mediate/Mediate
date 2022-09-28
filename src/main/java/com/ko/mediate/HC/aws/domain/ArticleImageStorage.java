@@ -7,6 +7,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ArticleImageStorage {
-    public List<AttachedImage> uploadImages(MultipartFile[] images) throws IOException;
-
+    List<AttachedImage> uploadImages(MultipartFile[] images) throws IOException;
+    void deleteImages(List<AttachedImage> keys);
 }

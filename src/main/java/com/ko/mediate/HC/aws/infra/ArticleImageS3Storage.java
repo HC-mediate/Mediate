@@ -38,9 +38,14 @@ public class ArticleImageS3Storage implements ArticleImageStorage {
     }
 
     @Override
+    public void deleteImages(List<AttachedImage> images) {
+        images.stream().forEach(image -> amazonS3Client.deleteObject(BUCKET, image.getImageKey()));
+    }
+
+    @Override
     public List<AttachedImage> uploadImages(MultipartFile[] images) throws IOException {
         List<AttachedImage> list = new ArrayList<>();
-        for(MultipartFile image: images){
+        for (MultipartFile image : images) {
             String uploadKey = uploadImage(image);
             uploadKey = uploadKey.substring(uploadKey.indexOf(BUCKET));
             String uploadUrl = CLOUD_FRONT + "/" + uploadKey;
