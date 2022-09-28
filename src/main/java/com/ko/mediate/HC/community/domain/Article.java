@@ -66,4 +66,8 @@ public class Article extends BaseEntity {
             this.articleImageList.add(articleImage);
         }
     }
+
+    public boolean isAuthorByEmail(String email){
+        return this.authorEmail.equals(email);
+    }
 }

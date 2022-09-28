@@ -3,7 +3,9 @@ package com.ko.mediate.HC.CommunityTest;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.BaseApiTest;
 import com.ko.mediate.HC.community.application.CommunityService;
-import com.ko.mediate.HC.community.application.dto.request.RequestArticleDto;
+import com.ko.mediate.HC.community.application.dto.request.CreateArticleDto;
+import com.ko.mediate.HC.community.domain.Article;
+import com.ko.mediate.HC.community.domain.ArticleImage;
 import com.ko.mediate.HC.community.domain.Category;
 import com.ko.mediate.HC.community.infra.JpaArticleRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,23 +48,26 @@ public class CreateArticleTest extends BaseApiTest {
     @Test
     void 글_생성_성공시_아이디를_반환한다() throws IOException {
         //given
-        RequestArticleDto dto = createRequestArticleDto("title", "", Category.STUDY_QUESTION, null);
+        CreateArticleDto dto = createRequestArticleDto("title", "", Category.STUDY_QUESTION, null);
         //when
         Long id = communityService.createArticle(userInfo, dto);
         //then
         assertThat(articleRepository.findById(id).isPresent()).isTrue();
     }
 
-    @DisplayName("글 이미지 첨부 시 아이디를 반환한다")
+    @DisplayName("글 이미지 첨부 시 S3 key와 CDN url을 저장한다.")
     @Test
-    void 글_이미지_첨부시_아이디를_반환한다() throws IOException {
+    void 글_이미지_첨부시_S3_Key와_CDN_URL을_저장한다() throws IOException {
         //given
-        RequestArticleDto dto = createRequestArticleDto("title", "", Category.TROUBLE_COUNSEL,
+        CreateArticleDto dto = createRequestArticleDto("title", "", Category.TROUBLE_COUNSEL,
                 new MultipartFile[]{new MockMultipartFile("image1.jpg", new byte[]{1}),
                 new MockMultipartFile("image2.jpg", new byte[]{1})});
         //when
         Long id = communityService.createArticle(userInfo, dto);
         //then
-        assertThat(articleRepository.findById(id).isPresent()).isTrue();
+        Article result = articleRepository.findArticleByIdFetch(id).get();
+        ArticleImage articleImage = result.getArticleImageList().get(0);
+        assertThat(articleImage.getAttachedImage().getImageKey().startsWith(bucket)).isTrue();
+        assertThat(articleImage.getAttachedImage().getImageUrl().startsWith(cloudfront + "/" + bucket)).isTrue();
     }
 }

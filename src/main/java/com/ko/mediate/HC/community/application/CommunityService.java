@@ -2,7 +2,10 @@ package com.ko.mediate.HC.community.application;
 
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.aws.domain.ArticleImageStorage;
-import com.ko.mediate.HC.community.application.dto.request.RequestArticleDto;
+import com.ko.mediate.HC.common.ErrorCode;
+import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
+import com.ko.mediate.HC.common.exception.MediateUnAuthorizedException;
+import com.ko.mediate.HC.community.application.dto.request.CreateArticleDto;
 import com.ko.mediate.HC.community.domain.Article;
 import com.ko.mediate.HC.community.domain.ArticleImage;
 import com.ko.mediate.HC.community.infra.JpaArticleRepository;
@@ -20,7 +23,7 @@ public class CommunityService {
     private final ArticleImageStorage articleImageStorage;
 
     @Transactional
-    public Long createArticle(UserInfo userInfo, RequestArticleDto dto) throws IOException {
+    public Long createArticle(UserInfo userInfo, CreateArticleDto dto) throws IOException {
         Article article = Article.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
@@ -35,4 +38,14 @@ public class CommunityService {
         }
         return articleRepository.save(article).getId();
     }
+
+    @Transactional
+    public void deleteArticle(UserInfo userInfo, Long articleId) {
+        Article findArticle = articleRepository.findById(articleId).orElseThrow(() -> new MediateIllegalStateException(ErrorCode.ENTITY_NOT_FOUND));
+        if(!findArticle.isAuthorByEmail(userInfo.getAccountEmail())){
+            throw new MediateUnAuthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);
+        }
+        articleRepository.delete(findArticle);
+    }
+
 }

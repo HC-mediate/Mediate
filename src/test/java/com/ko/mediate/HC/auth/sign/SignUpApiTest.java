@@ -73,8 +73,8 @@ public class SignUpApiTest extends BaseApiTest {
         accountService.saveAccount(dto);
         //when, then
         mvc.perform(post("/api/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(existNickNameDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(existNickNameDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(containsString(ErrorCode.NICKNAME_ALREADY_EXIST.getCode())))
                 .andDo(print());

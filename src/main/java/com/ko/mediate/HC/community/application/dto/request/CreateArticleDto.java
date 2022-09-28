@@ -13,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestArticleDto {
+public class CreateArticleDto {
     @NotEmpty
     private String title;
     private String content;

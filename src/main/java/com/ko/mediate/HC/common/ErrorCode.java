@@ -18,7 +18,8 @@ public enum ErrorCode {
     INVALID_TOKEN("ERR_0011", "유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED),
     IMAGE_CONVERT_FAILED("ERR_0012", "유효하지 않은 이미지입니다.", HttpStatus.BAD_REQUEST),
     UNSUPPORT_IMAGE_TYPE("ERR_0013", "지원하지 않는 미디어타입입니다.", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
-    NICKNAME_ALREADY_EXIST("ERR_0014", "이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST);
+    NICKNAME_ALREADY_EXIST("ERR_0014", "이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST),
+    UNAUTHORIZED_ACCESS("ERR_0015", "해당 작업을 수행할 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
 
     private final String code;
     private final String description;
