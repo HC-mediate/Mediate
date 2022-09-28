@@ -4,6 +4,6 @@ import com.ko.mediate.HC.common.ErrorCode;
 
 public class MediateIllegalStateException extends MediateException {
     public MediateIllegalStateException(ErrorCode errorCode) {
-        super(ErrorCode.EMAIL_ALREADY_EXIST);
+        super(errorCode);
     }
 }

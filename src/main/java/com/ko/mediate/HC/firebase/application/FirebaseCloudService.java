@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.firebase.application;
 
-import com.ko.mediate.HC.auth.application.request.SignInDto;
+import com.ko.mediate.HC.auth.application.dto.request.SignInDto;
 import com.ko.mediate.HC.firebase.domain.FcmToken;
 import com.ko.mediate.HC.firebase.infra.JpaFcmTokenRepository;
 import lombok.RequiredArgsConstructor;

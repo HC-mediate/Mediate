@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.auth.application.response;
+package com.ko.mediate.HC.auth.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

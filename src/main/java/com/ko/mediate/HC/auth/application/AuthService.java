@@ -1,8 +1,8 @@
 package com.ko.mediate.HC.auth.application;
 
 import com.amazonaws.util.StringUtils;
-import com.ko.mediate.HC.auth.application.request.SignInDto;
-import com.ko.mediate.HC.auth.application.response.TokenDto;
+import com.ko.mediate.HC.auth.application.dto.request.SignInDto;
+import com.ko.mediate.HC.auth.application.dto.response.TokenDto;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.auth.resolver.UserInfo;

@@ -1,8 +1,8 @@
 package com.ko.mediate.HC.auth.sign;
 
 import com.ko.mediate.HC.auth.application.AuthService;
-import com.ko.mediate.HC.auth.application.request.SignInDto;
-import com.ko.mediate.HC.auth.application.response.TokenDto;
+import com.ko.mediate.HC.auth.application.dto.request.SignInDto;
+import com.ko.mediate.HC.auth.application.dto.response.TokenDto;
 import com.ko.mediate.HC.common.BaseApiTest;
 import com.ko.mediate.HC.jwt.TokenStorage;
 import org.junit.jupiter.api.DisplayName;

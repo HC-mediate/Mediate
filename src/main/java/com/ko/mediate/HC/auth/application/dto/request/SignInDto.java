@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.auth.application.request;
+package com.ko.mediate.HC.auth.application.dto.request;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;

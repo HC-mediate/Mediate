@@ -2,7 +2,7 @@ package com.ko.mediate.HC.auth.controller;
 
 import com.ko.mediate.HC.auth.annotation.GetAccountInfoSwagger;
 import com.ko.mediate.HC.auth.annotation.LoginUser;
-import com.ko.mediate.HC.auth.application.response.GetAccountFacadeInfoDto;
+import com.ko.mediate.HC.auth.application.dto.response.GetAccountFacadeInfoDto;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.facade.query.AccountQueryFacade;
 import io.swagger.annotations.Api;

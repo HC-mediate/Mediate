@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.auth.application.response;
+package com.ko.mediate.HC.auth.application.dto.response;
 
 import com.ko.mediate.HC.auth.domain.Account;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,6 +16,9 @@ public class GetAccountInfoDto {
     @ApiModelProperty(value = "이름")
     private String name;
 
+    @ApiModelProperty(value = "닉네임")
+    private String nickname;
+
     @ApiModelProperty(value = "전화번호")
     private String phoneNum;
 
@@ -26,10 +29,12 @@ public class GetAccountInfoDto {
     private GetAccountInfoDto(
             String email,
             String name,
+            String nickname,
             String phoneNum,
             String profileUrl) {
         this.email = email;
         this.name = name;
+        this.nickname = nickname;
         this.phoneNum = phoneNum;
         this.profileUrl = profileUrl;
     }
@@ -38,6 +43,7 @@ public class GetAccountInfoDto {
         return GetAccountInfoDto.builder()
                 .email(account.getEmail())
                 .name(account.getName())
+                .nickname(account.getNickname())
                 .phoneNum(account.getPhoneNum())
                 .profileUrl(account.getProfileImage().getProfileUrl())
                 .build();

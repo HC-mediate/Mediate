@@ -5,7 +5,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ko.mediate.HC.CommunityTest.S3MockConfig;
 import com.ko.mediate.HC.auth.application.AuthService;
-import com.ko.mediate.HC.auth.application.response.TokenDto;
+import com.ko.mediate.HC.auth.application.dto.response.TokenDto;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.config.LocalRedisConfig;

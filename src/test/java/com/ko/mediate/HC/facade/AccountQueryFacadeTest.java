@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.facade;
 
 import com.ko.mediate.HC.auth.application.AccountService;
-import com.ko.mediate.HC.auth.application.response.GetAccountFacadeInfoDto;
+import com.ko.mediate.HC.auth.application.dto.response.GetAccountFacadeInfoDto;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.facade.query.AccountQueryFacade;
