@@ -38,6 +38,7 @@ class AccountQueryFacadeTest {
 
     static final String accountEmail = "test@naver.com";
     static final String accountName = "test_naver";
+    static final String accountNickname = "test_nickname";
     static final String tutorSchool = "tutor-school";
     static final String tuteeSchool = "tutee-school";
     Account account;
@@ -61,7 +62,10 @@ class AccountQueryFacadeTest {
         given(tuteeQueryProcessor.getTuteeByAccountEmail(accountEmail)).willReturn(null);
 
         // when
-        GetAccountFacadeInfoDto result = queryFacade.getAccountInfo(new UserInfo(1L, accountEmail, RoleType.ROLE_USER.name()));
+        GetAccountFacadeInfoDto result = queryFacade.getAccountInfo(UserInfo.builder().accountId(1L)
+                .accountEmail(accountEmail)
+                .accountNickname(accountNickname)
+                .roles(RoleType.ROLE_USER.name()).build());
 
         // then
         assertThat(result.getAccountInfo().getEmail()).isEqualTo(accountEmail);
@@ -79,7 +83,10 @@ class AccountQueryFacadeTest {
         given(tuteeQueryProcessor.getTuteeByAccountEmail(accountEmail)).willReturn(null);
 
         // when
-        GetAccountFacadeInfoDto result = queryFacade.getAccountInfo(new UserInfo(1L, accountEmail, RoleType.ROLE_USER.name()));
+        GetAccountFacadeInfoDto result = queryFacade.getAccountInfo(UserInfo.builder().accountId(1L)
+                .accountEmail(accountEmail)
+                .accountNickname(accountNickname)
+                .roles(RoleType.ROLE_USER.name()).build());
 
         // then
         assertThat(result.getAccountInfo().getName()).isEqualTo(accountName);
@@ -96,7 +103,10 @@ class AccountQueryFacadeTest {
         given(tuteeQueryProcessor.getTuteeByAccountEmail(accountEmail)).willReturn(tutee);
 
         // when
-        GetAccountFacadeInfoDto result = queryFacade.getAccountInfo(new UserInfo(1L, accountEmail, RoleType.ROLE_USER.name()));
+        GetAccountFacadeInfoDto result = queryFacade.getAccountInfo(UserInfo.builder().accountId(1L)
+                .accountEmail(accountEmail)
+                .accountNickname(accountNickname)
+                .roles(RoleType.ROLE_USER.name()).build());
 
         // then
         assertThat(result.getAccountInfo().getName()).isEqualTo(accountName);

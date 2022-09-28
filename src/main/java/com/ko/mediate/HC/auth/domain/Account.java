@@ -6,6 +6,7 @@ import com.ko.mediate.HC.tutoring.application.RoleType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.locationtech.jts.geom.Point;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_account")
 @DynamicUpdate
 public class Account {
@@ -32,6 +34,9 @@ public class Account {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "nickname")
+    private String nickname;
 
     @Column(name = "is_activated", columnDefinition = "tinyint(1)")
     private Boolean isActivated;
@@ -52,11 +57,6 @@ public class Account {
     @Transient
     List<RoleType> roles = new ArrayList<>();
 
-    protected Account() {
-    }
-
-    ;
-
     @PrePersist
     void enumListToString() {
         this.role =
@@ -74,6 +74,7 @@ public class Account {
             String email,
             String password,
             String name,
+            String nickname,
             String phoneNum,
             RoleType role,
             String profileKey,
@@ -81,6 +82,7 @@ public class Account {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.nickname = nickname;
         this.isActivated = true;
         this.phoneNum = phoneNum;
         this.profileImage = new ProfileImage(profileKey, profileUrl);
