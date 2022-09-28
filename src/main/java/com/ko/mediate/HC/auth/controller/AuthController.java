@@ -42,7 +42,6 @@ public class AuthController {
         return new ResponseEntity<>(tokenDto, httpHeaders, HttpStatus.OK);
     }
 
-    //todo: 이메일 중복 시 http 상태코드랑 body에 이유를 같이 포함시켜서 전달
     @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
     @SignUpSwagger
     public ResponseEntity signUp(@Valid @RequestBody SignUpDto dto) {

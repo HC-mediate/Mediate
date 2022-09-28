@@ -17,7 +17,8 @@ public enum ErrorCode {
     INCORRECT_PASSWORD("ERR_0010", "비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
     INVALID_TOKEN("ERR_0011", "유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED),
     IMAGE_CONVERT_FAILED("ERR_0012", "유효하지 않은 이미지입니다.", HttpStatus.BAD_REQUEST),
-    UNSUPPORT_IMAGE_TYPE("ERR_0013", "지원하지 않는 미디어타입입니다.", HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    UNSUPPORT_IMAGE_TYPE("ERR_0013", "지원하지 않는 미디어타입입니다.", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
+    NO_ACCOUNT_EXISTS("ERR_0014", "가입 이력이 없습니다. 회원가입을 진행해 주세요.", HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String description;

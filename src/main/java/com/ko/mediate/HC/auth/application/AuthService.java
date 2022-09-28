@@ -37,7 +37,7 @@ public class AuthService implements UserDetailsService {
     private Account findAccountByEmail(String email) {
         return accountRepository
                 .findAccountByEmail(email)
-                .orElseThrow(() -> new MediateNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+                .orElseThrow(() -> new MediateNotFoundException(ErrorCode.NO_ACCOUNT_EXISTS));
     }
 
     @Override
