@@ -17,15 +17,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 11
+      # Action Sequence
+      - name: Start Action
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.COFIG_REPOSITORY_TOKEN }}
+          submodules: true
+          
+      # Setup JDK
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
-          token: ${{ secrets.COFIG_REPOSITORY_TOKEN }}
-          submodules: true
-          
+      
       # Submodule Update
       - name: Git Sumbmodule Update
         run: git submodule update --remote --recursive
