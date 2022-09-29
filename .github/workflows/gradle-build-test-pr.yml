@@ -23,6 +23,8 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+          token: ${{ secrets.COFIG_REPOSITORY_TOKEN }}
+          submodules: true
           
       # Submodule Update
       - name: Git Sumbmodule Update
