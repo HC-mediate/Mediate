@@ -23,6 +23,8 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+        token: ${{secrets.CONFIG_REPOSITORY_TOKEN}}
+        submodules: true
         
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
