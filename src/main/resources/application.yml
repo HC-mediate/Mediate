@@ -2,7 +2,7 @@ spring:
   profiles:
     group:
       local: local-h2
-      local-maria: local-maria
+      test: local-h2
       prod1: prod-db
       prod2: prod-db
     include:
@@ -12,28 +12,19 @@ spring:
     multipart:
       max-file-size: 3MB
       max-request-size: 10MB
-  redis:
-    host: 127.0.0.1
-    port: 6379
-logging:
-  level:
-    com:
-      amazonaws:
-        util:
-          EC2MetadataUtils: error
-cloud:
-  aws:
-    credentials:
-      access-key: dummy-password
-      secret-key: dummy-password
-    region:
-      static: ap-northeast-2
-    s3:
-      bucket: mediate-image-bucket
-    cloud_front:
-      domain_name: https://dummy.cloudfront.net
-    stack:
-      auto: false
-
 image:
   convert-path: '${user.dir}'
+---
+spring:
+  config:
+    activate:
+      on-profile: prod1
+server:
+  port: 8081
+---
+spring:
+  config:
+    activate:
+      on-profile: prod2
+server:
+  port: 8082
