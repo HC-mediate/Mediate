@@ -28,14 +28,7 @@ public class ArticleImageS3Storage implements ArticleImageStorage {
     @Value("${cloud.aws.cloud_front.domain_name}")
     private String CLOUD_FRONT;
 
-    private String uploadDirectory;
-
     private final AmazonS3Client amazonS3Client;
-
-    @PostConstruct
-    void init() {
-        uploadDirectory = "article/";
-    }
 
     @Override
     public void deleteImages(List<AttachedImage> images) {
@@ -47,7 +40,7 @@ public class ArticleImageS3Storage implements ArticleImageStorage {
         List<AttachedImage> list = new ArrayList<>();
         for (MultipartFile image : images) {
             String uploadKey = uploadImage(image);
-            uploadKey = uploadKey.substring(uploadKey.indexOf(uploadDirectory));
+            uploadKey = uploadKey.substring(uploadKey.indexOf(UPLOAD_DIRECTORY));
             String uploadUrl = CLOUD_FRONT + "/" + uploadKey;
             list.add(new AttachedImage(uploadKey, uploadUrl));
         }
@@ -60,7 +53,7 @@ public class ArticleImageS3Storage implements ArticleImageStorage {
         ByteArrayInputStream bytesArray = new ByteArrayInputStream(bytes);
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(bytes.length);
-        amazonS3Client.putObject(new PutObjectRequest(BUCKET, uploadDirectory + fileName, bytesArray, metadata));
-        return amazonS3Client.getUrl(BUCKET, uploadDirectory + fileName).toString();
+        amazonS3Client.putObject(new PutObjectRequest(BUCKET, UPLOAD_DIRECTORY + fileName, bytesArray, metadata));
+        return amazonS3Client.getUrl(BUCKET, UPLOAD_DIRECTORY + fileName).toString();
     }
 }

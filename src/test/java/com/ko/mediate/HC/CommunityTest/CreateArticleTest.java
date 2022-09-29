@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.CommunityTest;
 
 import com.ko.mediate.HC.auth.resolver.UserInfo;
+import com.ko.mediate.HC.aws.domain.ArticleImageStorage;
 import com.ko.mediate.HC.common.BaseApiTest;
 import com.ko.mediate.HC.community.application.CommunityService;
 import com.ko.mediate.HC.community.application.dto.request.CreateArticleDto;
@@ -29,8 +30,8 @@ public class CreateArticleTest extends BaseApiTest {
     @Autowired
     JpaArticleRepository articleRepository;
 
-    @Value("${cloud.aws.s3.bucket}")
-    String bucket;
+    @Autowired
+    ArticleImageStorage articleImageStorage;
 
     @Value("${cloud.aws.cloud_front.domain_name}")
     String cloudfront;
@@ -59,13 +60,13 @@ public class CreateArticleTest extends BaseApiTest {
         //given
         CreateArticleDto dto = createRequestArticleDto("title", "", Category.TROUBLE_COUNSEL,
                 new MultipartFile[]{new MockMultipartFile("image1.jpg", new byte[]{1}),
-                new MockMultipartFile("image2.jpg", new byte[]{1})});
+                        new MockMultipartFile("image2.jpg", new byte[]{1})});
         //when
         Long id = communityService.createArticle(userInfo, dto);
         //then
         Article result = articleRepository.findArticleByIdFetch(id).get();
         ArticleImage articleImage = result.getArticleImageList().get(0);
-        assertThat(articleImage.getAttachedImage().getImageKey().startsWith(bucket)).isTrue();
-        assertThat(articleImage.getAttachedImage().getImageUrl().startsWith(cloudfront + "/" + bucket)).isTrue();
+        assertThat(articleImage.getAttachedImage().getImageKey().startsWith(ArticleImageStorage.UPLOAD_DIRECTORY)).isTrue();
+        assertThat(articleImage.getAttachedImage().getImageUrl().startsWith(cloudfront + "/" +ArticleImageStorage.UPLOAD_DIRECTORY)).isTrue();
     }
 }
