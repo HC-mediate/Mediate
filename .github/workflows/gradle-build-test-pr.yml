@@ -21,8 +21,7 @@ jobs:
       - name: Start Action
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.COFIG_REPOSITORY_TOKEN }}
-          submodules: true
+          submodules: recursive
           
       # Setup JDK
       - name: Set up JDK
