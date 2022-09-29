@@ -47,7 +47,7 @@ public class ArticleImageS3Storage implements ArticleImageStorage {
         List<AttachedImage> list = new ArrayList<>();
         for (MultipartFile image : images) {
             String uploadKey = uploadImage(image);
-            uploadKey = uploadKey.substring(uploadKey.indexOf(BUCKET));
+            uploadKey = uploadKey.substring(uploadKey.indexOf(uploadDirectory));
             String uploadUrl = CLOUD_FRONT + "/" + uploadKey;
             list.add(new AttachedImage(uploadKey, uploadUrl));
         }
