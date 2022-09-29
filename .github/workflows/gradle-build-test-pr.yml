@@ -21,6 +21,7 @@ jobs:
       - name: Start Action
         uses: actions/checkout@v2
         with:
+          token: ${{ secrets.CONFIG_REPOSITORY_TOKEN }}
           submodules: recursive
           
       # Setup JDK
