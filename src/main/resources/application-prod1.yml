@@ -1,8 +1,0 @@
-spring:
-  config:
-    activate:
-      on-profile: prod1
-server:
-  port: 8081
-image:
-  convert-path: /home/ec2-user/app
