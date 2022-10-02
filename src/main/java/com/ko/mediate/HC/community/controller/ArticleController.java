@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class ArticleController {
 
     @PostMapping(value = "/articles", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @CreateArticleSwagger
-    public ResponseEntity createArticle(@ApiParam(hidden = true) @LoginUser UserInfo userInfo,
+    public ResponseEntity createArticle(@ApiIgnore @LoginUser UserInfo userInfo,
                                         @Valid @RequestPart CreateArticleDto dto, @RequestPart List<MultipartFile> images) throws IOException {
         communityService.createArticle(userInfo, dto, images);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -35,8 +36,8 @@ public class ArticleController {
 
     @DeleteMapping("/articles/{articleId}")
     @DeleteArticleSwagger
-    public ResponseEntity deleteArticle(@ApiParam(hidden = true) @LoginUser UserInfo userInfo,
-                                        @ApiParam(required = true) @PathVariable Long articleId) {
+    public ResponseEntity deleteArticle(@ApiIgnore @LoginUser UserInfo userInfo,
+                                        @ApiParam(value = "글 ID", required = true) @PathVariable Long articleId) {
         communityService.deleteArticle(userInfo, articleId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
