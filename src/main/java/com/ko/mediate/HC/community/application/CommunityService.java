@@ -32,7 +32,7 @@ public class CommunityService {
                 .authorEmail(userInfo.getAccountEmail())
                 .authorName(userInfo.getAccountNickname())
                 .build();
-        if (Objects.nonNull(dto.getImages())) {
+        if (Objects.nonNull(dto.getImages()) && dto.getImages().size() > 0) {
             articleImageStorage.uploadImages(dto.getImages()).stream()
                     .forEach(image -> article.addArticleImage(ArticleImage.builder()
                             .article(article).attachedImage(image).build()));

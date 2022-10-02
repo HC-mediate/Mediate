@@ -8,14 +8,16 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateArticleDto {
-    @NotEmpty
     private String title;
     private String content;
     private Category category;
-    private MultipartFile[] images;
+    private List<MultipartFile> images = new ArrayList<>();
 }

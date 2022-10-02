@@ -18,6 +18,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.ko.mediate.HC.factory.dto.ArticleDtoFactory.createRequestArticleDto;
 import static com.ko.mediate.HC.factory.dto.UserInfoFactory.createUserInfo;
@@ -58,8 +59,8 @@ public class CreateArticleTest extends BaseApiTest {
     void 글_이미지_첨부시_S3_Key와_CDN_URL을_저장한다() throws IOException {
         //given
         CreateArticleDto dto = createRequestArticleDto("title", "", Category.TROUBLE_COUNSEL,
-                new MultipartFile[]{new MockMultipartFile("image1.jpg", new byte[]{1}),
-                        new MockMultipartFile("image2.jpg", new byte[]{1})});
+                List.of(new MockMultipartFile("image1.jpg", new byte[]{1}),
+                        new MockMultipartFile("image2.jpg", new byte[]{1})));
         //when
         Long id = communityService.createArticle(userInfo, dto);
         //then

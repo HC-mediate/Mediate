@@ -36,7 +36,7 @@ public class ArticleImageS3Storage implements ArticleImageStorage {
     }
 
     @Override
-    public List<AttachedImage> uploadImages(MultipartFile[] images) throws IOException {
+    public List<AttachedImage> uploadImages(List<MultipartFile> images) throws IOException {
         List<AttachedImage> list = new ArrayList<>();
         for (MultipartFile image : images) {
             String uploadKey = uploadImage(image);

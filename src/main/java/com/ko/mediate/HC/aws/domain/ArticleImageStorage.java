@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ArticleImageStorage {
     String UPLOAD_DIRECTORY = "article/";
-    List<AttachedImage> uploadImages(MultipartFile[] images) throws IOException;
+    List<AttachedImage> uploadImages(List<MultipartFile> images) throws IOException;
     void deleteImages(List<AttachedImage> keys);
 }
