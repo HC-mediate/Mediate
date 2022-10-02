@@ -23,6 +23,7 @@ import static com.ko.mediate.HC.factory.dto.ArticleDtoFactory.createRequestArtic
 import static com.ko.mediate.HC.factory.dto.UserInfoFactory.createUserInfo;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("글 생성 테스트")
 public class CreateArticleTest extends BaseApiTest {
     @Autowired
     CommunityService communityService;
@@ -43,7 +44,6 @@ public class CreateArticleTest extends BaseApiTest {
         userInfo = createUserInfo();
     }
 
-    @DisplayName("글 생성 시 아이디를 반환한다")
     @Test
     void 글_생성_성공시_아이디를_반환한다() throws IOException {
         //given
@@ -54,7 +54,6 @@ public class CreateArticleTest extends BaseApiTest {
         assertThat(articleRepository.findById(id).isPresent()).isTrue();
     }
 
-    @DisplayName("글 이미지 첨부 시 S3 key와 CDN url을 저장한다.")
     @Test
     void 글_이미지_첨부시_S3_Key와_CDN_URL을_저장한다() throws IOException {
         //given

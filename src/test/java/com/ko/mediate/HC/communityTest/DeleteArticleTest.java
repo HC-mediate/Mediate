@@ -19,6 +19,7 @@ import static com.ko.mediate.HC.factory.dto.UserInfoFactory.createUserInfo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@DisplayName("글 삭제 테스트")
 public class DeleteArticleTest extends BaseApiTest {
     @Autowired
     CommunityService communityService;
@@ -33,7 +34,6 @@ public class DeleteArticleTest extends BaseApiTest {
         createArticleDto = createRequestArticleDto("title", "content", Category.STUDY_QUESTION, null);
     }
 
-    @DisplayName("글 제거 성공 시 레포지토리 조회가 안돼야 한다")
     @Test
     void 글_제거_성공시_레포지토리_조회가_안돼야_한다() throws IOException {
         //given
@@ -44,7 +44,6 @@ public class DeleteArticleTest extends BaseApiTest {
         assertThat(articleRepository.existsById(articleId)).isFalse();
     }
 
-    @DisplayName("작성자가 아니면 글 삭제 시 예외를 던진다.")
     @Test
     void 작성자가_아니면_글_삭제시_예외를_던진다() throws IOException {
         //given
