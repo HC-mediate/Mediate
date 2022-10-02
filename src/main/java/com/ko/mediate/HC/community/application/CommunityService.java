@@ -11,9 +11,11 @@ import com.ko.mediate.HC.community.domain.ArticleImage;
 import com.ko.mediate.HC.community.infra.JpaArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -24,7 +26,7 @@ public class CommunityService {
     private final ArticleImageStorage articleImageStorage;
 
     @Transactional
-    public Long createArticle(UserInfo userInfo, CreateArticleDto dto) throws IOException {
+    public Long createArticle(UserInfo userInfo, CreateArticleDto dto, List<MultipartFile> images) throws IOException {
         Article article = Article.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
@@ -32,8 +34,8 @@ public class CommunityService {
                 .authorEmail(userInfo.getAccountEmail())
                 .authorName(userInfo.getAccountNickname())
                 .build();
-        if (Objects.nonNull(dto.getImages()) && dto.getImages().size() > 0) {
-            articleImageStorage.uploadImages(dto.getImages()).stream()
+        if (Objects.nonNull(images) && images.size() > 0) {
+            articleImageStorage.uploadImages(images).stream()
                     .forEach(image -> article.addArticleImage(ArticleImage.builder()
                             .article(article).attachedImage(image).build()));
         }

@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public class ArticleDtoFactory {
-    public static CreateArticleDto createRequestArticleDto(String title, String content, Category category, List<MultipartFile> images){
-        return new CreateArticleDto(title, content, category, images);
+    public static CreateArticleDto createRequestArticleDto(String title, String content, Category category){
+        return new CreateArticleDto(title, content, category);
     }
 }

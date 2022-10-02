@@ -31,13 +31,13 @@ public class DeleteArticleTest extends BaseApiTest {
     @BeforeEach
     void init() {
         userInfo = createUserInfo();
-        createArticleDto = createRequestArticleDto("title", "content", Category.STUDY_QUESTION, null);
+        createArticleDto = createRequestArticleDto("title", "content", Category.STUDY_QUESTION);
     }
 
     @Test
     void 글_제거_성공시_레포지토리_조회가_안돼야_한다() throws IOException {
         //given
-        Long articleId = communityService.createArticle(userInfo, createArticleDto);
+        Long articleId = communityService.createArticle(userInfo, createArticleDto, null);
         //when
         communityService.deleteArticle(userInfo, articleId);
         //then
@@ -47,7 +47,7 @@ public class DeleteArticleTest extends BaseApiTest {
     @Test
     void 작성자가_아니면_글_삭제시_예외를_던진다() throws IOException {
         //given
-        Long articleId = communityService.createArticle(userInfo, createArticleDto);
+        Long articleId = communityService.createArticle(userInfo, createArticleDto, null);
         userInfo = new UserInfo(2L, "1234", "1234", "ROLE_USER");
         //when, then
         assertThatThrownBy(() -> communityService.deleteArticle(userInfo, articleId))

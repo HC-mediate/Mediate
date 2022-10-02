@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateArticleDto {
@@ -22,5 +21,4 @@ public class CreateArticleDto {
     private String title;
     private String content;
     private Category category;
-    private List<MultipartFile> images = new ArrayList<>();
 }

@@ -48,9 +48,9 @@ public class CreateArticleTest extends BaseApiTest {
     @Test
     void 글_생성_성공시_아이디를_반환한다() throws IOException {
         //given
-        CreateArticleDto dto = createRequestArticleDto("title", "", Category.STUDY_QUESTION, null);
+        CreateArticleDto dto = createRequestArticleDto("title", "", Category.STUDY_QUESTION);
         //when
-        Long id = communityService.createArticle(userInfo, dto);
+        Long id = communityService.createArticle(userInfo, dto, null);
         //then
         assertThat(articleRepository.findById(id).isPresent()).isTrue();
     }
@@ -58,11 +58,10 @@ public class CreateArticleTest extends BaseApiTest {
     @Test
     void 글_이미지_첨부시_S3_Key와_CDN_URL을_저장한다() throws IOException {
         //given
-        CreateArticleDto dto = createRequestArticleDto("title", "", Category.TROUBLE_COUNSEL,
-                List.of(new MockMultipartFile("image1.jpg", new byte[]{1}),
-                        new MockMultipartFile("image2.jpg", new byte[]{1})));
+        CreateArticleDto dto = createRequestArticleDto("title", "", Category.TROUBLE_COUNSEL);
         //when
-        Long id = communityService.createArticle(userInfo, dto);
+        Long id = communityService.createArticle(userInfo, dto, List.of(new MockMultipartFile("image1.jpg", new byte[]{1}),
+                new MockMultipartFile("image2.jpg", new byte[]{1})));
         //then
         Article result = articleRepository.findArticleByIdFetch(id).get();
         ArticleImage articleImage = result.getArticleImageList().get(0);
