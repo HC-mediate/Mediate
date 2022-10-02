@@ -27,7 +27,7 @@ public class Article extends BaseEntity {
 
     private String authorEmail;
 
-    private String authorName;
+    private String authorNickname;
 
     @ColumnDefault("0")
     @Column(name = "view_count")
@@ -52,11 +52,11 @@ public class Article extends BaseEntity {
     private Category category;
 
     @Builder
-    public Article(String title, String content, String authorEmail, String authorName, Category category) {
+    public Article(String title, String content, String authorEmail, String authorNickname, Category category) {
         this.title = title;
         this.content = content;
         this.authorEmail = authorEmail;
-        this.authorName = authorName;
+        this.authorNickname = authorNickname;
         this.category = category;
     }
 

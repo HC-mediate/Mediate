@@ -32,7 +32,7 @@ public class CommunityService {
                 .content(dto.getContent())
                 .category(dto.getCategory())
                 .authorEmail(userInfo.getAccountEmail())
-                .authorName(userInfo.getAccountNickname())
+                .authorNickname(userInfo.getAccountNickname())
                 .build();
         if (Objects.nonNull(images) && images.size() > 0) {
             articleImageStorage.uploadImages(images).stream()
