@@ -40,6 +40,17 @@ public class CommunityService {
         return articleRepository.save(article).getId();
     }
 
+    @Transactional
+    public void deleteArticle(UserInfo userInfo, Long articleId) {
+        Article existingArticle = articleRepository.findArticleByIdFetch(articleId)
+                .orElseThrow(() -> new MediateIllegalStateException(ErrorCode.ENTITY_NOT_FOUND));
+        if (!existingArticle.isAuthorByEmail(userInfo.getAccountEmail())) {
+            throw new MediateUnAuthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);
+        }
+        removeIfAttachedImages(existingArticle);
+        articleRepository.delete(existingArticle);
+    }
+
     private void removeIfAttachedImages(Article article) {
         if (Objects.isNull(article.getArticleImageList()) || article.getArticleImageList().size() == 0) {
             return;
@@ -47,16 +58,4 @@ public class CommunityService {
         articleImageStorage.deleteImages(article.getArticleImageList().stream()
                 .map(i -> i.getAttachedImage()).collect(Collectors.toList()));
     }
-
-    @Transactional
-    public void deleteArticle(UserInfo userInfo, Long articleId) {
-        Article findArticle = articleRepository.findArticleByIdFetch(articleId)
-                .orElseThrow(() -> new MediateIllegalStateException(ErrorCode.ENTITY_NOT_FOUND));
-        if (!findArticle.isAuthorByEmail(userInfo.getAccountEmail())) {
-            throw new MediateUnAuthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);
-        }
-        removeIfAttachedImages(findArticle);
-        articleRepository.delete(findArticle);
-    }
-
 }

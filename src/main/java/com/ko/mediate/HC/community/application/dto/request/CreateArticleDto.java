@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotEmpty;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateArticleDto {

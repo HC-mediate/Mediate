@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.CommunityTest;
+package com.ko.mediate.HC.communityTest;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.AnonymousAWSCredentials;

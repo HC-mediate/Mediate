@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.CommunityTest;
+package com.ko.mediate.HC.communityTest;
 
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.aws.domain.ArticleImageStorage;

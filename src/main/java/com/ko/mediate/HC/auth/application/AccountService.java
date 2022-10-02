@@ -23,8 +23,8 @@ public class AccountService {
         }
     }
 
-    public void checkExistNickname(String nickname){
-        if(accountRepository.existsByNickname(nickname)){
+    public void checkExistNickname(String nickname) {
+        if (accountRepository.existsByNickname(nickname)) {
             throw new MediateIllegalStateException(ErrorCode.NICKNAME_ALREADY_EXIST);
         }
     }

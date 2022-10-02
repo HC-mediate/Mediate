@@ -3,7 +3,7 @@ package com.ko.mediate.HC.common;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ko.mediate.HC.CommunityTest.S3MockConfig;
+import com.ko.mediate.HC.communityTest.S3MockConfig;
 import com.ko.mediate.HC.auth.application.AuthService;
 import com.ko.mediate.HC.auth.application.dto.response.TokenDto;
 import com.ko.mediate.HC.auth.domain.Account;

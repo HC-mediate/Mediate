@@ -13,7 +13,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 
 @EnableWebMvc
-@Profile({"local", "prod1", "prod2", "local-maria"})
+@Profile({"local", "prod1", "prod2"})
 @Configuration
 public class SwaggerConfig {
 

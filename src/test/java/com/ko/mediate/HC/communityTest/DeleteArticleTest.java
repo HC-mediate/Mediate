@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.CommunityTest;
+package com.ko.mediate.HC.communityTest;
 
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.BaseApiTest;
@@ -49,8 +49,7 @@ public class DeleteArticleTest extends BaseApiTest {
     void 작성자가_아니면_글_삭제시_예외를_던진다() throws IOException {
         //given
         Long articleId = communityService.createArticle(userInfo, createArticleDto);
-        userInfo = new UserInfo(2L, "1234", "1234",
-                "ROLE_USER");
+        userInfo = new UserInfo(2L, "1234", "1234", "ROLE_USER");
         //when, then
         assertThatThrownBy(() -> communityService.deleteArticle(userInfo, articleId))
                 .isInstanceOf(MediateUnAuthorizedException.class);
