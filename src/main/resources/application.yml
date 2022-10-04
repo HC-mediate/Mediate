@@ -12,6 +12,9 @@ spring:
     multipart:
       max-file-size: 3MB
       max-request-size: 10MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 image:
   convert-path: '${user.dir}'
 ---

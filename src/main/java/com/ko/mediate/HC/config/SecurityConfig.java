@@ -27,8 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final String[] whiteUrls = {
             "/favicon.ico",
             "/profile",
-            "/swagger-ui.html",
-            "/v2/api-docs",
+            "/swagger-ui/**",
+            "/v3/api-docs",
             "/swagger-resources/**",
             "/webjars/**"
     };

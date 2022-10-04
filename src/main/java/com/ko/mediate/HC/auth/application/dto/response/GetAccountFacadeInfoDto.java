@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.auth.application.response;
+package com.ko.mediate.HC.auth.application.dto.response;
 
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.tutee.application.response.GetTuteeDto;

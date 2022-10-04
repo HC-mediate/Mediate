@@ -39,8 +39,8 @@ dependencies {
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     //스웨거 설정
-    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
     //mysql for point
     implementation 'org.hibernate:hibernate-spatial:5.6.2.Final'

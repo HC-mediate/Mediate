@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.auth.application;
 
-import com.ko.mediate.HC.auth.application.request.SignUpDto;
+import com.ko.mediate.HC.auth.application.dto.request.SignUpDto;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.common.ErrorCode;
@@ -17,19 +17,27 @@ public class AccountService {
     private final JpaAccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void checkExistEmail(String email) {
+    private void checkExistEmail(String email) {
         if (accountRepository.existsByEmail(email)) {
             throw new MediateIllegalStateException(ErrorCode.EMAIL_ALREADY_EXIST);
         }
     }
 
+    private void checkExistNickname(String nickname) {
+        if (accountRepository.existsByNickname(nickname)) {
+            throw new MediateIllegalStateException(ErrorCode.NICKNAME_ALREADY_EXIST);
+        }
+    }
+
     public void saveAccount(SignUpDto dto) {
         checkExistEmail(dto.getEmail());
+        checkExistNickname(dto.getNickname());
         Account account =
                 Account.builder()
                         .email(dto.getEmail())
                         .password(passwordEncoder.encode(dto.getPassword()))
                         .name(dto.getName())
+                        .nickname(dto.getNickname())
                         .phoneNum(dto.getPhoneNum())
                         .role(RoleType.ROLE_USER)
                         .build();

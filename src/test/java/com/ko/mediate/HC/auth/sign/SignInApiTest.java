@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.auth.sign;
 
-import com.ko.mediate.HC.auth.application.request.SignInDto;
+import com.ko.mediate.HC.auth.application.dto.request.SignInDto;
 import com.ko.mediate.HC.common.BaseApiTest;
 import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.jwt.TokenProvider;

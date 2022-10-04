@@ -3,9 +3,9 @@ package com.ko.mediate.HC.common;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ko.mediate.HC.CommunityTest.S3MockConfig;
+import com.ko.mediate.HC.communityTest.S3MockConfig;
 import com.ko.mediate.HC.auth.application.AuthService;
-import com.ko.mediate.HC.auth.application.response.TokenDto;
+import com.ko.mediate.HC.auth.application.dto.response.TokenDto;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.config.LocalRedisConfig;
@@ -15,6 +15,8 @@ import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,6 +39,7 @@ import static com.ko.mediate.HC.auth.AccountFactory.createSignInDto;
 @AutoConfigureMockMvc
 @Import({S3MockConfig.class, LocalRedisConfig.class})
 @ActiveProfiles("test")
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class BaseApiTest {
     @Autowired
     protected JpaAccountRepository accountRepository;

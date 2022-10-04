@@ -1,34 +1,46 @@
 package com.ko.mediate.HC.community.domain;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_article")
-@DynamicInsert
 public class Article extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
-    private String writeBy;
 
-    @ColumnDefault("0")
+    @NotNull
+    private String authorEmail;
+
+    @NotNull
+    private String authorNickname;
+
     @Column(name = "view_count")
-    private Long view;
+    private Long viewCount = 0L;
 
-    @ColumnDefault("0")
     @Column(name = "like_count")
-    private Long like;
+    private Long likeCount = 0L;
+
+    @Column(name = "reply_count")
+    private Long replyCount = 0L;
 
     @OneToMany(
             mappedBy = "article",
@@ -40,29 +52,23 @@ public class Article extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    protected Article() {
-    }
-
     @Builder
-    public Article(String title, String content, String writeBy, Category category) {
+    public Article(String title, String content, String authorEmail, String authorNickname, Category category) {
         this.title = title;
         this.content = content;
-        this.writeBy = writeBy;
+        this.authorEmail = authorEmail;
+        this.authorNickname = authorNickname;
         this.category = category;
     }
 
     public void addArticleImage(ArticleImage articleImage) {
-        if (articleImage != null) {
-            articleImage.changeArticle(this);
+        if (Objects.nonNull(articleImage)) {
+            articleImage.changeArticleImage(this);
             this.articleImageList.add(articleImage);
         }
     }
 
-    public void visitArticle() {
-        this.view++;
-    }
-
-    public void pushLike() {
-        this.like++;
+    public boolean isAuthorByEmail(String email){
+        return this.authorEmail.equals(email);
     }
 }

@@ -1,4 +1,4 @@
-package com.ko.mediate.HC.auth.application.request;
+package com.ko.mediate.HC.auth.application.dto.request;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -24,6 +24,10 @@ public class SignUpDto {
     @ApiModelProperty(value = "이름", required = true)
     @NotBlank(message = "이름은 반드시 있어야 합니다.")
     private String name;
+
+    @ApiModelProperty(value = "닉네임", required = true)
+    @NotBlank(message = "닉네임은 반드시 있어야 합니다.")
+    private String nickname;
 
     @ApiModelProperty(value = "전화번호", required = true)
     @NotBlank(message = "전화번호는 반드시 있어야 합니다.")

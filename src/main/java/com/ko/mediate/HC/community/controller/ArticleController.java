@@ -2,65 +2,43 @@ package com.ko.mediate.HC.community.controller;
 
 import com.ko.mediate.HC.auth.annotation.LoginUser;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
-import com.ko.mediate.HC.common.CommonResponseDto;
-import com.ko.mediate.HC.community.application.CommunityCommandExecutor;
-import com.ko.mediate.HC.community.application.CommunityQueryProcessor;
-import com.ko.mediate.HC.community.application.dto.request.RequestArticleDto;
-import com.ko.mediate.HC.community.application.dto.response.GetArticleDetailDto;
-import com.ko.mediate.HC.community.application.dto.response.GetArticleListDto;
-import com.ko.mediate.HC.community.application.dto.response.GetPopularArticleDto;
+import com.ko.mediate.HC.community.annotation.CreateArticleSwagger;
+import com.ko.mediate.HC.community.annotation.DeleteArticleSwagger;
+import com.ko.mediate.HC.community.application.CommunityService;
+import com.ko.mediate.HC.community.application.dto.request.CreateArticleDto;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
-@Slf4j
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-// todo: 글 수정 API
-// todo: 인기글 캐싱
-// todo: 방문마다 조회수 +1
-// todo: 좋아요 +1
-// todo: 북마크, 댓글, 카테고리
 public class ArticleController {
 
-    private final CommunityCommandExecutor communityCommandExecutor;
-    private final CommunityQueryProcessor communityQueryProcessor;
+    private final CommunityService communityService;
 
-    @PostMapping(
-            value = "/articles",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<CommonResponseDto> createArticle(
-            @LoginUser UserInfo token,
-            @RequestPart(value = "dto") RequestArticleDto dto,
-            @RequestPart(value = "imgFile", required = false) MultipartFile[] multipartFiles) {
-        communityCommandExecutor.createArticle(token, dto, multipartFiles);
-        return ResponseEntity.ok(new CommonResponseDto("글을 작성했습니다."));
+    @PostMapping(value = "/articles", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @CreateArticleSwagger
+    public ResponseEntity createArticle(@ApiIgnore @LoginUser UserInfo userInfo,
+                                        @Valid @RequestPart CreateArticleDto dto, @RequestPart List<MultipartFile> images) throws IOException {
+        communityService.createArticle(userInfo, dto, images);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/articles")
-    public ResponseEntity<GetArticleListDto> getAllArticle(
-            @RequestParam(defaultValue = "5") int size, @RequestParam(defaultValue = "0") int page) {
-        return ResponseEntity.ok(communityQueryProcessor.getAllArticle(page, size));
-    }
-
-    @GetMapping("/articles/{id}")
-    public ResponseEntity<GetArticleDetailDto> getArticleDetailById(@PathVariable long id) {
-        return ResponseEntity.ok(communityQueryProcessor.getArticleDetailById(id));
-    }
-
-    @DeleteMapping("/articles/{id}")
-    public ResponseEntity<CommonResponseDto> deleteArticleById(
-            @LoginUser UserInfo token, @PathVariable long id) {
-        communityCommandExecutor.deleteArticle(token, id);
-        return ResponseEntity.ok(new CommonResponseDto("글을 삭제했습니다."));
-    }
-
-    @GetMapping("/popular-articles")
-    public ResponseEntity<GetPopularArticleDto> getPopularArticle() {
-        return ResponseEntity.ok(communityQueryProcessor.getPopularArticle());
+    @DeleteMapping("/articles/{articleId}")
+    @DeleteArticleSwagger
+    public ResponseEntity deleteArticle(@ApiIgnore @LoginUser UserInfo userInfo,
+                                        @ApiParam(value = "글 ID", required = true) @PathVariable Long articleId) {
+        communityService.deleteArticle(userInfo, articleId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
