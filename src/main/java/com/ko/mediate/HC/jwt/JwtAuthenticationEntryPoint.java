@@ -1,20 +1,27 @@
 package com.ko.mediate.HC.jwt;
 
+import static com.ko.mediate.HC.common.AuthenticationExceptionUtils.EXCEPTION_ATTRIBUTE_KEY;
+import static com.ko.mediate.HC.common.AuthenticationExceptionUtils.setResponse;
+
+import com.ko.mediate.HC.common.ErrorCode;
+import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            AuthenticationException authException) throws IOException {
+        ErrorCode errorCode = (ErrorCode) request.getAttribute(EXCEPTION_ATTRIBUTE_KEY);
+        if (errorCode == ErrorCode.EXPIRED_TOKEN) {
+            setResponse(response, errorCode);
+        } else if (errorCode == ErrorCode.NO_ACCESS_TOKEN) {
+            setResponse(response, errorCode);
+        }
     }
 }
