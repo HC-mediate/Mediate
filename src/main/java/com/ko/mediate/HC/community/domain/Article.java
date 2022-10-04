@@ -1,5 +1,6 @@
 package com.ko.mediate.HC.community.domain;
 
+import com.ko.mediate.HC.auth.domain.Account;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,10 +29,9 @@ public class Article extends BaseEntity {
     private String content;
 
     @NotNull
-    private String authorEmail;
-
-    @NotNull
-    private String authorNickname;
+    @ManyToOne
+    @JoinColumn(name = "email")
+    private Account account;
 
     @Column(name = "view_count")
     private Long viewCount = 0L;
@@ -53,11 +53,10 @@ public class Article extends BaseEntity {
     private Category category;
 
     @Builder
-    public Article(String title, String content, String authorEmail, String authorNickname, Category category) {
+    public Article(String title, String content, Account account, Category category) {
         this.title = title;
         this.content = content;
-        this.authorEmail = authorEmail;
-        this.authorNickname = authorNickname;
+        this.account = account;
         this.category = category;
     }
 
@@ -69,6 +68,6 @@ public class Article extends BaseEntity {
     }
 
     public boolean isAuthorByEmail(String email){
-        return this.authorEmail.equals(email);
+        return this.account.getEmail().equals(email);
     }
 }
