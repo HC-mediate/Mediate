@@ -9,7 +9,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Operation(summary = "커뮤니티 글 생성 api", description = "dto = 글 제목, 내용, 카테고리를 포함하는 json, images = 글에 포함할 이미지, 여러 개를 올린다면 같은 이름으로 여러 파일을 올려주세요")
+@Operation(summary = "커뮤니티 글 생성 api", description = "dto = 글 제목, 내용, 카테고리를 포함하는 json\n" +
+        "title = 글 제목, content = 글 내용, category = 카테고리, images = 글에 포함할 이미지, 여러 개를 올린다면 같은 이름으로 여러 파일을 올려주세요")
 @ApiResponses(
         value = {
                 @ApiResponse(responseCode = "201", description = "생성 성공"),
