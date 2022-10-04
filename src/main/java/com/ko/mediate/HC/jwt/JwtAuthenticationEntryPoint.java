@@ -18,10 +18,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException {
         ErrorCode errorCode = (ErrorCode) request.getAttribute(EXCEPTION_ATTRIBUTE_KEY);
-        if (errorCode == ErrorCode.EXPIRED_TOKEN) {
-            setResponse(response, errorCode);
-        } else if (errorCode == ErrorCode.NO_ACCESS_TOKEN) {
-            setResponse(response, errorCode);
-        }
+        setResponse(response, errorCode);
     }
 }

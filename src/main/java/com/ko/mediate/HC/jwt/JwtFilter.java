@@ -5,6 +5,7 @@ import static com.ko.mediate.HC.common.AuthenticationExceptionUtils.EXCEPTION_AT
 import com.ko.mediate.HC.auth.application.AuthService;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.exception.MediateExpiredTokenException;
+import com.ko.mediate.HC.common.exception.MediateInvalidTokenException;
 import com.ko.mediate.HC.common.exception.MediateNotFoundTokenException;
 import java.io.IOException;
 import java.util.Optional;
@@ -38,21 +39,29 @@ public class JwtFilter extends GenericFilterBean {
             String accessToken = resolveToken(httpServletRequest);
             if (StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
                 UserInfo userInfo = tokenProvider.getUserInfoFromToken(accessToken);
-                if (Optional.ofNullable(tokenStorage.getAccessTokenById(userInfo.getAccountId()))
-                        .filter(extractToken -> extractToken.equals(accessToken))
-                        .isPresent()) {
-                    CustomUserDetails userDetails = authService.loadUserByUsername(
-                            userInfo.getAccountEmail());
-                    setUserAuthenticationToken(userDetails);
+                if (hasNotContainAccessTokenByAccountId(accessToken, userInfo)) {
+                    throw new MediateNotFoundTokenException();
                 }
+                CustomUserDetails userDetails = authService.loadUserByUsername(
+                        userInfo.getAccountEmail());
+                setUserAuthenticationToken(userDetails);
             }
         } catch (MediateExpiredTokenException e) {
             request.setAttribute(EXCEPTION_ATTRIBUTE_KEY, e.getErrorCode());
         } catch (MediateNotFoundTokenException e) {
             request.setAttribute(EXCEPTION_ATTRIBUTE_KEY, e.getErrorCode());
+        } catch (MediateInvalidTokenException e) {
+            request.setAttribute(EXCEPTION_ATTRIBUTE_KEY, e.getErrorCode());
         }
 
         chain.doFilter(request, response);
+    }
+
+    private boolean hasNotContainAccessTokenByAccountId(String accessToken,
+            UserInfo userInfo) {
+        return !Optional.ofNullable(tokenStorage.getAccessTokenById(userInfo.getAccountId()))
+                .filter(extractToken -> extractToken.equals(accessToken))
+                .isPresent();
     }
 
     private void setUserAuthenticationToken(CustomUserDetails userDetails) {

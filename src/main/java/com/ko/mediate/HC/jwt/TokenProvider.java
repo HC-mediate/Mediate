@@ -3,6 +3,7 @@ package com.ko.mediate.HC.jwt;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateExpiredTokenException;
+import com.ko.mediate.HC.common.exception.MediateInvalidTokenException;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -108,7 +109,7 @@ public class TokenProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            throw new io.jsonwebtoken.security.SecurityException("잘못된 JWT 서명입니다.");
+            throw new MediateInvalidTokenException();
         } catch (ExpiredJwtException e) {
             throw new MediateExpiredTokenException();
         } catch (UnsupportedJwtException e) {

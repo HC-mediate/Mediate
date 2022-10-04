@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.exception.MediateExpiredTokenException;
+import com.ko.mediate.HC.common.exception.MediateInvalidTokenException;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import java.util.List;
@@ -78,6 +79,6 @@ public class TokenProviderTest {
     void invalidTokenTest() {
         String invalidToken = "asdf1234";
         assertThatThrownBy(() -> tokenProvider.validateToken(invalidToken))
-                .isInstanceOf(io.jsonwebtoken.security.SecurityException.class);
+                .isInstanceOf(MediateInvalidTokenException.class);
     }
 }
