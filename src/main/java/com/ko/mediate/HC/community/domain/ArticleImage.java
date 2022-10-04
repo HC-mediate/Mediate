@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 
@@ -21,6 +22,7 @@ public class ArticleImage extends BaseEntity {
     @Embedded
     AttachedImage attachedImage;
 
+    @NotNull
     @ManyToOne
     private Article article;
 

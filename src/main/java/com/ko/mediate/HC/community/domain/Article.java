@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,26 +21,26 @@ public class Article extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @NotNull
     private String authorEmail;
 
+    @NotNull
     private String authorNickname;
 
-    @ColumnDefault("0")
     @Column(name = "view_count")
-    private Long viewCount;
+    private Long viewCount = 0L;
 
-    @ColumnDefault("0")
     @Column(name = "like_count")
-    private Long likeCount;
+    private Long likeCount = 0L;
 
-    @ColumnDefault("0")
     @Column(name = "reply_count")
-    private Long replyCount;
+    private Long replyCount = 0L;
 
     @OneToMany(
             mappedBy = "article",

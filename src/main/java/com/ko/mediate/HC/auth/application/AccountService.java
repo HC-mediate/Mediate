@@ -17,13 +17,13 @@ public class AccountService {
     private final JpaAccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void checkExistEmail(String email) {
+    private void checkExistEmail(String email) {
         if (accountRepository.existsByEmail(email)) {
             throw new MediateIllegalStateException(ErrorCode.EMAIL_ALREADY_EXIST);
         }
     }
 
-    public void checkExistNickname(String nickname) {
+    private void checkExistNickname(String nickname) {
         if (accountRepository.existsByNickname(nickname)) {
             throw new MediateIllegalStateException(ErrorCode.NICKNAME_ALREADY_EXIST);
         }

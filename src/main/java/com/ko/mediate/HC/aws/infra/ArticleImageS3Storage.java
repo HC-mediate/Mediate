@@ -42,7 +42,7 @@ public class ArticleImageS3Storage implements ArticleImageStorage {
             String uploadKey = uploadImage(image);
             uploadKey = uploadKey.substring(uploadKey.indexOf(UPLOAD_DIRECTORY));
             String uploadUrl = CLOUD_FRONT + "/" + uploadKey;
-            list.add(new AttachedImage(uploadKey, uploadUrl));
+            list.add(AttachedImage.createAttachedImage(uploadKey, uploadUrl));
         }
         return list;
     }

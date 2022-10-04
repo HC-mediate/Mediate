@@ -20,7 +20,8 @@ public enum ErrorCode {
     UNSUPPORT_IMAGE_TYPE("ERR_0013", "지원하지 않는 미디어타입입니다.", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
     NO_ACCOUNT_EXISTS("ERR_0014", "가입 이력이 없습니다. 회원가입을 진행해 주세요.", HttpStatus.BAD_REQUEST),
     NICKNAME_ALREADY_EXIST("ERR_0015", "이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST),
-    UNAUTHORIZED_ACCESS("ERR_0016", "해당 작업을 수행할 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+    UNAUTHORIZED_ACCESS("ERR_0016", "해당 작업을 수행할 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
+    NULL_PROPERTY("ERR_0017", "엔티티의 프로퍼티는 null 값을 가질 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String code;
     private final String description;

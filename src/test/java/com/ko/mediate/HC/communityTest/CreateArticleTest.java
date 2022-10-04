@@ -3,15 +3,15 @@ package com.ko.mediate.HC.communityTest;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.aws.domain.ArticleImageStorage;
 import com.ko.mediate.HC.common.BaseApiTest;
+import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import com.ko.mediate.HC.community.application.CommunityService;
 import com.ko.mediate.HC.community.application.dto.request.CreateArticleDto;
 import com.ko.mediate.HC.community.domain.Article;
 import com.ko.mediate.HC.community.domain.ArticleImage;
+import com.ko.mediate.HC.community.domain.AttachedImage;
 import com.ko.mediate.HC.community.domain.Category;
 import com.ko.mediate.HC.community.infra.JpaArticleRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
@@ -23,6 +23,7 @@ import java.util.List;
 import static com.ko.mediate.HC.factory.dto.ArticleDtoFactory.createRequestArticleDto;
 import static com.ko.mediate.HC.factory.dto.UserInfoFactory.createUserInfo;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("글 생성 테스트")
 public class CreateArticleTest extends BaseApiTest {
@@ -66,6 +67,11 @@ public class CreateArticleTest extends BaseApiTest {
         Article result = articleRepository.findArticleByIdFetch(id).get();
         ArticleImage articleImage = result.getArticleImageList().get(0);
         assertThat(articleImage.getAttachedImage().getImageKey().startsWith(ArticleImageStorage.UPLOAD_DIRECTORY)).isTrue();
-        assertThat(articleImage.getAttachedImage().getImageUrl().startsWith(cloudfront + "/" +ArticleImageStorage.UPLOAD_DIRECTORY)).isTrue();
+        assertThat(articleImage.getAttachedImage().getImageUrl().startsWith(cloudfront + "/" + ArticleImageStorage.UPLOAD_DIRECTORY)).isTrue();
+    }
+
+    @Test
+    void 이미지_엔티티의_URL과_Key는_null이_될수없다() throws IOException {
+        assertThatThrownBy(() -> AttachedImage.createAttachedImage(null, null)).isInstanceOf(MediateIllegalStateException.class);
     }
 }
