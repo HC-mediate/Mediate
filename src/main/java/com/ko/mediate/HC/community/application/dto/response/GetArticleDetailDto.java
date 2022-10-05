@@ -29,7 +29,6 @@ public class GetArticleDetailDto {
             shape = JsonFormat.Shape.STRING,
             pattern = "yyyy-MM-dd HH:mm:ss",
             timezone = "Asia/Seoul")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createAt;
     @Schema(description = "작성자 닉네임")
     private String authorNickname;

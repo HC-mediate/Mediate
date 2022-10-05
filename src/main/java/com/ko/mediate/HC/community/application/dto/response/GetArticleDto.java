@@ -26,7 +26,6 @@ public class GetArticleDto {
             shape = JsonFormat.Shape.STRING,
             pattern = "yyyy-MM-dd HH:mm:ss",
             timezone = "Asia/Seoul")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createAt;
     @Schema(description = "좋아요 수")
     private Long like;
