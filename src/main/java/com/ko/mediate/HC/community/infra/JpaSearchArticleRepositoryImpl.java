@@ -23,19 +23,19 @@ import static com.ko.mediate.HC.community.domain.QArticle.article;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class JpaSearchArticleRepositoryImpl implements JpaSearchArticleRepository {
+
     private final JPAQueryFactory queryFactory;
 
     @Override
     public Slice<Article> findAllBySearchCondition(ArticleSearchCondition searchCondition) {
         List<Article> contents = queryFactory.selectFrom(article)
                 .innerJoin(article.account, account)
-                .on(article.account.id.eq(account.id))
                 .where(account.isActivated.isTrue(),
                         ltArticleId(searchCondition.getLastArticleId()),
                         containsTitle(searchCondition),
                         containsContent(searchCondition))
                 .orderBy(articleSortList(searchCondition).stream().toArray(OrderSpecifier[]::new))
-                .limit(searchCondition.getLimit())
+                .limit(searchCondition.getLimit() + 1)
                 .fetch();
         boolean hasNext = false;
         if (contents.size() > searchCondition.getLimit()) {
@@ -46,11 +46,13 @@ public class JpaSearchArticleRepositoryImpl implements JpaSearchArticleRepositor
     }
 
     private BooleanExpression containsTitle(ArticleSearchCondition searchCondition) {
-        return StringUtils.isNotBlank(searchCondition.getKeyword()) ? article.title.contains(searchCondition.getKeyword()) : null;
+        return StringUtils.isNotBlank(searchCondition.getKeyword()) ? article.title.contains(
+                searchCondition.getKeyword()) : null;
     }
 
     private BooleanExpression containsContent(ArticleSearchCondition searchCondition) {
-        return StringUtils.isNotBlank(searchCondition.getKeyword()) ? article.content.contains(searchCondition.getKeyword()) : null;
+        return StringUtils.isNotBlank(searchCondition.getKeyword()) ? article.content.contains(
+                searchCondition.getKeyword()) : null;
     }
 
     private BooleanExpression ltArticleId(Long articleId) {
@@ -62,10 +64,9 @@ public class JpaSearchArticleRepositoryImpl implements JpaSearchArticleRepositor
 
     private List<OrderSpecifier> articleSortList(ArticleSearchCondition searchCondition) {
         List<OrderSpecifier> orders = new ArrayList<>();
-        if(searchCondition.getSort() == ArticleSort.LATEST){
+        if (searchCondition.getSort() == ArticleSort.LATEST) {
             orders.add(article.createAt.desc());
-        }
-        else{
+        } else {
             orders.add(article.likeCount.desc());
         }
         return orders;

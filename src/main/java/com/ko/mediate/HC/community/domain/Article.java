@@ -30,7 +30,7 @@ public class Article extends BaseEntity {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "email")
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
     private Account account;
 
     @Column(name = "view_count")
