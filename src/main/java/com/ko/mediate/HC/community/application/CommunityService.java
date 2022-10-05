@@ -6,8 +6,10 @@ import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.aws.domain.ArticleImageStorage;
 import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
+import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.common.exception.MediateUnAuthorizedException;
 import com.ko.mediate.HC.community.application.dto.request.CreateArticleDto;
+import com.ko.mediate.HC.community.application.dto.response.GetArticleDetailDto;
 import com.ko.mediate.HC.community.application.dto.response.GetArticleListDto;
 import com.ko.mediate.HC.community.domain.Article;
 import com.ko.mediate.HC.community.domain.ArticleImage;
@@ -62,6 +64,12 @@ public class CommunityService {
     public GetArticleListDto getAllArticles(ArticleSearchCondition searchCondition) {
         return GetArticleListDto.fromEntities(
                 articleRepository.findAllBySearchCondition(searchCondition));
+    }
+
+    @Transactional(readOnly = true)
+    public GetArticleDetailDto getArticleDetailById(Long articleId) {
+        return GetArticleDetailDto.fromEntity(articleRepository.findArticleByIdWithActive(articleId)
+                .orElseThrow(MediateNotFoundException::new));
     }
 
     private void removeIfAttachedImages(Article article) {

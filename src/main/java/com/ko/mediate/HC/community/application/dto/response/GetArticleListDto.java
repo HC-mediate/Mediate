@@ -12,12 +12,14 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GetArticleListDto {
+
     List<GetArticleDto> contents;
     boolean hasNext;
 
     public static GetArticleListDto fromEntities(Slice<Article> articles) {
         return GetArticleListDto.builder()
-                .contents(articles.stream().map(GetArticleDto::fromEntity).collect(Collectors.toList()))
+                .contents(articles.stream().map(GetArticleDto::fromEntity)
+                        .collect(Collectors.toList()))
                 .hasNext(articles.hasNext())
                 .build();
     }

@@ -10,7 +10,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface JpaArticleRepository extends JpaRepository<Article, Long>, JpaSearchArticleRepository {
+public interface JpaArticleRepository extends JpaRepository<Article, Long>,
+        JpaSearchArticleRepository {
+
     @Query("SELECT a FROM Article a LEFT JOIN FETCH a.articleImageList WHERE a.id = :articleId")
     Optional<Article> findArticleByIdFetch(@Param("articleId") Long articleId);
+
+    @Query("SELECT a FROM Article a JOIN FETCH a.account "
+            + "LEFT JOIN FETCH a.articleImageList WHERE a.account.isActivated = true AND a.id = :articleId")
+    Optional<Article> findArticleByIdWithActive(@Param("articleId") Long articleId);
 }
