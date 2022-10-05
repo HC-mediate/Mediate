@@ -5,10 +5,10 @@ import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.aws.domain.ArticleImageStorage;
 import com.ko.mediate.HC.common.ErrorCode;
-import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.common.exception.MediateUnAuthorizedException;
 import com.ko.mediate.HC.community.application.dto.request.CreateArticleDto;
+import com.ko.mediate.HC.community.application.dto.request.UpdateArticleDto;
 import com.ko.mediate.HC.community.application.dto.response.GetArticleDetailDto;
 import com.ko.mediate.HC.community.application.dto.response.GetArticleListDto;
 import com.ko.mediate.HC.community.domain.Article;
@@ -52,12 +52,24 @@ public class CommunityService {
     @Transactional
     public void deleteArticle(UserInfo userInfo, Long articleId) {
         Article existingArticle = articleRepository.findArticleByIdFetch(articleId)
-                .orElseThrow(() -> new MediateIllegalStateException(ErrorCode.ENTITY_NOT_FOUND));
+                .orElseThrow(MediateNotFoundException::new);
         if (!existingArticle.isAuthorByEmail(userInfo.getAccountEmail())) {
             throw new MediateUnAuthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);
         }
         removeIfAttachedImages(existingArticle);
         articleRepository.delete(existingArticle);
+    }
+
+    @Transactional
+    public GetArticleDetailDto updateArticleById(UserInfo userInfo, Long articleId,
+            UpdateArticleDto dto) {
+        Article existingArticle = articleRepository.findArticleByIdFetch(articleId)
+                .orElseThrow(MediateNotFoundException::new);
+        if (!existingArticle.isAuthorByEmail(userInfo.getAccountEmail())) {
+            throw new MediateUnAuthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);
+        }
+        existingArticle.updateArticle(dto.getTitle(), dto.getContent(), dto.getCategory());
+        return GetArticleDetailDto.fromEntity(existingArticle);
     }
 
     @Transactional(readOnly = true)

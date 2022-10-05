@@ -70,4 +70,10 @@ public class Article extends BaseEntity {
     public boolean isAuthorByEmail(String email){
         return this.account.getEmail().equals(email);
     }
+
+    public void updateArticle(String title, String content, Category category){
+        this.title = title;
+        this.content = content;
+        this.category = category;
+    }
 }
