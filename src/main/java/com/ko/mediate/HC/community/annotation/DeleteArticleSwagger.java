@@ -9,7 +9,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@ApiOperation(value = "커뮤니티 글 생성 api")
+@ApiOperation(value = "커뮤니티 글 삭제 api")
 @ApiResponses(
         value = {
                 @ApiResponse(code = 204, message = "제거 성공"),
