@@ -1,5 +1,8 @@
 package com.ko.mediate.HC.community.application.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.ko.mediate.HC.community.domain.Article;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
@@ -22,6 +25,11 @@ public class GetArticleDetailDto {
     @Schema(description = "글 내용")
     private String content;
     @Schema(description = "작성 일자")
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd HH:mm:ss",
+            timezone = "Asia/Seoul")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createAt;
     @Schema(description = "작성자 닉네임")
     private String authorNickname;
