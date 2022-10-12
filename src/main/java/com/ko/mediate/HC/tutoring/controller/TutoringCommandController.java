@@ -2,7 +2,6 @@ package com.ko.mediate.HC.tutoring.controller;
 
 import com.ko.mediate.HC.auth.annotation.LoginUser;
 import com.ko.mediate.HC.auth.resolver.UserInfo;
-import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.tutoring.application.TutoringCommandExecutor;
 import com.ko.mediate.HC.tutoring.application.request.RequestProgressDto;
 import com.ko.mediate.HC.tutoring.application.request.RequestTutoringDto;
@@ -22,11 +21,12 @@ import javax.validation.Valid;
 @RequestMapping(value = "/api")
 @Api(tags = {"튜터링 생성(제안), 업데이트, 삭제용 api"})
 public class TutoringCommandController {
+
     private final TutoringCommandExecutor commandExecutor;
 
     @PostMapping(value = "/tutorings", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "튜터링을 생성(제안)하는 api")
-    public ResponseEntity requestTutoring(
+    public ResponseEntity<?> requestTutoring(
             @LoginUser UserInfo userInfo, @Valid @RequestBody RequestTutoringDto dto) {
         commandExecutor.requestTutoring(dto, userInfo);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -34,17 +34,17 @@ public class TutoringCommandController {
 
     @ApiOperation(value = "튜터링 제안에 대한 응답을 보내는 api")
     @PostMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity responseTutoring(
+    public ResponseEntity<?> responseTutoring(
             @LoginUser UserInfo userInfo,
             @PathVariable Long tutoringId,
             @Valid @RequestBody TutoringResponseDto dto) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(commandExecutor.responseTutoring(tutoringId, userInfo, dto));
+        commandExecutor.responseTutoring(tutoringId, userInfo, dto);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @ApiOperation(value = "튜터링을 취소하는 api")
     @DeleteMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity cancelTutoring(
+    public ResponseEntity<?> cancelTutoring(
             @LoginUser UserInfo userInfo, @PathVariable Long tutoringId) {
         commandExecutor.cancelTutoring(tutoringId, userInfo);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -52,7 +52,7 @@ public class TutoringCommandController {
 
     @ApiOperation(value = "튜터링 정보를 업데이트하는 api")
     @PutMapping(value = "/tutorings/{tutoringId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity updateTutoring(
+    public ResponseEntity<?> updateTutoring(
             @LoginUser UserInfo userInfo,
             @PathVariable Long tutoringId,
             @Valid @RequestBody RequestTutoringDto dto) {
@@ -64,19 +64,19 @@ public class TutoringCommandController {
     @PostMapping(
             value = "/tutorings/{tutoringId}/progress",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CommonResponseDto> createProgressInTutoring(
+    public ResponseEntity<?> createProgressInTutoring(
             @LoginUser UserInfo userInfo,
             @PathVariable Long tutoringId,
             @Valid @RequestBody RequestProgressDto dto) {
         commandExecutor.addProgressInTutoring(tutoringId, dto, userInfo);
-        return ResponseEntity.ok(new CommonResponseDto("튜터링 진행도를 추가했습니다."));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @ApiOperation(value = "튜터링 진행도를 수정하는 api")
     @PutMapping(
             value = "/tutorings/{tutoringId}/progress/{progressId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity modifyProgressInTutoring(
+    public ResponseEntity<?> modifyProgressInTutoring(
             @LoginUser UserInfo userInfo,
             @PathVariable Long tutoringId,
             @PathVariable Long progressId,
@@ -89,8 +89,9 @@ public class TutoringCommandController {
     @DeleteMapping(
             value = "/tutorings/{tutoringId}/progress/{progressId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity removeProgressInTutoring(
-            @LoginUser UserInfo userInfo, @PathVariable Long tutoringId, @PathVariable Long progressId) {
+    public ResponseEntity<?> removeProgressInTutoring(
+            @LoginUser UserInfo userInfo, @PathVariable Long tutoringId,
+            @PathVariable Long progressId) {
         commandExecutor.removeProgressInTutoring(tutoringId, progressId, userInfo);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

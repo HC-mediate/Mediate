@@ -1,7 +1,6 @@
 package com.ko.mediate.HC.tutoring.application;
 
 import com.ko.mediate.HC.auth.resolver.UserInfo;
-import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
 import com.ko.mediate.HC.tutoring.application.request.RequestProgressDto;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class TutoringCommandExecutor {
+
     private final JpaTutoringRepository tutoringRepository;
 
     private Tutoring findByTutoringId(Long tutoringId) {
@@ -27,7 +27,7 @@ public class TutoringCommandExecutor {
     }
 
     @Transactional
-    public CommonResponseDto responseTutoring(
+    public void responseTutoring(
             long tutoringId, UserInfo userInfo, TutoringResponseDto dto) {
         Tutoring tutoring = findByTutoringId(tutoringId);
         tutoring.isTutoringMember(userInfo.getAccountEmail());
@@ -38,7 +38,6 @@ public class TutoringCommandExecutor {
             tutoring.acceptTutoring();
         }
         tutoringRepository.save(tutoring);
-        return new CommonResponseDto("튜터링이 " + dto.getResponseType().getMessage() + " 되었습니다.");
     }
 
     @Transactional

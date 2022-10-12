@@ -61,7 +61,7 @@ public class HomeworkTest extends BaseApiTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", accessToken)
                                 .content(objectMapper.writeValueAsString(homework)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andDo(print());
         List<Homework> homeworks = homeworkRepository.findAllByTuteeId(tuteeId);
         assertThat(homeworks.size()).isEqualTo(2);
