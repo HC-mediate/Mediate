@@ -37,7 +37,7 @@ public class TokenProviderTest {
         TokenProvider expiredTokenProvider = new TokenProvider(secret, 0L, 0L);
         String expiredToken =
                 expiredTokenProvider.createAccessToken(1L, "test@naver.com", "test", List.of(role));
-        assertThatThrownBy(() -> tokenProvider.validateToken(expiredToken))
+        assertThatThrownBy(() -> tokenProvider.isValidToken(expiredToken))
                 .isInstanceOf(ExpiredJwtException.class);
     }
 
@@ -48,7 +48,7 @@ public class TokenProviderTest {
         TokenProvider expiredTokenProvider = new TokenProvider(secret, 0L, 0L);
         String expiredToken =
                 expiredTokenProvider.createRefreshToken(1L, "test@naver.com", "test", List.of(role));
-        assertThatThrownBy(() -> tokenProvider.validateToken(expiredToken))
+        assertThatThrownBy(() -> tokenProvider.isValidToken(expiredToken))
                 .isInstanceOf(ExpiredJwtException.class);
     }
 
@@ -78,7 +78,7 @@ public class TokenProviderTest {
     @Test
     void invalidTokenTest() {
         String invalidToken = "asdf1234";
-        assertThatThrownBy(() -> tokenProvider.validateToken(invalidToken))
+        assertThatThrownBy(() -> tokenProvider.isValidToken(invalidToken))
                 .isInstanceOf(io.jsonwebtoken.security.SecurityException.class);
     }
 }

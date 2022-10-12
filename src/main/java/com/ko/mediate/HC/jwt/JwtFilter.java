@@ -33,7 +33,7 @@ public class JwtFilter extends GenericFilterBean {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String accessToken = resolveToken(httpServletRequest);
 
-        if (StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
+        if (StringUtils.hasText(accessToken) && tokenProvider.isValidToken(accessToken)) {
             UserInfo userInfo = tokenProvider.getUserInfoFromToken(accessToken);
             if (Optional.ofNullable(tokenStorage.getAccessTokenById(userInfo.getAccountId()))
                     .filter(extractToken -> extractToken.equals(accessToken))

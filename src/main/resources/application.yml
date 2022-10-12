@@ -17,6 +17,17 @@ spring:
       matching-strategy: ant_path_matcher
 image:
   convert-path: '${user.dir}'
+oauth2:
+  client:
+    google:
+      base-url: https://www.googleapis.com
+      path: /oauth2/v2/userinfo
+    kakao:
+      base-url: https://kapi.kakao.com
+      path: /v2/user/me
+    naver:
+      base-url: https://openapi.naver.com
+      path: /v1/nid/me
 ---
 spring:
   config:

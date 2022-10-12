@@ -1,11 +1,13 @@
 package com.ko.mediate.HC.auth.application;
 
+import com.ko.mediate.HC.auth.application.dto.request.OAuth2SignUpDto;
 import com.ko.mediate.HC.auth.application.dto.request.SignUpDto;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateAlreadyExistException;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
+import com.ko.mediate.HC.oauth2.domain.Profile;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,18 +18,6 @@ import org.springframework.stereotype.Service;
 public class AccountService {
     private final JpaAccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
-
-    private void checkExistEmail(String email) {
-        if (accountRepository.existsByEmail(email)) {
-            throw new MediateIllegalStateException(ErrorCode.EMAIL_ALREADY_EXIST);
-        }
-    }
-
-    private void checkExistNickname(String nickname) {
-        if (accountRepository.existsByNickname(nickname)) {
-            throw new MediateIllegalStateException(ErrorCode.NICKNAME_ALREADY_EXIST);
-        }
-    }
 
     public void saveAccount(SignUpDto dto) {
         checkExistEmail(dto.getEmail());
@@ -44,9 +34,37 @@ public class AccountService {
         accountRepository.save(account);
     }
 
+    public void saveAccount(OAuth2SignUpDto dto, Profile oauth2Profile) {
+        checkExistEmail(oauth2Profile.getEmail());
+        checkExistNickname(dto.getNickname());
+        Account account =
+                Account.builder()
+                        .email(oauth2Profile.getEmail())
+                        .socialType(dto.getSocialType())
+                        .socialId(oauth2Profile.getSocialId())
+                        .name(oauth2Profile.getName())
+                        .nickname(dto.getNickname())
+                        .phoneNum(dto.getPhoneNum())
+                        .role(RoleType.ROLE_USER)
+                        .build();
+        accountRepository.save(account);
+    }
+
     public Account getAccountByEmail(String email) {
         return accountRepository
                 .findAccountByEmail(email)
                 .orElseThrow(() -> new MediateAlreadyExistException(ErrorCode.EMAIL_ALREADY_EXIST));
+    }
+
+    private void checkExistEmail(String email) {
+        if (accountRepository.existsByEmail(email)) {
+            throw new MediateIllegalStateException(ErrorCode.EMAIL_ALREADY_EXIST);
+        }
+    }
+
+    private void checkExistNickname(String nickname) {
+        if (accountRepository.existsByNickname(nickname)) {
+            throw new MediateIllegalStateException(ErrorCode.NICKNAME_ALREADY_EXIST);
+        }
     }
 }

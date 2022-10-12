@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@ApiOperation(value = "로그인", notes = "성공 시 Authorization 헤더에 토큰 값을 반환")
+@ApiOperation(value = "로그인", notes = "성공 시 토큰 값을 반환")
 @ApiResponses(
         value = {
                 @ApiResponse(code = 201, message = "로그인 성공"),

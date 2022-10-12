@@ -1,7 +1,11 @@
 package com.ko.mediate.HC.config;
 
 import com.ko.mediate.HC.auth.application.AuthService;
-import com.ko.mediate.HC.jwt.*;
+import com.ko.mediate.HC.jwt.JwtAccessDeniedHandler;
+import com.ko.mediate.HC.jwt.JwtAuthenticationEntryPoint;
+import com.ko.mediate.HC.jwt.JwtSecurityConfig;
+import com.ko.mediate.HC.jwt.TokenProvider;
+import com.ko.mediate.HC.jwt.TokenStorage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,7 +27,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    private final String[] permitUrls = {"/api/signin", "/api/signup", "/api/refresh"};
+    private final String[] permitUrls = {
+            "/api/signin",
+            "/api/oauth2/signin",
+            "/api/oauth2/signup",
+            "/api/signup",
+            "/api/refresh"
+    };
     private final String[] whiteUrls = {
             "/favicon.ico",
             "/profile",

@@ -36,7 +36,7 @@ public class RedisConfig {
     private final String ARTICLE_DETAIL = "articleDetail";
 
     @Bean
-    @Profile({"local", "prod1", "prod2"})
+    @Profile({"local-h2", "prod1", "prod2"})
     public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory(redisHost, redisPort);
     }

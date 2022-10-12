@@ -1,29 +1,38 @@
 package com.ko.mediate.HC.jwt;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
-
 import java.util.concurrent.TimeUnit;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class TokenRedisStorage implements TokenStorage {
 
+    @Value("${jwt.access.validity-period}")
+    private long accessTokenValidityPeriodInMillis;
+
+    @Value("${jwt.refresh.validity-period}")
+    private long refreshTokenValidityPeriodInMillis;
+
     private final RedisTemplate redisTemplate;
-    private final TokenProvider tokenProvider;
-    private final String SEPERATOR = "::";
-    private final String ACCESS_KEY = "accessToken";
-    private final String REFRESH_KEY = "refreshToken";
+
+    private static final String SEPARATOR = "::";
+
+    private static final String ACCESS_TOKEN_KEY = "accessToken";
+
+    private static final String REFRESH_TOKEN_KEY = "refreshToken";
 
     @Override
     public void saveAccessToken(String accessToken, Long id) {
         redisTemplate
                 .opsForValue()
                 .set(
-                        ACCESS_KEY + SEPERATOR + String.valueOf(id),
+                        ACCESS_TOKEN_KEY + SEPARATOR + id,
                         accessToken,
-                        tokenProvider.getExpiredTime(accessToken),
+                        accessTokenValidityPeriodInMillis,
                         TimeUnit.MILLISECONDS);
     }
 
@@ -32,25 +41,25 @@ public class TokenRedisStorage implements TokenStorage {
         redisTemplate
                 .opsForValue()
                 .set(
-                        REFRESH_KEY + SEPERATOR + String.valueOf(id),
+                        REFRESH_TOKEN_KEY + SEPARATOR + id,
                         refreshToken,
-                        tokenProvider.getExpiredTime(refreshToken),
+                        refreshTokenValidityPeriodInMillis,
                         TimeUnit.MILLISECONDS);
     }
 
     @Override
     public String getAccessTokenById(Long id) {
-        return (String) redisTemplate.opsForValue().get(ACCESS_KEY + SEPERATOR + String.valueOf(id));
+        return (String) redisTemplate.opsForValue().get(ACCESS_TOKEN_KEY + SEPARATOR + id);
     }
 
     @Override
     public String getRefreshTokenById(Long id) {
-        return (String) redisTemplate.opsForValue().get(REFRESH_KEY + SEPERATOR + String.valueOf(id));
+        return (String) redisTemplate.opsForValue().get(REFRESH_TOKEN_KEY + SEPARATOR + id);
     }
 
     @Override
     public void deleteRefreshAndAccessTokenById(Long id) {
-        redisTemplate.delete(ACCESS_KEY + SEPERATOR + String.valueOf(id));
-        redisTemplate.delete(REFRESH_KEY + SEPERATOR + String.valueOf(id));
+        redisTemplate.delete(ACCESS_TOKEN_KEY + SEPARATOR + id);
+        redisTemplate.delete(REFRESH_TOKEN_KEY + SEPARATOR + id);
     }
 }
