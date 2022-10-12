@@ -6,10 +6,11 @@ import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 
 public class AccountFactory {
-    static String phoneNum = "010-1234-5678";
-    static String name = "test_name";
-    static String password = "test";
-    static String nickname = "test_nickname";
+
+    public final static String phoneNum = "010-1234-5678";
+    public final static String name = "test_name";
+    public final static String password = "test";
+    public final static String nickname = "test_nickname";
 
     public static Account createAccount(String accountEmail, String name, String role) {
         return Account.builder()
@@ -44,6 +45,16 @@ public class AccountFactory {
                 .build();
     }
 
+    public static Account createAccount(String email, String encodingPassword) {
+        return Account.builder()
+                .email(email)
+                .password(encodingPassword)
+                .name(name)
+                .role(RoleType.ROLE_USER)
+                .phoneNum(phoneNum)
+                .build();
+    }
+
     public static SignInDto createSignInDto(String email, String password) {
         return new SignInDto(email, password, "token");
     }
@@ -52,7 +63,7 @@ public class AccountFactory {
         return new SignUpDto(email, password, name, nickname, phoneNum);
     }
 
-    public static SignUpDto createSignUpDtoWithNickName(String email, String nickname){
+    public static SignUpDto createSignUpDtoWithNickName(String email, String nickname) {
         return new SignUpDto(email, password, name, nickname, phoneNum);
     }
 }

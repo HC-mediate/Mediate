@@ -1,6 +1,8 @@
 package com.ko.mediate.HC.auth.sign;
 
+import com.ko.mediate.HC.auth.AccountFactory;
 import com.ko.mediate.HC.auth.application.dto.request.SignInDto;
+import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.common.BaseApiTest;
 import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.jwt.TokenProvider;
@@ -11,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.ko.mediate.HC.auth.AccountFactory.createAccount;
 import static com.ko.mediate.HC.auth.AccountFactory.createSignInDto;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -19,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("로그인 api 테스트")
 public class SignInApiTest extends BaseApiTest {
+
     @Autowired
     MockMvc mvc;
     @Autowired
@@ -77,6 +81,21 @@ public class SignInApiTest extends BaseApiTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(jsonPath("$.code").exists())
+                .andDo(print());
+    }
+
+    @Test
+    void 활성화되지_않은_계정은_예외를_던진다() throws Exception {
+        //given
+        Account account = createAccount("deactivated@naver.com",
+                passwordEncoder.encode(AccountFactory.password));
+        account.deactivate();
+        accountRepository.saveAndFlush(account);
+        SignInDto dto = createSignInDto(account.getEmail(), AccountFactory.password);
+        //when, then
+        mvc.perform(post("/api/signin").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(jsonPath("$.code").value(ErrorCode.DEACTIVATED_ACCOUNT.getCode()))
                 .andDo(print());
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "계정 정보 조회")
-public class AccountQueryController {
+public class AccountController {
     private final AccountQueryFacade accountQueryFacade;
 
     @GetAccountInfoSwagger
