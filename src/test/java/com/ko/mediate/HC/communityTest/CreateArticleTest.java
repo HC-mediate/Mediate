@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("글 생성 테스트")
-public class CreateArticleTest extends BaseApiTest {
+public class CreateArticleTest extends BaseArticleApiTest {
     @Autowired
     CommunityService communityService;
 
