@@ -3,7 +3,6 @@ package com.ko.mediate.HC.jwt;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,7 @@ public class TokenRedisStorage implements TokenStorage {
     @Value("${jwt.refresh.validity-period}")
     private long refreshTokenValidityPeriodInMillis;
 
-    private final RedisTemplate redisTemplate;
+    private final StringRedisTemplate redisTemplate;
 
     private static final String SEPARATOR = "::";
 
@@ -49,12 +48,12 @@ public class TokenRedisStorage implements TokenStorage {
 
     @Override
     public String getAccessTokenById(Long id) {
-        return (String) redisTemplate.opsForValue().get(ACCESS_TOKEN_KEY + SEPARATOR + id);
+        return redisTemplate.opsForValue().get(ACCESS_TOKEN_KEY + SEPARATOR + id);
     }
 
     @Override
     public String getRefreshTokenById(Long id) {
-        return (String) redisTemplate.opsForValue().get(REFRESH_TOKEN_KEY + SEPARATOR + id);
+        return redisTemplate.opsForValue().get(REFRESH_TOKEN_KEY + SEPARATOR + id);
     }
 
     @Override
