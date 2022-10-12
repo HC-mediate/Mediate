@@ -7,43 +7,50 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ErrorResponseBuilder {
+final class ErrorResponseBuilder {
 
     private ErrorResponseBuilder() {
     }
 
+    public static ErrorResponseDto build(final ErrorCode errorCode) {
+        return buildDetails(errorCode.getCode(), errorCode.getDescription(), errorCode.getStatus());
+    }
+
     public static ErrorResponseDto build(
-            final String code, final String message, final HttpStatus status) {
-        return buildDetails(code, message, status);
+            final String code, final String description, final HttpStatus status) {
+        return buildDetails(code, description, status);
     }
 
     public static ErrorResponseDto build(
             final String code,
-            final String message,
+            final String description,
             final HttpStatus status,
             final List<InvalidParameterDto> invalidParameters) {
-        return buildDetails(code, message, status, invalidParameters);
+        return buildDetails(code, description, status, invalidParameters);
     }
 
     private static ErrorResponseDto buildDetails(
-            final String code, final String message, final HttpStatus status) {
+            final String code, final String description, final HttpStatus status) {
         ErrorResponseDto errorResponseDto =
-                new ErrorResponseDto(code, message, status.value(), LocalDateTime.now(), new ArrayList<>());
+                new ErrorResponseDto(code, description, status.value(), LocalDateTime.now(),
+                        new ArrayList<>());
         return errorResponseDto;
     }
 
     private static ErrorResponseDto buildDetails(
             final String code,
-            final String message,
+            final String description,
             final HttpStatus status,
             final List<InvalidParameterDto> invalidParameters) {
         ErrorResponseDto errorResponseDetails =
-                new ErrorResponseDto(code, message, status.value(), LocalDateTime.now(), new ArrayList<>());
+                new ErrorResponseDto(code, description, status.value(), LocalDateTime.now(),
+                        new ArrayList<>());
 
         if (!CollectionUtils.isEmpty(invalidParameters)) {
             errorResponseDetails =
                     new ErrorResponseDto(
-                            code, message, status.value(), LocalDateTime.now(), invalidParameters);
+                            code, description, status.value(), LocalDateTime.now(),
+                            invalidParameters);
         }
         return errorResponseDetails;
     }

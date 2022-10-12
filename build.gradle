@@ -44,7 +44,6 @@ dependencies {
 
     //mysql for point
     implementation 'org.hibernate:hibernate-spatial:5.6.2.Final'
-    implementation 'org.mariadb.jdbc:mariadb-java-client'
 
     //querydsl 추가
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"

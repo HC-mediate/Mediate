@@ -18,7 +18,7 @@ public class ErrorResponseDto {
     @ApiModelProperty(value = "발생 코드")
     private String code;
     @ApiModelProperty(value = "발생 이유")
-    private String message;
+    private String description;
     @ApiModelProperty(value = "Http 상태 코드")
     private Integer status;
     @ApiModelProperty(value = "발생 시간")
