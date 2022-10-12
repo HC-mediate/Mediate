@@ -2,8 +2,8 @@ package com.ko.mediate.HC.TutoringTest.HomeworkTest;
 
 import com.ko.mediate.HC.common.BaseApiTest;
 import com.ko.mediate.HC.homework.application.HomeworkContentDto;
-import com.ko.mediate.HC.homework.application.request.CreateHomeworkDto;
-import com.ko.mediate.HC.homework.application.request.UpdateHomeworkDto;
+import com.ko.mediate.HC.homework.application.dto.request.CreateHomeworkDto;
+import com.ko.mediate.HC.homework.application.dto.request.UpdateHomeworkDto;
 import com.ko.mediate.HC.homework.domain.Homework;
 import com.ko.mediate.HC.homework.infra.JpaHomeworkRepository;
 import org.junit.jupiter.api.AfterEach;

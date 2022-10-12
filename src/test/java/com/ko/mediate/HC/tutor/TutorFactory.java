@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.tutor;
 
 import com.ko.mediate.HC.common.domain.Location;
-import com.ko.mediate.HC.tutor.application.request.TutorSignupDto;
+import com.ko.mediate.HC.tutor.application.dto.request.TutorSignupDto;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.tutee;
 
 import com.ko.mediate.HC.common.BaseApiTest;
-import com.ko.mediate.HC.tutee.application.request.TuteeSignupDto;
+import com.ko.mediate.HC.tutee.application.dto.request.TuteeSignupDto;
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

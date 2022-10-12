@@ -2,9 +2,9 @@ package com.ko.mediate.HC.homework.controller;
 
 import com.ko.mediate.HC.homework.application.HomeworkCommandExecutor;
 import com.ko.mediate.HC.homework.application.HomeworkQueryProcessor;
-import com.ko.mediate.HC.homework.application.request.CreateHomeworkDto;
-import com.ko.mediate.HC.homework.application.request.UpdateHomeworkDto;
-import com.ko.mediate.HC.homework.application.response.GetHomeworkDto;
+import com.ko.mediate.HC.homework.application.dto.request.CreateHomeworkDto;
+import com.ko.mediate.HC.homework.application.dto.request.UpdateHomeworkDto;
+import com.ko.mediate.HC.homework.application.dto.response.GetHomeworkDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

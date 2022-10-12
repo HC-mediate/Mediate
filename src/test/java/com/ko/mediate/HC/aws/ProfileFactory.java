@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.aws;
 
-import com.ko.mediate.HC.aws.application.request.ProfileImageRequestDto;
+import com.ko.mediate.HC.aws.application.dto.request.ProfileImageRequestDto;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.lang.reflect.Constructor;

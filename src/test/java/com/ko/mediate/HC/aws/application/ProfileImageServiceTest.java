@@ -2,7 +2,7 @@ package com.ko.mediate.HC.aws.application;
 
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
 import com.ko.mediate.HC.aws.domain.ProfileImageStorage;
-import com.ko.mediate.HC.aws.exception.MediateUnsupportImageType;
+import com.ko.mediate.HC.common.exception.MediateUnsupportImageType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,7 @@ package com.ko.mediate.HC.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ko.mediate.HC.tutor.application.request.TutorSignupDto;
+import com.ko.mediate.HC.tutor.application.dto.request.TutorSignupDto;
 import com.ko.mediate.HC.tutoring.domain.Curriculum;
 import org.junit.jupiter.api.Test;
 
