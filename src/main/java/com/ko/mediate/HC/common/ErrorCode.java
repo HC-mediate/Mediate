@@ -21,7 +21,8 @@ public enum ErrorCode {
     NO_ACCOUNT_EXISTS("ERR_0014", "가입 이력이 없습니다. 회원가입을 진행해 주세요.", HttpStatus.BAD_REQUEST),
     NICKNAME_ALREADY_EXIST("ERR_0015", "이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED_ACCESS("ERR_0016", "해당 작업을 수행할 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
-    NULL_PROPERTY("ERR_0017", "엔티티의 프로퍼티는 null 값을 가질 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    NULL_PROPERTY("ERR_0017", "엔티티의 프로퍼티는 null 값을 가질 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    EXPIRED_TOKEN("ERR_0018", "만료된 토큰입니다.", HttpStatus.FORBIDDEN);
 
     private final String code;
     private final String description;

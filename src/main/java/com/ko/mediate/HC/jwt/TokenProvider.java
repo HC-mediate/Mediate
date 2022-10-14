@@ -1,6 +1,9 @@
 package com.ko.mediate.HC.jwt;
 
 import com.ko.mediate.HC.auth.resolver.UserInfo;
+import com.ko.mediate.HC.common.ErrorCode;
+import com.ko.mediate.HC.common.exception.MediateExpiredTokenException;
+import com.ko.mediate.HC.common.exception.MediateInvalidTokenException;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class TokenProvider {
+
     private static final String AUTHORITIES_KEY = "authority";
     private static final String ACCOUNT_ID_KEY = "accountId";
     private static final String ACCOUNT_EMAIL_KEY = "accountEmail";
@@ -47,7 +51,8 @@ public class TokenProvider {
     }
 
     private String createToken(
-            Long accountId, String accountEmail, String accountNickname, List<RoleType> roles, long tokenValidityInMilliseconds) {
+            Long accountId, String accountEmail, String accountNickname, List<RoleType> roles,
+            long tokenValidityInMilliseconds) {
 
         long now = (new Date()).getTime();
         Date validity = new Date(now + tokenValidityInMilliseconds);
@@ -58,18 +63,23 @@ public class TokenProvider {
                 .claim(ACCOUNT_NICKNAME_KEY, accountNickname)
                 .claim(
                         ROLE_KEY,
-                        String.join(",", roles.stream().map(RoleType::toString).collect(Collectors.toList())))
+                        String.join(",", roles.stream().map(RoleType::toString)
+                                .collect(Collectors.toList())))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();
     }
 
-    public String createAccessToken(Long accountId, String accountEmail, String accountNickname, List<RoleType> roles) {
-        return createToken(accountId, accountEmail, accountNickname, roles, this.accessTokenValidityInMilliseconds);
+    public String createAccessToken(Long accountId, String accountEmail, String accountNickname,
+            List<RoleType> roles) {
+        return createToken(accountId, accountEmail, accountNickname, roles,
+                this.accessTokenValidityInMilliseconds);
     }
 
-    public String createRefreshToken(Long accountId, String accountEmail, String accountNickname, List<RoleType> roles) {
-        return createToken(accountId, accountEmail, accountNickname, roles, this.refreshTokenValidityInMilliseconds);
+    public String createRefreshToken(Long accountId, String accountEmail, String accountNickname,
+            List<RoleType> roles) {
+        return createToken(accountId, accountEmail, accountNickname, roles,
+                this.refreshTokenValidityInMilliseconds);
     }
 
     public UserInfo getUserInfoFromToken(String token) {
@@ -99,9 +109,9 @@ public class TokenProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            throw new io.jsonwebtoken.security.SecurityException("잘못된 JWT 서명입니다.");
+            throw new MediateInvalidTokenException();
         } catch (ExpiredJwtException e) {
-            throw new ExpiredJwtException(null, null, "만료된 JWT 토큰입니다.");
+            throw new MediateExpiredTokenException();
         } catch (UnsupportedJwtException e) {
             throw new UnsupportedJwtException("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
@@ -110,11 +120,12 @@ public class TokenProvider {
     }
 
     public String createAccessTokenIfExpired(
-            String token, Long accountId, String accountEmail, String accountNickname, List<RoleType> roles) {
+            String token, Long accountId, String accountEmail, String accountNickname,
+            List<RoleType> roles) {
         try {
             validateToken(token);
             return token;
-        } catch (ExpiredJwtException e) {
+        } catch (MediateExpiredTokenException e) {
             return createAccessToken(accountId, accountEmail, accountNickname, roles);
         }
     }

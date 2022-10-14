@@ -1,5 +1,8 @@
 package com.ko.mediate.HC.common;
 
+import static com.ko.mediate.HC.auth.AccountFactory.createAccount;
+import static com.ko.mediate.HC.auth.AccountFactory.createSignInDto;
+
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,11 +11,17 @@ import com.ko.mediate.HC.auth.application.AuthService;
 import com.ko.mediate.HC.auth.application.dto.response.TokenDto;
 import com.ko.mediate.HC.auth.domain.Account;
 import com.ko.mediate.HC.auth.infra.JpaAccountRepository;
+import com.ko.mediate.HC.communityTest.S3MockConfig;
 import com.ko.mediate.HC.config.LocalRedisConfig;
 import com.ko.mediate.HC.jwt.TokenStorage;
 import com.ko.mediate.HC.tutee.infra.JpaTuteeRepository;
 import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import com.ko.mediate.HC.tutoring.application.RoleType;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -26,21 +35,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.ko.mediate.HC.auth.AccountFactory.createAccount;
-import static com.ko.mediate.HC.auth.AccountFactory.createSignInDto;
-
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Import({S3MockConfig.class, LocalRedisConfig.class})
 @ActiveProfiles("test")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class BaseApiTest {
+
     @Autowired
     protected JpaAccountRepository accountRepository;
     @Autowired
@@ -75,6 +76,7 @@ public class BaseApiTest {
     protected Long saveId, normalUserId;
     protected String accessToken, refreshToken;
     protected String normalAccessToken;
+    protected final String BEARER = "Bearer ";
 
     private File createTempFile() throws IOException {
         File file = new File(tempFilePath);
@@ -108,8 +110,8 @@ public class BaseApiTest {
     private void authAccounts() {
         for (Account account : accountResults) {
             TokenDto dto = authService.signIn(createSignInDto(account.getEmail(), "1234"));
-            accessTokenMap.put(account.getId(), dto.getAccessToken());
-            refreshTokenMap.put(account.getId(), dto.getRefreshToken());
+            accessTokenMap.put(account.getId(), BEARER + dto.getAccessToken());
+            refreshTokenMap.put(account.getId(), BEARER + dto.getRefreshToken());
         }
     }
 
