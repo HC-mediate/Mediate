@@ -1,16 +1,16 @@
 package com.ko.mediate.HC.auth;
 
-import com.ko.mediate.HC.auth.resolver.UserInfo;
-import com.ko.mediate.HC.jwt.TokenProvider;
-import com.ko.mediate.HC.tutoring.application.RoleType;
-import io.jsonwebtoken.ExpiredJwtException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.ko.mediate.HC.auth.resolver.UserInfo;
+import com.ko.mediate.HC.common.exception.MediateExpiredTokenException;
+import com.ko.mediate.HC.common.exception.MediateInvalidTokenException;
+import com.ko.mediate.HC.jwt.TokenProvider;
+import com.ko.mediate.HC.tutoring.application.RoleType;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("토큰 생성 Bean 테스트")
 public class TokenProviderTest {
@@ -38,7 +38,7 @@ public class TokenProviderTest {
         String expiredToken =
                 expiredTokenProvider.createAccessToken(1L, "test@naver.com", "test", List.of(role));
         assertThatThrownBy(() -> tokenProvider.validateToken(expiredToken))
-                .isInstanceOf(ExpiredJwtException.class);
+                .isInstanceOf(MediateExpiredTokenException.class);
     }
 
     @DisplayName("리프레쉬 토큰 만료 테스트")
@@ -49,7 +49,7 @@ public class TokenProviderTest {
         String expiredToken =
                 expiredTokenProvider.createRefreshToken(1L, "test@naver.com", "test", List.of(role));
         assertThatThrownBy(() -> tokenProvider.validateToken(expiredToken))
-                .isInstanceOf(ExpiredJwtException.class);
+                .isInstanceOf(MediateExpiredTokenException.class);
     }
 
     @DisplayName("유효한 토큰이면 재사용, 그렇지 않으면 생성")
@@ -79,6 +79,6 @@ public class TokenProviderTest {
     void invalidTokenTest() {
         String invalidToken = "asdf1234";
         assertThatThrownBy(() -> tokenProvider.validateToken(invalidToken))
-                .isInstanceOf(io.jsonwebtoken.security.SecurityException.class);
+                .isInstanceOf(MediateInvalidTokenException.class);
     }
 }

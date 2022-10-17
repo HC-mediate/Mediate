@@ -34,17 +34,17 @@ public class LogoutApiTest extends BaseApiTest {
         TokenDto dto = authService.signIn(signInDto);
 
         // when
-        mvc.perform(delete("/api/logout").header(AUTHORIZATION, dto.getAccessToken()))
+        mvc.perform(delete("/api/logout").header(AUTHORIZATION, BEARER + dto.getAccessToken()))
                 .andExpect(status().isOk());
 
         // then
         assertThat(tokenStorage.getAccessTokenById(saveId)).isNull();
         assertThat(tokenStorage.getRefreshTokenById(saveId)).isNull();
 
-        mvc.perform(delete("/api/logout").header(AUTHORIZATION, dto.getAccessToken()))
+        mvc.perform(delete("/api/logout").header(AUTHORIZATION, BEARER + dto.getAccessToken()))
                 .andExpect(status().isUnauthorized())
                 .andDo(print());
-        mvc.perform(post("/api/refresh").header("Refresh", dto.getRefreshToken()))
+        mvc.perform(post("/api/refresh").header("Refresh", BEARER + dto.getRefreshToken()))
                 .andExpect(status().isUnauthorized())
                 .andDo(print());
     }

@@ -22,7 +22,9 @@ public enum ErrorCode {
     NICKNAME_ALREADY_EXIST("ERR_0015", "이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED_ACCESS("ERR_0016", "해당 작업을 수행할 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
     NULL_PROPERTY("ERR_0017", "엔티티의 프로퍼티는 null 값을 가질 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
-    DEACTIVATED_ACCOUNT("ERR_0018", "비활성화된 계정입니다.", HttpStatus.BAD_REQUEST);
+    DEACTIVATED_ACCOUNT("ERR_0018", "비활성화된 계정입니다.", HttpStatus.BAD_REQUEST),
+    EXPIRED_TOKEN("ERR_0019", "만료된 토큰입니다.", HttpStatus.FORBIDDEN);
+
 
     private final String code;
     private final String description;

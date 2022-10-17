@@ -2,7 +2,7 @@ package com.ko.mediate.HC.auth.resolver;
 
 import com.ko.mediate.HC.auth.annotation.LoginUser;
 import com.ko.mediate.HC.common.ErrorCode;
-import com.ko.mediate.HC.common.exception.MediateNotFoundToken;
+import com.ko.mediate.HC.common.exception.MediateNotFoundTokenException;
 import com.ko.mediate.HC.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -33,7 +33,7 @@ public class LoginMethodArgumentResolver implements HandlerMethodArgumentResolve
             throws RuntimeException {
         String authorization = webRequest.getHeader("Authorization");
         if (authorization == null) {
-            throw new MediateNotFoundToken(ErrorCode.NO_ACCESS_TOKEN);
+            throw new MediateNotFoundTokenException(ErrorCode.NO_ACCESS_TOKEN);
         }
 
         return tokenProvider.getUserInfoFromToken(authorization.substring(7));

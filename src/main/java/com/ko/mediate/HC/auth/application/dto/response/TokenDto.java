@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @JsonInclude(Include.NON_NULL)
 public class TokenDto {
-    private static final String BEARER = "Bearer ";
 
     @ApiModelProperty(name = "리프레쉬 토큰")
     private String refreshToken;
@@ -19,7 +18,7 @@ public class TokenDto {
     private String accessToken;
 
     public TokenDto(String refreshToken, String accessToken) {
-        this.refreshToken = BEARER + refreshToken;
-        this.accessToken = BEARER + accessToken;
+        this.refreshToken = refreshToken;
+        this.accessToken = accessToken;
     }
 }

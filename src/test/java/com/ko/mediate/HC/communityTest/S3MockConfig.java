@@ -18,6 +18,7 @@ import static com.ko.mediate.HC.common.ProcessUtils.findAvailablePort;
 
 @TestConfiguration
 public class S3MockConfig {
+
     @Value("${cloud.aws.region.static}")
     private String region;
 
