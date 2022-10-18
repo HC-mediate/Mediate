@@ -1,14 +1,16 @@
 package com.ko.mediate.HC.common;
 
+import static com.ko.mediate.HC.common.ErrorResponseBuilder.build;
 import static java.util.stream.Collectors.toList;
 
 import com.ko.mediate.HC.common.exception.MediateException;
-
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Path;
 import javax.validation.Path.Node;
-
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,13 +26,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-
-import static com.ko.mediate.HC.common.ErrorResponseBuilder.build;
 
 @RestControllerAdvice
 @Slf4j
