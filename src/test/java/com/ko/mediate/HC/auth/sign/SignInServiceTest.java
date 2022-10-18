@@ -15,7 +15,6 @@ public class SignInServiceTest extends BaseApiTest {
     @Autowired
     AuthService authService;
 
-    @DisplayName("비밀번호가 틀린 예외")
     @Test
     void 비밀번호가_틀리면_AccountIncorrectPasswordException을_던진다() {
         assertThatThrownBy(() -> authService.signIn(createSignInDto(saveEmail, "아무비밀번호")))
