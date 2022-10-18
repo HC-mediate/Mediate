@@ -16,13 +16,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("튜터 api 테스트")
 public class TutorApiTest extends BaseApiTest {
     @Autowired
     MockMvc mvc;
 
-    @DisplayName("다수의 학습과목으로 튜터 등록")
     @Test
-    void tutorJoinTest() throws Exception {
+    void 다수의_학습과목으로_튜터_등록시_201을_반환한다() throws Exception {
         //given
         TutorSignupDto dto = createTutorSignup();
 

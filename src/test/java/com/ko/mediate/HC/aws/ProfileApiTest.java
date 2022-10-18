@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("프로필 이미지 api 테스트")
 public class ProfileApiTest extends BaseApiTest {
     @Autowired
     MockMvc mvc;
@@ -25,9 +26,8 @@ public class ProfileApiTest extends BaseApiTest {
     @Value("${cloud.aws.cloud_front.domain_name}")
     String cloud_front;
 
-    @DisplayName("프로필 사진 업로드 테스트")
     @Test
-    void profileImageUploadTest() throws Exception {
+    void 프로필_이미지_업로드_성공시_201을_반환한다() throws Exception {
         // given
         String fileName = "test.jpg", ext = "jpg";
         MockMultipartFile file =
@@ -50,9 +50,8 @@ public class ProfileApiTest extends BaseApiTest {
         assertThat(account.getProfileImage().getProfileUrl()).contains(ext, cloud_front);
     }
 
-    @DisplayName("프로필 사진 변경 테스트")
     @Test
-    void profileImageChangeTest() throws Exception {
+    void 프로필_이미지_변경시_변경된_이미지의_업로드url이_반환된다() throws Exception {
         // given
         String fileName = "test.png", ext = "png";
         MockMultipartFile file =

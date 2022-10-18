@@ -14,16 +14,15 @@ import org.springframework.context.annotation.Import;
 import static com.ko.mediate.HC.auth.AccountFactory.createAccount;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Tag("Account")
 @DataJpaTest
 @Import(TestJpaConfig.class)
 public class AccountRepositoryTest {
     @Autowired
     JpaAccountRepository accountRepository;
 
-    @Tag("Account")
-    @DisplayName("리스트 형태의 Enum과 String 변환 테스트")
     @Test
-    void manyRoleAccountTest() {
+    void 계정은_다수의_Role을_가질수_있다() {
         // given
         Account account = createAccount("test@naver.com", "test", RoleType.ROLE_USER.toString());
 

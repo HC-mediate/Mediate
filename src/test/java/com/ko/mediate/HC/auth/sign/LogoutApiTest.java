@@ -6,6 +6,8 @@ import com.ko.mediate.HC.auth.application.dto.response.TokenDto;
 import com.ko.mediate.HC.common.BaseApiTest;
 import com.ko.mediate.HC.jwt.TokenStorage;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,9 +28,8 @@ public class LogoutApiTest extends BaseApiTest {
     @Autowired
     TokenStorage tokenStorage;
 
-    @DisplayName("정상 로그아웃 테스트. 같은 토큰으로 로그인할 수 없음")
     @Test
-    void logoutTest() throws Exception {
+    void 로그아웃후_같은_토큰으로_로그인시_401을_던진다() throws Exception {
         // given
         SignInDto signInDto = createSignInDto(saveEmail, "1234");
         TokenDto dto = authService.signIn(signInDto);

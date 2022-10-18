@@ -19,9 +19,8 @@ public class TuteeApiTest extends BaseApiTest {
     @Autowired
     MockMvc mvc;
 
-    @DisplayName("튜티 등록")
     @Test
-    void tuteeJoinTest() throws Exception {
+    void 튜티_등록_성공시_201을_반환한다() throws Exception {
         //given
         TuteeSignupDto dto = createTuteeSignup();
 
