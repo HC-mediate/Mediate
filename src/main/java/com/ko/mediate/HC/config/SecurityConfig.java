@@ -23,7 +23,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    private final String[] permitUrls = {"/api/signin", "/api/signup", "/api/refresh"};
+    private final String[] permitUrls = {"/api/signin", "/api/signup", "/api/refresh",
+            "/actuator/**"};
     private final String[] whiteUrls = {
             "/favicon.ico",
             "/profile",
