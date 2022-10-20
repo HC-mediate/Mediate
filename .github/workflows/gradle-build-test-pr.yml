@@ -41,3 +41,17 @@ jobs:
       # Build
       - name: Build with Gradle
         run: ./gradlew clean build
+      
+      #Slack Webhook
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: Build + Deploy
+          fields: repo, commit, message, author
+          mention: here
+          if_mention: failure, cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
+      
