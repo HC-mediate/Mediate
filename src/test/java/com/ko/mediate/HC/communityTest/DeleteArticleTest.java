@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("글 삭제 테스트")
-public class DeleteArticleTest extends BaseApiTest {
+public class DeleteArticleTest extends BaseArticleApiTest {
     @Autowired
     CommunityService communityService;
     @Autowired
