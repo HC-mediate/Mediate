@@ -6,7 +6,7 @@ import com.ko.mediate.HC.auth.resolver.UserInfo;
 import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.domain.GeometryConverter;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
-import com.ko.mediate.HC.tutor.application.request.TutorSignupDto;
+import com.ko.mediate.HC.tutor.application.dto.request.TutorSignupDto;
 import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import lombok.RequiredArgsConstructor;

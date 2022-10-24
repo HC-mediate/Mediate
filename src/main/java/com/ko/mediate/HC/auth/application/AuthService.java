@@ -15,7 +15,6 @@ import com.ko.mediate.HC.jwt.TokenProvider;
 import com.ko.mediate.HC.jwt.TokenStorage;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +28,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
+
     private final JpaAccountRepository accountRepository;
     private final TokenProvider tokenProvider;
     private final TokenStorage tokenStorage;
@@ -42,19 +42,18 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public CustomUserDetails loadUserByUsername(String email) throws AuthenticationException {
-        return accountRepository
-                .findAccountByEmail(email)
-                .map(user -> createUser(user))
-                .orElseThrow(() -> new BadCredentialsException("등록된 이메일이 없습니다."));
+        return createUser(findAccountByEmail(email).verifyActivatedUser());
     }
 
     public TokenDto signIn(SignInDto dto) {
-        Account account = findAccountByEmail(dto.getEmail());
+        Account account = findAccountByEmail(dto.getEmail()).verifyActivatedUser();
         authenticate(account.getPassword(), dto.getPassword());
         String refreshToken =
-                tokenProvider.createRefreshToken(account.getId(), dto.getEmail(), account.getNickname(), account.getRoles());
+                tokenProvider.createRefreshToken(account.getId(), dto.getEmail(),
+                        account.getNickname(), account.getRoles());
         String accessToken =
-                tokenProvider.createAccessToken(account.getId(), dto.getEmail(), account.getNickname(), account.getRoles());
+                tokenProvider.createAccessToken(account.getId(), dto.getEmail(),
+                        account.getNickname(), account.getRoles());
         tokenStorage.saveRefreshToken(refreshToken, account.getId());
         tokenStorage.saveAccessToken(accessToken, account.getId());
         return new TokenDto(refreshToken, accessToken);
@@ -67,9 +66,6 @@ public class AuthService implements UserDetailsService {
     }
 
     public CustomUserDetails createUser(Account account) {
-        if (account.isDeactivated()) {
-            throw new BadCredentialsException("활성화되지 않은 아이디입니다.");
-        }
         Set<GrantedAuthority> grantedAuthorities =
                 account.getRoles().stream()
                         .map(RoleType::toString)
@@ -93,7 +89,8 @@ public class AuthService implements UserDetailsService {
         String accessToken = tokenStorage.getAccessTokenById(userInfo.getAccountId());
         String reissueToken =
                 tokenProvider.createAccessTokenIfExpired(
-                        accessToken, userInfo.getAccountId(), userInfo.getAccountEmail(), userInfo.getAccountNickname(), userInfo.getRoles());
+                        accessToken, userInfo.getAccountId(), userInfo.getAccountEmail(),
+                        userInfo.getAccountNickname(), userInfo.getRoles());
         if (accessToken.equals(reissueToken)) {
             return accessToken;
         } else {

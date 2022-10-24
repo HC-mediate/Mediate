@@ -1,9 +1,9 @@
 package com.ko.mediate.HC.auth.application.dto.response;
 
 import com.ko.mediate.HC.auth.domain.Account;
-import com.ko.mediate.HC.tutee.application.response.GetTuteeDto;
+import com.ko.mediate.HC.tutee.application.dto.response.GetTuteeDto;
 import com.ko.mediate.HC.tutee.domain.Tutee;
-import com.ko.mediate.HC.tutor.application.response.GetTutorDto;
+import com.ko.mediate.HC.tutor.application.dto.response.GetTutorDto;
 import com.ko.mediate.HC.tutor.domain.Tutor;
 import lombok.AccessLevel;
 import lombok.Builder;

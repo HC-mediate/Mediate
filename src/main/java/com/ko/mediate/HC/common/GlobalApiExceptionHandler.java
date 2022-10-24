@@ -1,26 +1,22 @@
 package com.ko.mediate.HC.common;
 
+import static com.ko.mediate.HC.common.ErrorResponseBuilder.build;
 import static java.util.stream.Collectors.toList;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ko.mediate.HC.common.exception.MediateException;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Path;
 import javax.validation.Path.Node;
-
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -31,40 +27,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.Path;
-import javax.validation.Path.Node;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-
-import static com.ko.mediate.HC.common.ErrorResponseBuilder.build;
-import static java.util.stream.Collectors.toList;
-
 @RestControllerAdvice
-@RequiredArgsConstructor
 @Slf4j
 public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
-
-    private final ObjectMapper objectMapper;
-
-    @ExceptionHandler(
-            value = {
-                    AuthenticationException.class,
-                    BadCredentialsException.class,
-                    AccessDeniedException.class
-            })
-    public ResponseEntity<Object> handleAuthenticationException(
-            final AuthenticationException ex, final ServletWebRequest request) {
-        log(ex, request);
-        final ErrorResponseDto errorResponseDto =
-                build(
-                        AuthenticationException.class.getSimpleName(),
-                        ex.getMessage(),
-                        HttpStatus.UNAUTHORIZED);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponseDto);
-    }
 
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleUncaughtException(
@@ -79,9 +44,10 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = {MediateException.class})
-    public ResponseEntity<Object> handleMediateException(final MediateException ex, final ServletWebRequest request) throws JsonProcessingException {
+    public ResponseEntity<Object> handleBusinessException(final MediateException ex,
+            final ServletWebRequest request) {
         log(ex, request);
-        return respondBusinessException(ex.getErrorCode());
+        return ResponseEntity.status(ex.getErrorCode().getStatus()).body(build(ex.getErrorCode()));
     }
 
     @ExceptionHandler(value = {ConstraintViolationException.class})
@@ -93,7 +59,8 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
         ex.getConstraintViolations()
                 .forEach(
                         constraintViolation -> {
-                            final Iterator<Node> it = constraintViolation.getPropertyPath().iterator();
+                            final Iterator<Node> it = constraintViolation.getPropertyPath()
+                                    .iterator();
                             if (it.hasNext()) {
                                 try {
                                     it.next();
@@ -103,7 +70,8 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
                                     invalidParameter.setMessage(constraintViolation.getMessage());
                                     invalidParameters.add(invalidParameter);
                                 } catch (final Exception e) {
-                                    log.warn("Can't extract the information about constraint violation");
+                                    log.warn(
+                                            "Can't extract the information about constraint violation");
                                 }
                             }
                         });
@@ -130,6 +98,7 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
         log(ex, request);
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(errorResponseDto);
     }
+
     // 메시지 컨버터에서 변환할 수 없는 경우
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
@@ -199,7 +168,8 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
         final ErrorResponseDto errorResponseDto =
                 build(
                         MissingServletRequestParameterException.class.getSimpleName(),
-                        String.format("%s: %s", HttpStatus.BAD_REQUEST.getReasonPhrase(), ex.getMessage()),
+                        String.format("%s: %s", HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                                ex.getMessage()),
                         HttpStatus.BAD_REQUEST);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
     }
@@ -208,14 +178,16 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
         final Optional<HttpMethod> httpMethod;
         final Optional<String> requestUrl;
 
-        final Optional<ServletWebRequest> possibleIncomingNullRequest = Optional.ofNullable(request);
+        final Optional<ServletWebRequest> possibleIncomingNullRequest = Optional.ofNullable(
+                request);
         if (possibleIncomingNullRequest.isPresent()) {
             // get the HTTP Method
             httpMethod = Optional.ofNullable(possibleIncomingNullRequest.get().getHttpMethod());
             if (Optional.ofNullable(possibleIncomingNullRequest.get().getRequest()).isPresent()) {
                 // get the Request URL
                 requestUrl =
-                        Optional.of(possibleIncomingNullRequest.get().getRequest().getRequestURL().toString());
+                        Optional.of(possibleIncomingNullRequest.get().getRequest().getRequestURL()
+                                .toString());
             } else {
                 requestUrl = Optional.empty();
             }
@@ -230,11 +202,5 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
                 (requestUrl.orElse("'null'")),
                 ex.getMessage(),
                 ex);
-    }
-    private ResponseEntity respondBusinessException(ErrorCode errorCode) throws JsonProcessingException {
-        Map<String, String> response = new HashMap<>();
-        response.put("code", errorCode.getCode());
-        response.put("description", errorCode.getDescription());
-        return ResponseEntity.status(errorCode.getStatus()).body(objectMapper.writeValueAsString(response));
     }
 }

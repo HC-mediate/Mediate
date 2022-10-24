@@ -1,6 +1,7 @@
 package com.ko.mediate.HC.auth.domain;
 
 import com.ko.mediate.HC.common.ErrorCode;
+import com.ko.mediate.HC.common.exception.MediateDeactivatedException;
 import com.ko.mediate.HC.common.exception.MediateIllegalStateException;
 import com.ko.mediate.HC.tutoring.application.RoleType;
 import lombok.AccessLevel;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Table(name = "tb_account")
 @DynamicUpdate
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -60,13 +62,15 @@ public class Account {
     @PrePersist
     void enumListToString() {
         this.role =
-                String.join(",", roles.stream().map(RoleType::toString).collect(Collectors.toList()));
+                String.join(",",
+                        roles.stream().map(RoleType::toString).collect(Collectors.toList()));
     }
 
     @PostLoad
     void stringToEnumList() {
         this.roles =
-                Arrays.stream(role.split(",")).map(RoleType::fromString).collect(Collectors.toList());
+                Arrays.stream(role.split(",")).map(RoleType::fromString)
+                        .collect(Collectors.toList());
     }
 
     @Builder
@@ -109,6 +113,21 @@ public class Account {
     public void joinTutee(Point location) {
         this.tutoringLocation = location;
         join(RoleType.ROLE_TUTEE);
+    }
+
+    public void activate() {
+        this.isActivated = true;
+    }
+
+    public void deactivate() {
+        this.isActivated = false;
+    }
+
+    public Account verifyActivatedUser() {
+        if (!this.isActivated) {
+            throw new MediateDeactivatedException();
+        }
+        return this;
     }
 
     private boolean join(String roleType) {

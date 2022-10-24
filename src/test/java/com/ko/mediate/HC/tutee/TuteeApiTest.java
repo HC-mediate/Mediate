@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.tutee;
 
 import com.ko.mediate.HC.common.BaseApiTest;
-import com.ko.mediate.HC.tutee.application.request.TuteeSignupDto;
+import com.ko.mediate.HC.tutee.application.dto.request.TuteeSignupDto;
 import com.ko.mediate.HC.tutee.domain.Tutee;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,9 +19,8 @@ public class TuteeApiTest extends BaseApiTest {
     @Autowired
     MockMvc mvc;
 
-    @DisplayName("튜티 등록")
     @Test
-    void tuteeJoinTest() throws Exception {
+    void 튜티_등록_성공시_201을_반환한다() throws Exception {
         //given
         TuteeSignupDto dto = createTuteeSignup();
 

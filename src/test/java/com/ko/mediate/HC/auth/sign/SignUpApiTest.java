@@ -27,9 +27,8 @@ public class SignUpApiTest extends BaseApiTest {
     AccountService accountService;
     final String existEmail = "test123@naver.com";
 
-    @DisplayName("회원가입 성공 테스트 (이메일, 이름, 닉네임, 전화번호를 확인한다)")
     @Test
-    void signUpTest() throws Exception {
+    void 회원가입_성공시_엔티티를_확인하고_201을_반환한다() throws Exception {
         // given
         SignUpDto dto = createSignUpDto("test@naver.com");
 
@@ -47,9 +46,8 @@ public class SignUpApiTest extends BaseApiTest {
         assertThat(account.getPhoneNum()).isEqualTo(dto.getPhoneNum());
     }
 
-    @DisplayName("회원가입 이메일 중복 예외")
     @Test
-    void validateEmailTest() throws Exception {
+    void 회원가입시_이메일이_중복되면_400을_반환한다() throws Exception {
         // given
         SignUpDto dto = createSignUpDto(existEmail);
         accountService.saveAccount(dto);
@@ -64,7 +62,6 @@ public class SignUpApiTest extends BaseApiTest {
                 .andDo(print());
     }
 
-    @DisplayName("회원가입 닉네임 중복 예외")
     @Test
     void 회원가입_닉네임_중복시_400에러를_던진다() throws Exception {
         //given
