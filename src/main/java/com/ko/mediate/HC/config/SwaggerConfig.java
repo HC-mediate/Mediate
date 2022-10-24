@@ -30,7 +30,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 
 @EnableWebMvc
-@Profile({"local", "prod1", "prod2"})
+@Profile({"local", "prod1", "prod2", "test"})
 @Configuration
 public class SwaggerConfig {
 
@@ -68,7 +68,6 @@ public class SwaggerConfig {
                 , new EndpointLinksResolver(allEndpoints, basePath), shouldRegisterLinksMapping,
                 null);
     }
-
 
     private boolean shouldRegisterLinksMapping(WebEndpointProperties webEndpointProperties,
             Environment environment, String basePath) {
