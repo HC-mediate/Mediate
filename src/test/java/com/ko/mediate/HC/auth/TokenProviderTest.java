@@ -14,13 +14,13 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("토큰 생성 Bean 테스트")
 public class TokenProviderTest {
+
     final String secret =
             "c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK";
     TokenProvider tokenProvider = new TokenProvider(secret, 3600, 604800);
 
-    @DisplayName("토큰에 정보가 담기는지 테스트")
     @Test
-    void createTokenTest() {
+    void 토큰에_정보가_담긴_문자열을_비교한다() {
         RoleType role = RoleType.ROLE_TUTEE;
         String token = tokenProvider.createAccessToken(1L, "test@naver.com", "test", List.of(role));
         UserInfo userInfo = tokenProvider.getUserInfoFromToken(token);
@@ -30,9 +30,8 @@ public class TokenProviderTest {
         assertThat(userInfo.getRoles().contains(RoleType.ROLE_TUTEE)).isTrue();
     }
 
-    @DisplayName("액세스 토큰 만료 테스트")
     @Test
-    void validateTokenTest() {
+    void 액세스_토큰_만료시_MediateExpiredTokenException을_던진다() {
         RoleType role = RoleType.ROLE_USER;
         TokenProvider expiredTokenProvider = new TokenProvider(secret, 0L, 0L);
         String expiredToken =
@@ -41,28 +40,29 @@ public class TokenProviderTest {
                 .isInstanceOf(MediateExpiredTokenException.class);
     }
 
-    @DisplayName("리프레쉬 토큰 만료 테스트")
     @Test
-    void validateRefreshTokenTest() {
+    void 리프레쉬_토큰_만료시_MediateExpiredTokenException을_던진다() {
         RoleType role = RoleType.ROLE_USER;
         TokenProvider expiredTokenProvider = new TokenProvider(secret, 0L, 0L);
         String expiredToken =
-                expiredTokenProvider.createRefreshToken(1L, "test@naver.com", "test", List.of(role));
+                expiredTokenProvider.createRefreshToken(1L, "test@naver.com", "test",
+                        List.of(role));
         assertThatThrownBy(() -> tokenProvider.validateToken(expiredToken))
                 .isInstanceOf(MediateExpiredTokenException.class);
     }
 
-    @DisplayName("유효한 토큰이면 재사용, 그렇지 않으면 생성")
     @Test
-    void createAccessTokenIfExpiredTest() {
+    void 유효한_토큰이면_재사용하고_그렇지_않으면_생성하여_반환한다() {
         String email = "test@naver.com";
         String nickname = "test";
         RoleType role = RoleType.ROLE_USER;
         TokenProvider expiredTokenProvider = new TokenProvider(secret, 0L, 0L);
         TokenProvider validTokenProvider = new TokenProvider(secret, 60000L, 60000L);
 
-        String expiredToken = expiredTokenProvider.createAccessToken(1L, email, nickname, List.of(role));
-        String validToken = validTokenProvider.createAccessToken(1L, email, nickname, List.of(role));
+        String expiredToken = expiredTokenProvider.createAccessToken(1L, email, nickname,
+                List.of(role));
+        String validToken = validTokenProvider.createAccessToken(1L, email, nickname,
+                List.of(role));
 
         assertThat(
                 validTokenProvider.createAccessTokenIfExpired(
@@ -74,9 +74,8 @@ public class TokenProviderTest {
                 .isEqualTo(validToken);
     }
 
-    @DisplayName("서명이 잘못된 토큰이면 예외 발생")
     @Test
-    void invalidTokenTest() {
+    void 서명이_잘못된_토큰은_MediateInvalidTokenException을_던진다() {
         String invalidToken = "asdf1234";
         assertThatThrownBy(() -> tokenProvider.validateToken(invalidToken))
                 .isInstanceOf(MediateInvalidTokenException.class);

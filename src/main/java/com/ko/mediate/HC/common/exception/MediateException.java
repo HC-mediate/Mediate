@@ -8,6 +8,7 @@ public abstract class MediateException extends RuntimeException {
     private final ErrorCode errorCode;
 
     public MediateException(ErrorCode errorCode) {
+        super(errorCode.getDescription());
         this.errorCode = errorCode;
     }
 }

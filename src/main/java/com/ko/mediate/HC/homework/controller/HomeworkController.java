@@ -1,12 +1,12 @@
 package com.ko.mediate.HC.homework.controller;
 
-import com.ko.mediate.HC.common.CommonResponseDto;
 import com.ko.mediate.HC.homework.application.HomeworkCommandExecutor;
 import com.ko.mediate.HC.homework.application.HomeworkQueryProcessor;
-import com.ko.mediate.HC.homework.application.request.CreateHomeworkDto;
-import com.ko.mediate.HC.homework.application.request.UpdateHomeworkDto;
-import com.ko.mediate.HC.homework.application.response.GetHomeworkDto;
+import com.ko.mediate.HC.homework.application.dto.request.CreateHomeworkDto;
+import com.ko.mediate.HC.homework.application.dto.request.UpdateHomeworkDto;
+import com.ko.mediate.HC.homework.application.dto.response.GetHomeworkDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/homework")
 public class HomeworkController {
+
     private final HomeworkCommandExecutor homeworkCommandExecutor;
     private final HomeworkQueryProcessor homeworkQueryProcessor;
 
@@ -33,14 +34,15 @@ public class HomeworkController {
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CommonResponseDto> createHomework(@RequestBody CreateHomeworkDto dto) {
+    public ResponseEntity<?> createHomework(@RequestBody CreateHomeworkDto dto) {
         homeworkCommandExecutor.createHomework(dto);
-        return ResponseEntity.ok(new CommonResponseDto("숙제를 추가하였습니다."));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping(value = "{homeworkId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CommonResponseDto> modifyHomework(@PathVariable Long homeworkId, @RequestBody UpdateHomeworkDto dto) {
+    public ResponseEntity<?> modifyHomework(@PathVariable Long homeworkId,
+            @RequestBody UpdateHomeworkDto dto) {
         homeworkCommandExecutor.modifyHomework(homeworkId, dto);
-        return ResponseEntity.ok(new CommonResponseDto("숙제를 수정하였습니다."));
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

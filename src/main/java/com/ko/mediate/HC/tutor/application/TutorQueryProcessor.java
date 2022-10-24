@@ -2,7 +2,7 @@ package com.ko.mediate.HC.tutor.application;
 
 import com.ko.mediate.HC.common.ErrorCode;
 import com.ko.mediate.HC.common.exception.MediateNotFoundException;
-import com.ko.mediate.HC.tutor.application.response.GetTutorDto;
+import com.ko.mediate.HC.tutor.application.dto.response.GetTutorDto;
 import com.ko.mediate.HC.tutor.domain.Tutor;
 import com.ko.mediate.HC.tutor.infra.JpaTutorRepository;
 import lombok.RequiredArgsConstructor;

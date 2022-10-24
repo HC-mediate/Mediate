@@ -47,6 +47,6 @@ public class AccountService {
     public Account getAccountByEmail(String email) {
         return accountRepository
                 .findAccountByEmail(email)
-                .orElseThrow(() -> new MediateAlreadyExistException(ErrorCode.EMAIL_ALREADY_EXIST));
+                .orElseThrow(() -> new MediateAlreadyExistException(ErrorCode.NO_ACCOUNT_EXISTS));
     }
 }

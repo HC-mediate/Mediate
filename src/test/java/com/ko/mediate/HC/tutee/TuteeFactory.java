@@ -1,7 +1,7 @@
 package com.ko.mediate.HC.tutee;
 
 import com.ko.mediate.HC.common.domain.Location;
-import com.ko.mediate.HC.tutee.application.request.TuteeSignupDto;
+import com.ko.mediate.HC.tutee.application.dto.request.TuteeSignupDto;
 
 public class TuteeFactory {
     public static TuteeSignupDto createTuteeSignup() {

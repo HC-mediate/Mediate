@@ -1,6 +1,6 @@
 package com.ko.mediate.HC.homework.application;
 
-import com.ko.mediate.HC.homework.application.response.GetHomeworkDto;
+import com.ko.mediate.HC.homework.application.dto.response.GetHomeworkDto;
 import com.ko.mediate.HC.homework.infra.JpaHomeworkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
