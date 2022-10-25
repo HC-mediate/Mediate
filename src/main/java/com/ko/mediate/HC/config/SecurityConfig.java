@@ -1,7 +1,12 @@
 package com.ko.mediate.HC.config;
 
 import com.ko.mediate.HC.auth.application.AuthService;
-import com.ko.mediate.HC.jwt.*;
+import com.ko.mediate.HC.jwt.JwtAccessDeniedHandler;
+import com.ko.mediate.HC.jwt.JwtAuthenticationEntryPoint;
+import com.ko.mediate.HC.jwt.JwtSecurityConfig;
+import com.ko.mediate.HC.jwt.TokenProvider;
+import com.ko.mediate.HC.jwt.TokenStorage;
+import com.ko.mediate.HC.tutoring.application.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,13 +29,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private final String[] permitUrls = {"/api/signin", "/api/signup", "/api/refresh"};
+    private final String[] adminRoleUrls = {"/actuator/**"};
     private final String[] whiteUrls = {
             "/favicon.ico",
             "/profile",
             "/swagger-ui/**",
             "/v3/api-docs",
             "/swagger-resources/**",
-            "/webjars/**"
+            "/webjars/**",
+            "/h2-console/**"
     };
 
     @Override
@@ -63,6 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(permitUrls)
                 .permitAll()
+                .antMatchers(adminRoleUrls)
+                .hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

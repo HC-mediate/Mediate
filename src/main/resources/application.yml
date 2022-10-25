@@ -17,6 +17,11 @@ spring:
       matching-strategy: ant_path_matcher
 image:
   convert-path: '${user.dir}'
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 ---
 spring:
   config:

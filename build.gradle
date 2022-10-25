@@ -41,6 +41,8 @@ dependencies {
     //스웨거 설정
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+    //spring actuator
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.6.2'
 
     //mysql for point
     implementation 'org.hibernate:hibernate-spatial:5.6.2.Final'
