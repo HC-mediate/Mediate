@@ -84,6 +84,13 @@ jobs:
           --file-exists-behavior OVERWRITE \
           --s3-location bucket=mediate-springboot-build,bundleType=zip,key=mediate-springboot2-webservice.zip \
           --region ap-northeast-2
+  
+      - name: Check the deployed service URL
+        uses: jtalk/url-health-check-action@v2
+        with:
+          url: ${{ secrets.SERVER_IP_ADDRESS }}
+          max-attempts: 10
+          retry-delay: 5s
       
       #Slack Webhook
       - name: action-slack
